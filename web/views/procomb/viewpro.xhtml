@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel id="paneli" header="Pago a Proveedores">
+                    <h:form id="formPago" style="font-size: 10px;"> 
+                        <p:messages id="msgs1" showDetail="true"/>                             
+                        <h:panelGrid id="display"  columns="9" cellpadding="4" columnClasses="alinder, alinizq" >
+                            <h:outputText value="*Proveedor:" />
+                            <p:inputText size="30" value="#{proCombBean.selectedProveedor.nombre}" readonly="true"/>                                                                                    
+                            <h:outputText value="Ruc:"/>
+                            <p:inputText size="30" value="#{proCombBean.selectedProveedor.ruc}" readonly="true" />
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText size="30" value="#{proCombBean.selectedProveedor.telefono}" readonly="true" />
+                            <h:outputText value="Direccion:"/>
+                            <p:inputText size="30" value="#{proCombBean.selectedProveedor.direccion}" readonly="true" />
+                        </h:panelGrid>
+                    </h:form>
+                    <p:tabView id="tabla1" dynamic="true" cache="true" style="font-size: 10px;">
+                    <p:tab id="orden" title="Vales Pendientes">
+                    <h:form id="datos">  
+                        <p:dataTable id="vales" var="vale" value="#{proCombBean.vales}" style="letras"
+                                 paginator="true" paginatorPosition="top"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" rowKey="#{vale.idValeCombustible}" selection="#{proCombBean.selectedValeComb}" rows="10" rowsPerPageTemplate="10,30,60,100"
+                                 >                          
+                        <f:facet name="{Exporters}">
+                            <p:commandButton ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{proCombBean.exportarPDFvale(actionEvent)}"></p:commandButton>                                                 
+                        </f:facet>                          
+                        <f:facet name="header">
+                            Listado de Vales Pendientes
+                        </f:facet>
+                        <p:column headerText="N° Vale" filterStyle="width: 80%;"  style="width: 5%;" filterBy="#{valeVarios.idValeVarios}" >
+                            <h:outputText value="#{vale.idValeCombustible}" />
+                        </p:column>
+                        <p:column headerText="Proveedor" style="width: 15%;" >
+                            <h:outputText value="#{vale.proveedor.nombre}" />
+                        </p:column>
+                        <p:column headerText="Fecha Emision" style="width: 8%" >
+                            <h:outputText value="#{vale.fecha}" />
+                        </p:column>                                               
+                        <p:column headerText="Descripcion" style="width: 20%">
+                            <h:outputText value="#{vale.descripcion}" />
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;"  style="width: 8%" filterBy="#{valeVarios.camion.chapaCamion}" filterMatchMode="contains" sortBy="#{valeVarios.camion.chapaCamion}" >
+                            <h:outputText value="#{vale.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Chofer" style="width: 15%">
+                            <h:outputText value="#{vale.camion.chofer.nombre} #{vale.camion.chofer.apellido}" />
+                        </p:column>                 
+                        <p:column headerText="Monto Comb" style="width: 12%">
+                            <h:outputText value="#{vale.montoComb}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                            <p:column headerText="Viatico" style="width: 12%">
+                                <h:outputText value="#{vale.viatico}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Extras" style="width: 12%">
+                            <h:outputText value="#{vale.extras}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Monto Total" style="width: 12%">
+                            <h:outputText value="#{vale.montoTotal}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>    
+                        </p:dataTable>  
+                    </h:form>
+                    <h:form id="suma">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="720px" style="text-align:right">Extras:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{proCombBean.totalextras}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  
+                                               </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="ui-state-default" width="720px" style="text-align:right">Viatico:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{proCombBean.totalvia}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  
+                                               </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="ui-state-default" width="720px" style="text-align:right">Combustible:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{proCombBean.totalcomb}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  
+                                               </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="ui-state-default" width="720px" style="text-align:right">Totales:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{proCombBean.total}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  
+                                               </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>                                            
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator />                         
+                    </h:form>  
+                </p:tab>
+                <p:tab id="comb" title="Combustibles">
+                    <h:form id="datos1">  
+                        <p:dataTable id="vales" var="combustible" value="#{proCombBean.combustible}" style="letras"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 selectionMode="single" rowKey="#{combustible.idCombustible}" selection="#{comBean.selectedCombustible}" rows="20" rowsPerPageTemplate="10,30,60,100"
+                                 >
+                        <f:facet name="header">
+                            Listado de Combustibles
+                        </f:facet>
+                        <p:column headerText="N° Comb" filterStyle="width: 80%;" style="width: 5%;" filterBy="#{combustible.idCombustible}" >
+                            <h:outputText value="#{combustible.idCombustible}" />
+                        </p:column>
+                        <p:column headerText="N° Boleta" style="width: 7%;" filterStyle="width: 80%;" filterBy="#{combustible.NBoleta}" >
+                            <h:outputText value="#{combustible.NBoleta}" />
+                        </p:column>
+                        <p:column headerText="Proveedor" style="width: 15%;" >
+                            <h:outputText value="#{combustible.valeCombustible.proveedor.nombre}" />
+                        </p:column>                                                
+                        <p:column headerText="Fecha Emision" style="width: 8%" >
+                            <h:outputText value="#{combustible.fecha}" />
+                        </p:column>
+                        <p:column headerText="Litros" style="width: 8%">
+                            <h:outputText value="#{combustible.litros}" />
+                        </p:column>                        
+                        <p:column headerText="Total" style="width: 8%">
+                            <h:outputText value="#{combustible.montoTotal}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>                        
+                        <p:column headerText="Extras" style="width: 8%">
+                            <h:outputText value="#{combustible.extras}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Camion" style="width: 8%" filterBy="#{combustible.valeCombustible.camion.chapaCamion}" filterMatchMode="contains" filterStyle="width: 80%;">
+                            <h:outputText value="#{combustible.valeCombustible.camion.chapaCamion}"/>
+                        </p:column>
+                        <p:column headerText="Chofer" style="width: 15%" filterBy="#{combustible.valeCombustible.camion.chofer.nombre},#{combustible.valeCombustible.camion.chofer.apellido}" filterMatchMode="contains" filterStyle="width: 80%;">
+                            <h:outputText value="#{combustible.valeCombustible.camion.chofer.nombre} #{combustible.valeCombustible.camion.chofer.apellido}" />
+                        </p:column>   
+                        </p:dataTable>  
+                    </h:form>
+                    <h:form id="suma1">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="720px" style="text-align:right">Totales:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{proCombBean.totalcomb}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  
+                                               </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator />                         
+                    </h:form>  
+                </p:tab>  
+                <p:tab id="pagos" title="Ultimos Pagos">
+                    <h:form id="datos2">  
+                        <p:dataTable id="datacar" var="pagoCombustible" value="#{proCombBean.pagoCombustible}" rowKey="#{pagoCombustible.idPagoCombustible}" selection="#{pagocBean.selectedPago}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" paginator="true" paginatorPosition="top" rows="20" rowsPerPageTemplate="10,30,60,100">  
+                                <f:facet name="{Exporters}">
+                                    <p:commandButton onclick="form.target='_blank'" ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{pagocBean.exportarPDF(actionEvent)}"></p:commandButton>                                                 
+                                </f:facet>
+                                <p:column headerText="Cod Pago" style="width:10%;" filterBy="#{pagoCombustible.idPagoCombustible}"   
+                                       filterMatchMode="contains">  
+                                    <h:outputText value="#{pagoCombustible.idPagoCombustible}"/>  
+                                </p:column>                                
+                                <p:column headerText="Proveedor" style="width:20%;" filterBy="#{pagoVarios.proveedorVarios.nombre}"   
+                                       filterMatchMode="contains">  
+                                    <h:outputText value="#{pagoCombustible.proveedor.idProveedor}, #{pagoCombustible.proveedor.nombre}" />  
+                                </p:column>
+                                <p:column headerText="Fecha" style="width:10%;">  
+                                    <h:outputText value="#{pagoCombustible.fecha}" />  
+                                </p:column>  
+                                <p:column headerText="Estado" style="width:15%;">  
+                                    <h:outputText value="#{pagoCombustible.estado}"/>  
+                                </p:column>  
+
+                                <p:column headerText="Total" style="width:10%; text-align: right;">  
+                                    <h:outputText value="#{pagoCombustible.total}"  >
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                    </h:outputText>  
+                                </p:column>                                                         
+                            </p:dataTable>  
+                    </h:form>
+                    <h:form id="suma2">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="720px" style="text-align:right">Totales:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{proCombBean.totalpago}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  
+                                               </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator />                         
+                    </h:form>  
+                </p:tab>          
+                </p:tabView>        
+                </p:panel>   
+                
+            </ui:define>           
+        </ui:composition>
+                <script type="text/javascript">
+            function handleClose(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioCreate').hide();
+                }
+            }
+
+            function handleClose2(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioUpdate').hide();
+                }
+            }
+
+            function handleClose3(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogNivelCreateN').hide();
+                }
+            }
+
+            function handleClose4(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableUsu').hide();
+                }
+            }
+
+            function handleClose5(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableCli').hide();
+                }
+            }
+
+            function handleClose6(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTablePro').hide();
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:form>
+                    <p:commandButton id="btnChoferCreate" update=":formCreate" oncomplete="PF('choferDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo" actionListener="#{choferBean.btnIniciar(actionEvent)}"/>
+                </h:form>
+                <p:panel id="paneli" header="Listado de Choferes">                                                            
+                    <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 11px;">
+                        <p:tab title="Choferes">
+                            <h:form id="formDataTable" style="font-size: 10px;">
+                                <p:dataTable id="choferes" var="chofer" value="#{choferBean.choferes}" style="letras"
+                                             paginator="true" paginatorPosition="bottom"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                             selectionMode="single" rowKey="#{chofer.idChofer}" selection="#{choferBean.selectedChofer}"
+                                             >
+                                    <f:facet name="{Exporters}">
+                                        <p:commandButton onclick="form.target = '_blank'" ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{choferBean.exportarPDF(actionEvent)}"></p:commandButton>                                                 
+                                    </f:facet>     
+                                    <p:column headerText="Nombre" style="width: 15%;" filterBy="#{chofer.nombre}, #{chofer.apellido}" filterStyle="width: 80%;" filterMatchMode="contains">
+                                        <h:outputText value="#{chofer.nombre} #{chofer.apellido}" />
+                                    </p:column>
+                                    <p:column headerText="N°CI" style="width: 15%;" filterBy="#{chofer.NCi}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                        <h:outputText value="#{chofer.NCi}">
+                                            <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Telefono" style="width: 15%" >
+                                        <h:outputText value="#{chofer.telefono}" />
+                                    </p:column>
+                                    <p:column headerText="Direccion" style="width: 15%" filterBy="#{chofer.direccion}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                        <h:outputText value="#{chofer.direccion}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha de Nacimiento" style="width: 15%">
+                                        <h:outputText value="#{chofer.fechaNacimiento}" />
+                                    </p:column>
+                                    <p:column style="width:8%">
+                                        <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('choferDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                            <f:setPropertyActionListener value="#{chofer}" target="#{choferBean.selectedChofer}" />
+                                        </p:commandButton>
+                                        <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('choferDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                            <f:setPropertyActionListener value="#{chofer}" target="#{choferBean.selectedChofer}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:tab>
+                    </p:tabView>
+                </p:panel>
+                <h:form id="formCreate">
+                    <p:dialog header="Agregar Chofer" widgetVar="choferDialogCreate" resizable="false" id="dlgChoferCreate" 
+                              showEffect="fade" hideEffect="explode" closeOnEscape="true" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{choferBean.selectedChofer.nombre}"/>
+                            <h:outputText value="Apellido:"/>
+                            <p:inputText value="#{choferBean.selectedChofer.apellido}"/>
+                            <h:outputText value="N°CI:"/>
+                            <p:inputText value="#{choferBean.selectedChofer.NCi}"/>
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText value="#{choferBean.selectedChofer.telefono}"/>
+                            <h:outputText value="Direccion"/>
+                            <p:inputText value="#{choferBean.selectedChofer.direccion}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":paneli :msgs" oncomplete="PF('choferDialogCreate').hide()" action="#{choferBean.btnCreateChofer(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('choferDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formUpdate">
+                    <p:dialog header="Modificar Chofer" widgetVar="choferDialogUpdate" resizable="false" id="dlgChoferUpdate" 
+                              showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{choferBean.selectedChofer.nombre}"/>
+                            <h:outputText value="Apellido:"/>
+                            <p:inputText value="#{choferBean.selectedChofer.apellido}"/>
+                            <h:outputText value="N°CI:"/>
+                            <p:inputText value="#{choferBean.selectedChofer.NCi}"/>
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText value="#{choferBean.selectedChofer.telefono}"/>
+                            <h:outputText value="Direccion"/>
+                            <p:inputText value="#{choferBean.selectedChofer.direccion}"/>
+                            <h:inputHidden value="#{choferBean.selectedChofer.idChofer}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":paneli :msgs" oncomplete="PF('choferDialogUpdate').hide()" actionListener="#{choferBean.btnUpdateChofer(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('choferDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formDelete">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Chofer" severity="alert" closeOnEscape="true" widgetVar="choferDialogDelete"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{choferBean.selectedChofer.idChofer}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":paneli :msgs" oncomplete="PF('choferDialogDelete').hide()"
+                                         actionListener="#{choferBean.btnDeleteChofer(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('choferDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

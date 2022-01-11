@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vale" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="69bd7db5-5027-4a38-a384-46ab8ea3ef70">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="db903f46-c001-4394-ac12-06406efe7462"/>
+	<queryString language="SQL">
+		<![CDATA[select * from valeVarios]]>
+	</queryString>
+	<field name="fecha" class="java.util.Date"/>
+	<field name="camion.chapaCamion" class="java.lang.String"/>
+	<field name="camion.chofer.nombre" class="java.lang.String"/>
+	<field name="camion.chofer.apellido" class="java.lang.String"/>
+	<field name="camion.propietario.nombre" class="java.lang.String"/>
+	<field name="camion.propietario.apellido" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="idValeVarios" class="java.lang.Integer"/>
+	<field name="monto" class="java.lang.Double"/>
+	<field name="proveedorVarios.nombre" class="java.lang.String"/>
+	<variable name="chofer" class="java.lang.String">
+		<variableExpression><![CDATA[($F{camion.chofer.nombre}!=null?$F{camion.chofer.nombre}:"")+($F{camion.chofer.apellido}!=null?","+$F{camion.chofer.apellido}:"")]]></variableExpression>
+	</variable>
+	<variable name="propietario" class="java.lang.String">
+		<variableExpression><![CDATA[($F{camion.propietario.nombre}!=null?$F{camion.propietario.nombre}:"")+($F{camion.propietario.apellido}!=null?","+$F{camion.propietario.apellido}:"")]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="92" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="90" backcolor="#CCCCCC" uuid="5cd9181b-16d7-4ae3-8cdc-5df2d86f01fb"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="170" y="31" width="215" height="31" forecolor="#336600" uuid="48be20a9-ba8d-491f-8c73-a82f578bd3bc"/>
+				<textElement>
+					<font fontName="Exotc350 Bd BT" size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LISTA DE VALES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="216" y="70" width="146" height="20" uuid="5da1f7dd-dbd5-426b-836b-ea871bfd0a27"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Transportadora RC SRL ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="71" splitType="Stretch">
+			<staticText>
+				<reportElement x="24" y="7" width="265" height="20" uuid="1dc9f19c-f9e6-48a9-b435-bb95a973a6f7"/>
+				<text><![CDATA[Servicio de Flete Nacional - Transporte de granos.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="29" width="265" height="20" uuid="d0ca376a-0912-4008-905c-f7c4361a24c4"/>
+				<text><![CDATA[Direccion: Mariscal Estigarribia e/ Doctor Montanaro.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="49" width="226" height="20" uuid="51d7968d-a5b4-445e-8620-8eb896695f6c"/>
+				<text><![CDATA[Telefono: 0521-204555 / Cel. 0984-660054]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="403" y="49" width="152" height="20" forecolor="#000000" backcolor="#000000" uuid="9413e069-7d56-4ae1-90a2-851ebc722e0e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="10" width="555" height="22" backcolor="#CCCCCC" uuid="88dde283-8574-402c-b5b2-b6fa06aa5f2a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="306" y="12" width="34" height="20" uuid="bfd326d6-7d80-43b8-ace9-ab29f7db8125"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Camion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="12" width="25" height="20" uuid="37d3381c-f086-4178-8109-eb022efd3fdb"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N°]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="12" width="42" height="20" uuid="37ce2352-50df-4781-9539-7d445e8433e4"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proveedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="84" y="12" width="33" height="20" uuid="d9171cb2-98cc-430a-8421-99c25843ae44"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="239" y="12" width="25" height="20" uuid="41d4987a-b1b7-48f2-b176-0dd4b7c775e9"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="12" width="34" height="20" uuid="c98c688c-b943-4262-a877-7fe0e957e914"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Chofer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="117" y="12" width="53" height="20" uuid="d0e27e48-7734-46f8-a50e-159c7bda3199"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripcion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="12" width="45" height="20" uuid="3f566919-fe17-4cd1-9356-ea208f70f150"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Propietario]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="84" y="0" width="33" height="20" uuid="c13520e0-783f-4f56-93a8-812c01bbebb9"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="306" y="0" width="46" height="20" uuid="6ee31ce8-6f10-4208-97ad-0b67b83337b4"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{camion.chapaCamion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="0" width="78" height="20" uuid="20abb48d-6422-451e-b86e-b5e7358936c2"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{chofer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="441" y="1" width="100" height="20" uuid="b02b1aa1-b83b-48b8-aeb6-65e58ce0ce47"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{propietario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="117" y="1" width="122" height="20" uuid="121ea44e-e7a8-4c70-bae8-f006d897e54c"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="1" width="32" height="20" uuid="32a77d07-c54e-47b6-8027-9242ce8410f0"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idValeVarios}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="239" y="1" width="49" height="20" uuid="058a063d-ec4b-476c-b937-ef22edc96242"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="42" y="0" width="42" height="20" uuid="9802c1ca-e96d-4786-ba8d-f004ba666492"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{proveedorVarios.nombre}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="32" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="4" width="555" height="22" backcolor="#CCCCCC" uuid="9efa31ee-6967-4832-aa4d-57008bbd10c2"/>
+			</rectangle>
+			<textField>
+				<reportElement x="511" y="6" width="30" height="20" uuid="793608c7-3407-4720-9900-d956577be21a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="487" y="6" width="24" height="20" uuid="25746ce0-660e-4ea7-97d9-ccc669868b61"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pag.]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="18" y="4" width="152" height="20" forecolor="#000000" backcolor="#000000" uuid="73de0d10-d593-4b0b-a8c1-b972a4677b46"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fletes" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="69bd7db5-5027-4a38-a384-46ab8ea3ef70">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="199"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="db903f46-c001-4394-ac12-06406efe7462"/>
+	<queryString language="SQL">
+		<![CDATA[select * from viaje]]>
+	</queryString>
+	<field name="ordenDeCarga.camion.chapaCamion" class="java.lang.String"/>
+	<field name="fechaDestino" class="java.util.Date"/>
+	<field name="montoCobrar" class="java.lang.Double"/>
+	<field name="chofer.nombre" class="java.lang.String"/>
+	<field name="precioCobro" class="java.lang.Double"/>
+	<field name="idViaje" class="java.lang.Integer"/>
+	<field name="ordenDeCarga.unidadOrigen.nombre" class="java.lang.String"/>
+	<field name="ordenDeCarga.unidadDestino.nombre" class="java.lang.String"/>
+	<field name="pesoOrigen" class="java.lang.Integer"/>
+	<field name="pesoDestino" class="java.lang.Integer"/>
+	<field name="falCobrar" class="java.lang.Double"/>
+	<field name="chofer.apellido" class="java.lang.String"/>
+	<field name="montoPagar" class="java.lang.Double"/>
+	<field name="remisionDestino" class="java.lang.String"/>
+	<field name="precioPago" class="java.lang.Double"/>
+	<variable name="chofer" class="java.lang.String">
+		<variableExpression><![CDATA[($F{chofer.nombre}!=null?$F{chofer.nombre}:"")+($F{chofer.apellido}!=null?","+$F{chofer.apellido}:"")]]></variableExpression>
+	</variable>
+	<variable name="totalp" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{montoCobrar}]]></variableExpression>
+	</variable>
+	<variable name="totalpeso" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{pesoDestino}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="98" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="90" backcolor="#42A3FF" uuid="5cd9181b-16d7-4ae3-8cdc-5df2d86f01fb"/>
+			</rectangle>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="427" y="67" width="96" height="20" forecolor="#000000" backcolor="#000000" uuid="9413e069-7d56-4ae1-90a2-851ebc722e0e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<rectangle radius="10">
+				<reportElement x="416" y="14" width="107" height="53" backcolor="#FFFF99" uuid="4f9568f6-576c-4f82-80a2-af69fa45b9da"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="428" y="38" width="86" height="21" uuid="d5ba03c8-8dc2-4528-b75d-9c3a1deb38e0"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="430" y="18" width="81" height="20" uuid="a68b4507-5a46-47eb-8293-0431979dfc94"/>
+				<textElement>
+					<font size="15" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pendientes]]></text>
+			</staticText>
+			<image>
+				<reportElement x="6" y="19" width="366" height="70" uuid="4f1f409b-ffcb-4594-80f8-d188dadb3242"/>
+				<imageExpression><![CDATA["terere3.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="10" width="555" height="22" backcolor="#CCCCCC" uuid="88dde283-8574-402c-b5b2-b6fa06aa5f2a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="466" y="12" width="36" height="20" uuid="68ebf13e-3234-4ee0-8f94-19f61c09509a"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto C.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="7" y="12" width="17" height="20" uuid="37d3381c-f086-4178-8109-eb022efd3fdb"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="12" width="32" height="20" uuid="37ce2352-50df-4781-9539-7d445e8433e4"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Chapa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="12" width="32" height="20" uuid="c2e5cf17-4270-487d-ab5d-322fef448987"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Chofer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="156" y="12" width="35" height="20" uuid="41d4987a-b1b7-48f2-b176-0dd4b7c775e9"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Origen]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="197" y="12" width="46" height="20" uuid="756af4a3-7f9a-4a42-a8a7-70d7a6caca06"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Destino]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="286" y="12" width="40" height="20" uuid="b5227037-9626-41e9-8cbd-ecd40e1a1bfc"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[P. Origen]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="325" y="12" width="45" height="20" uuid="2a338d30-8272-4df3-9afb-3b1d1965402a"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[P. Destino]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="370" y="12" width="52" height="20" uuid="c3ad083a-8360-4b61-a65c-9fb6400eda5b"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descuento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="122" y="12" width="32" height="20" uuid="7b4556f8-ad14-493a-a55e-11e151a54e04"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="12" width="24" height="20" uuid="56ee32b4-8fe7-4d0f-b95a-0934b7b1c0a9"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio C.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="243" y="12" width="40" height="20" uuid="496a73bc-9fd4-48f4-acfb-d8121274cfaa"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Remision]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="503" y="12" width="40" height="20" uuid="686029e4-72dc-4a11-acd0-f8e1131d7662"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto P.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="438" y="12" width="24" height="20" uuid="8fcf4e2d-5730-4d1e-b1b3-897a29fd78c3"/>
+				<textElement>
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Precio P.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="4" y="1" width="24" height="19" uuid="62506e8a-2db8-4463-a4e2-da3c034af4ab"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idViaje}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="67" y="1" width="54" height="20" uuid="bcd5e876-3503-499f-954d-af09c67172b1"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{chofer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="123" y="1" width="32" height="20" uuid="5e58884a-aac2-4e56-a6f1-09ea06e095f1"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fechaDestino}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="287" y="-1" width="39" height="20" uuid="4410dc27-d56f-49fd-a1e4-985f7807d6a9"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pesoOrigen}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement x="327" y="0" width="44" height="20" uuid="d3651f23-346b-4640-a16d-1c5f3a6f832f"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pesoDestino}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="372" y="1" width="35" height="20" uuid="20c9b6cb-414a-4bef-ad3d-707c93c2aef9"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{falCobrar}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0">
+				<reportElement x="413" y="1" width="22" height="20" uuid="bba458ad-d28f-49f2-8130-94a044867417"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precioCobro}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="466" y="1" width="36" height="20" uuid="51b63e41-3374-48df-9d82-c0c93012cd7f"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{montoCobrar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="31" y="0" width="35" height="20" uuid="54ba56b9-ea8a-4585-91ff-bb02fdd5d8af"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ordenDeCarga.camion.chapaCamion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="157" y="1" width="39" height="20" uuid="2f5f61c3-1c9d-4ea3-b529-be53d9fbceeb"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ordenDeCarga.unidadOrigen.nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="198" y="1" width="46" height="20" uuid="23b287b2-9c82-4080-ad9a-ba3de6066f87"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ordenDeCarga.unidadDestino.nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="244" y="1" width="42" height="20" uuid="81bf2345-d06a-4835-a227-6fdbc832d544"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{remisionDestino}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="503" y="1" width="40" height="20" uuid="b3be52aa-f4a2-41c4-a06b-c44912f891d1"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{montoPagar}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0">
+				<reportElement x="438" y="0" width="28" height="20" uuid="cb40d629-692c-4476-a7c6-b9f665ed348c"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{precioPago}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="49" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="4" width="555" height="35" backcolor="#CCCCCC" uuid="9efa31ee-6967-4832-aa4d-57008bbd10c2"/>
+			</rectangle>
+			<textField>
+				<reportElement x="261" y="6" width="30" height="20" uuid="793608c7-3407-4720-9900-d956577be21a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="227" y="6" width="24" height="20" uuid="25746ce0-660e-4ea7-97d9-ccc669868b61"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pag.]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="17" y="6" width="152" height="20" forecolor="#000000" backcolor="#000000" uuid="73de0d10-d593-4b0b-a8c1-b972a4677b46"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="460" y="9" width="34" height="18" uuid="3fd68740-aafd-4955-9e46-7e42f0823664"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="482" y="9" width="56" height="11" uuid="00a1bba2-7c3e-4cf5-a6de-522f23350d10"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalp}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="335" y="8" width="51" height="13" uuid="8f8b738e-7537-4881-9b61-b8fe10ef1885"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Peso Destino:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="387" y="8" width="62" height="13" uuid="77758c6d-5c64-46d3-98a5-64e72a4fef92"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalpeso}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="336" y="19" width="17" height="13" uuid="92692b13-43c5-4259-bc2b-82475715394a"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N°:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="353" y="19" width="33" height="13" uuid="df70150e-8717-48b8-8f3d-1b71e6fc36bc"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.ProveedorVarios" table="proveedor_varios" schema="public">
+        <id name="idProveedorVarios" type="int">
+            <column name="id_proveedor_varios" />
+            <generator class="sequence">
+                <param name="sequence">proveedor_id_proveedor_seq</param>
+            </generator>
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="40" not-null="true" />
+        </property>
+        <property name="telefono" type="string">
+            <column name="telefono" length="20" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="50" />
+        </property>
+        <property name="fechaInicio" type="date">
+            <column name="fecha_inicio" length="13" />
+        </property>
+        <property name="ruc" type="string">
+            <column name="ruc" length="50" />
+        </property>
+        <set name="valeVarioses" table="vale_varios" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="proveedor_varios_id_proveedor_varios" not-null="true" />
+            </key>
+            <one-to-many class="model.ValeVarios" />
+        </set>
+        <set name="pagoVarioses" table="pago_varios" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="proveedor_varios_id_proveedor_varios" not-null="true" />
+            </key>
+            <one-to-many class="model.PagoVarios" />
+        </set>
+    </class>
+</hibernate-mapping>

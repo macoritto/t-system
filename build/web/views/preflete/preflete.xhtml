@@ -1,0 +1,270 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 10px;">
+                <p:tab title="Vigentes">
+                <h:form>
+                    <p:commandButton id="btnPreFleBtn" update=":formCreate" oncomplete="PF('preFleteDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo" actionListener="#{preFleteBean.btnIniciar(actionEvent)}"/>
+                </h:form>
+                <h:form id="formDataTable">
+                    <p:dataTable id="preFlete" var="precioFlete" value="#{preFleteBean.precios}"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 selectionMode="single" rowKey="#{precioFlete.idPrecioFlete}" selection="#{preFleteBean.selectedPrecioFlete}"
+                                 >
+                        <f:facet name="header">
+                            Precios De Fletes
+                        </f:facet>
+                        <p:column headerText="Id" style="width: 5%;" filterBy="#{precioFlete.idPrecioFlete}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{precioFlete.idPrecioFlete}" />
+                        </p:column>
+                        <p:column headerText="Cliente" style="width: 20%;" filterBy="#{precioFlete.cliente.nombre}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{precioFlete.cliente.nombre}" />
+                        </p:column>
+                        <p:column headerText="U. Origen" style="width: 15%" filterBy="#{precioFlete.unidadOrigen.nombre}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{precioFlete.unidadOrigen.nombre}" />
+                        </p:column>
+                        <p:column headerText="U. Destino" style="width: 15%" filterBy="#{precioFlete.unidadDestino.nombre}" filterMatchMode="contains" filterStyle="width: 80%;">
+                            <h:outputText value="#{precioFlete.unidadDestino.nombre}"  />
+                        </p:column>
+                        <p:column headerText="Precio Iva" style="width: 5%">
+                            <h:outputText value="#{precioFlete.precioiva}" />
+                        </p:column>
+                        <p:column headerText="Precio Cobro" style="width: 5%">
+                            <h:outputText value="#{precioFlete.precioCobro}" />
+                        </p:column>
+                        <p:column headerText="Precio Pago" style="width: 5%">
+                            <h:outputText value="#{precioFlete.precioPago}" />
+                        </p:column>
+                        <p:column headerText="Descripcion" style="width: 20%" filterBy="#{precioFlete.descripcion}" filterMatchMode="contains" filterStyle="width: 80%;"> 
+                            <h:outputText value="#{precioFlete.descripcion}" />
+                        </p:column>
+                        <p:column headerText="Credo Por" style="width: 15%">
+                            <h:outputText value="#{precioFlete.usuario.usuario}" />
+                        </p:column>
+                        <p:column style="width:8%">
+                            <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('preFleteDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{precioFlete}" target="#{preFleteBean.selectedPrecioFlete}" />
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('preFleteDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{precioFlete}" target="#{preFleteBean.selectedPrecioFlete}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                </p:tab>                
+            </p:tabView>                        
+                <h:form id="formCreate" style="font-size: 10px;">
+                    <p:dialog width="40%" header="Agregar Precio De Flete" widgetVar="preFleteDialogCreate" resizable="false" id="dlgpreFleteCreate" 
+                              showEffect="fade" hideEffect="explode" closeOnEscape="true" modal="true">                        
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>    
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px; ">
+                            <h:outputText value="Cliente:"/>
+                            <p:inputText readonly="true" value="#{preFleteBean.selectedCliente.nombre}" size="40">
+                                <p:ajax event="click" update=":formAgregarCliente" oncomplete="PF('clienteDialogAgregar').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="Origen"/>
+                            <p:inputText readonly="true" value="#{preFleteBean.selectedOrigen.nombre}" size="40">
+                                <p:ajax event="click" update=":formAgregarOrigen" oncomplete="PF('origenDialogAgregar').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="Destino"/>
+                            <p:inputText readonly="true" value="#{preFleteBean.selectedDestino.nombre}" size="40">
+                                <p:ajax event="click" update=":formAgregarDestino" oncomplete="PF('destinoDialogAgregar').show()"/> 
+                            </p:inputText>
+                            <!--p:selectOneMenu value="#{preFleteBean.selectedPrecioFlete.cliente.idCliente}" style="width: 110% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue=""/>
+                                <f:selectItems value="#{preFleteBean.selectOneItemsCliente}" />
+                            </p:selectOneMenu>
+                            <h:outputText value="Origen"/>
+                            <p:selectOneMenu value="#{preFleteBean.selectedPrecioFlete.unidadOrigen.idUnidadOrigen}" style="width: 110% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{preFleteBean.selectOneItemsOrigen}" />
+                            </p:selectOneMenu>
+                            <h:outputText value="Destino"/>
+                            <p:selectOneMenu value="#{preFleteBean.selectedPrecioFlete.unidadDestino.idUnidadDestino}" style="width: 110% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{preFleteBean.selectOneItemsDestino}" />
+                            </p:selectOneMenu-->
+                            <h:outputText value=""/>
+                            <h:outputText value="Precio Cobro Iva"/>
+                            <p:inputText value="#{preFleteBean.selectedPrecioFlete.precioiva}" size="40"/>
+                            <h:outputText value="Precio Cobro s/ Iva"/>
+                            <p:inputText value="#{preFleteBean.selectedPrecioFlete.precioCobro}" size="40"/>
+                            <h:outputText value="Precio Pago"/>
+                            <p:inputText value="#{preFleteBean.selectedPrecioFlete.precioPago}" size="40"/>
+                            <h:outputText value="Descripcion"/>
+                            <p:inputText value="#{preFleteBean.selectedPrecioFlete.descripcion}" size="40"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable :msgs :formCreate" action="#{preFleteBean.btnCreatePrecioFlete(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('preFleteDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>                    
+                    </p:dialog>       
+                </h:form>
+                <h:form id="formUpdate" style="font-size: 10px;">
+                    <p:dialog width="40%" header="Modificar Precio" closeOnEscape="true" widgetVar="preFleteDialogUpdate" resizable="false" id="preFleteUpdate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px; ">
+                            <h:outputText value="Cliente:"/>
+                            <p:inputText readonly="true" value="#{preFleteBean.selectedPrecioFlete.cliente.nombre}" size="40">
+                                <p:ajax event="click" update=":formAgregarCliente2" oncomplete="PF('clienteDialogAgregar2').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="Origen"/>
+                            <p:inputText readonly="true" value="#{preFleteBean.selectedPrecioFlete.unidadOrigen.nombre}" size="40">
+                                <p:ajax event="click" update=":formAgregarOrigen2" oncomplete="PF('origenDialogAgregar2').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="Destino"/>
+                            <p:inputText readonly="true" value="#{preFleteBean.selectedPrecioFlete.unidadDestino.nombre}" size="40">
+                                <p:ajax event="click" update=":formAgregarDestino2" oncomplete="PF('destinoDialogAgregar2').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="Precio Cobro Iva"/>
+                            <p:inputText value="#{preFleteBean.selectedPrecioFlete.precioiva}" size="40"/>
+                            <h:outputText value="Precio Cobro s/ Iva"/>
+                            <p:inputText value="#{preFleteBean.selectedPrecioFlete.precioCobro}" size="40"/>
+                            <h:outputText value="Precio Pago"/>
+                            <p:inputText value="#{preFleteBean.selectedPrecioFlete.precioPago}" size="40"/>
+                            <h:outputText value="Descripcion"/>
+                            <p:inputText value="#{preFleteBean.selectedPrecioFlete.descripcion}" size="40"/>
+                            <h:outputText value="Estado"/>
+                            <p:selectOneMenu value="#{preFleteBean.selectedPrecioFlete.estado}" style="width: 100% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                                <f:selectItem itemLabel="Baja" itemValue="Baja" />
+                            </p:selectOneMenu>
+                            <h:inputHidden value="#{preFleteBean.selectedPrecioFlete.idPrecioFlete}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable :msgs" oncomplete="PF('preFleteDialogUpdate').hide()" actionListener="#{preFleteBean.btnUpdatePrecioFlete(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('preFleteDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formAgregarOrigen" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Origen" widgetVar="origenDialogAgregar"  id="clienteAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                        <p:dataTable var="unidadOrigen" value="#{origenBean.origenes}" selection="#{preFleteBean.selectedOrigen}" rowKey="#{unidadOrigen.idUnidadOrigen}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="6" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{unidadOrigen.idUnidadOrigen}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 20%" filterBy="#{unidadOrigen.nombre}" filterMatchMode="contains">
+                                    <h:outputText value="#{unidadOrigen.nombre}" />
+                            </p:column>                          
+                                <p:ajax listener="#{preFleteBean.onRowSelectOrigen(event)}" event="rowSelect" update="@this :formCreate"  oncomplete="PF('origenDialogAgregar').hide(); PF('preFleteDialogCreate').show() "/>  
+                        </p:dataTable>                        
+                </p:dialog>
+                </h:form> 
+                <h:form id="formAgregarDestino" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Destino" widgetVar="destinoDialogAgregar"  id="clienteAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                        <p:dataTable var="unidadDestino" value="#{destinoBean.destinos}" selection="#{preFleteBean.selectedDestino}" rowKey="#{unidadDestino.idUnidadDestino}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="6" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{unidadDestino.idUnidadDestino}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 20%" filterBy="#{unidadDestino.nombre}" filterMatchMode="contains">
+                                    <h:outputText value="#{unidadDestino.nombre}" />
+                            </p:column>                          
+                                <p:ajax listener="#{preFleteBean.onRowSelectDestino(event)}" event="rowSelect" update="@this :formCreate"  oncomplete="PF('preFleteDialogCreate').show(); PF('destinoDialogAgregar').hide() "/>  
+                        </p:dataTable>                        
+                </p:dialog>
+                </h:form>
+                <h:form id="formAgregarOrigen2" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Origen" widgetVar="origenDialogAgregar2"  id="clienteAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                        <p:dataTable var="unidadOrigen" value="#{origenBean.origenes}" selection="#{preFleteBean.selectedOrigen}" rowKey="#{unidadOrigen.idUnidadOrigen}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="6" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{unidadOrigen.idUnidadOrigen}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 20%" filterBy="#{unidadOrigen.nombre}" filterMatchMode="contains">
+                                    <h:outputText value="#{unidadOrigen.nombre}" />
+                            </p:column>                          
+                                <p:ajax listener="#{preFleteBean.onRowSelectOrigen(event)}" event="rowSelect" update="@this :formUpdate"  oncomplete="PF('preFleteDialogUpdate').show(); PF('origenDialogAgregar2').hide() "/>  
+                        </p:dataTable>                        
+                </p:dialog>
+                </h:form> 
+                <h:form id="formAgregarDestino2" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Destino" widgetVar="destinoDialogAgregar2"  id="clienteAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                        <p:dataTable var="unidadDestino" value="#{destinoBean.destinos}" selection="#{preFleteBean.selectedDestino}" rowKey="#{unidadDestino.idUnidadDestino}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="6" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{unidadDestino.idUnidadDestino}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 20%" filterBy="#{unidadDestino.nombre}" filterMatchMode="contains">
+                                    <h:outputText value="#{unidadDestino.nombre}" />
+                            </p:column>                          
+                                <p:ajax listener="#{preFleteBean.onRowSelectDestino(event)}" event="rowSelect" update="@this :formUpdate"  oncomplete="PF('preFleteDialogUpdate').show(); PF('destinoDialogAgregar2').hide() "/>  
+                        </p:dataTable>                        
+                </p:dialog>
+                </h:form>
+                <h:form id="formAgregarCliente" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Cliente" widgetVar="clienteDialogAgregar"  id="clienteAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                            <p:dataTable var="cliente" value="#{clienteBean.clientes}" selection="#{preFleteBean.selectedCliente}" rowKey="#{cliente.idCliente}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="6" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{cliente.idCliente}" />
+                            </p:column>
+                                <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 20%" filterBy="#{cliente.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 20%">
+                                <h:outputText value="#{cliente.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{cliente.telefono}" />
+                            </p:column>                             
+                                <p:ajax listener="#{preFleteBean.onRowSelectSeguro(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('clienteDialogAgregar').hide(); PF('preFleteDialogCreate').show() "/>  
+                        </p:dataTable>                        
+                </p:dialog>
+                </h:form> 
+                <h:form id="formAgregarCliente2" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Cliente" widgetVar="clienteDialogAgregar2"  id="clienteAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                            <p:dataTable var="cliente" value="#{clienteBean.clientes}" selection="#{preFleteBean.selectedCliente}" rowKey="#{cliente.idCliente}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="6" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{cliente.idCliente}" />
+                            </p:column>
+                                <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 20%" filterBy="#{cliente.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 20%">
+                                <h:outputText value="#{cliente.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{cliente.telefono}" />
+                            </p:column>                             
+                                <p:ajax listener="#{preFleteBean.onRowSelectSeguro(event)}" event="rowSelect" update="@this :formUpdate"  oncomplete="PF('preFleteDialogUpdate').show(); PF('clienteDialogAgregar2').hide() "/>  
+                        </p:dataTable>                        
+                </p:dialog>
+                </h:form>
+                <h:form id="formDelete" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Precio" severity="alert" closeOnEscape="true" widgetVar="preFleteDialogDelete"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{preFleteBean.selectedPrecioFlete.idPrecioFlete}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update="tabla:formDataTable :msgs" oncomplete="PF('preFleteDialogDelete').hide()"
+                                         actionListener="#{preFleteBean.btnDeleteUnidadOrigen(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('preFleteDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

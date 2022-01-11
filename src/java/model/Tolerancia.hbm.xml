@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Tolerancia" table="tolerancia" schema="public">
+        <id name="idTolerancia" type="int">
+            <column name="id_tolerancia" />
+            <generator class="sequence">
+                <param name="sequence">tolerancia_id_tolerancia_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="cliente" class="model.Cliente" fetch="select">
+            <column name="cliente_id_cliente" not-null="true" />
+        </many-to-one>
+        <property name="tolerancia" type="double">
+            <column name="tolerancia" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="tipo" type="string">
+            <column name="tipo" length="30" not-null="true" />
+        </property>
+        <set name="viajes" table="viaje" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="tolerancia_id_tolerancia" not-null="true" />
+            </key>
+            <one-to-many class="model.Viaje" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.DetallePagoVarios" table="detalle_pago_varios" schema="public">
+        <id name="idDetalle" type="int">
+            <column name="id_detalle" />
+            <generator class="sequence">
+                <param name="sequence">detalle_pago_varios_id_detalle_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="pagoVarios" class="model.PagoVarios" fetch="select">
+            <column name="pago_varios_id_pago_varios" not-null="true" />
+        </many-to-one>
+        <many-to-one name="varios" class="model.Varios" fetch="select">
+            <column name="varios_id_varios" not-null="true" />
+        </many-to-one>
+        <property name="monto" type="double">
+            <column name="monto" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

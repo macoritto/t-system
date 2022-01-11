@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.SumiCliente" table="sumi_cliente" schema="public">
+        <id name="idSumiCli" type="int">
+            <column name="id_sumi_cli" />
+            <generator class="sequence">
+                <param name="sequence">sumi_cliente_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="camion" class="model.Camion" fetch="select">
+            <column name="chapa_camion" length="6" />
+        </many-to-one>
+        <many-to-one name="chofer" class="model.Chofer" fetch="select">
+            <column name="chofer_id" />
+        </many-to-one>
+        <many-to-one name="cliente" class="model.Cliente" fetch="select">
+            <column name="cliente_id" />
+        </many-to-one>
+        <many-to-one name="ordenDeCarga" class="model.OrdenDeCarga" fetch="select">
+            <column name="orden_de_carga" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" />
+        </many-to-one>
+        <property name="monto" type="java.lang.Double">
+            <column name="monto" precision="17" scale="17" />
+        </property>
+        <property name="descrip" type="string">
+            <column name="descrip" length="200" />
+        </property>
+        <property name="estadoPago" type="string">
+            <column name="estado_pago" length="20" />
+        </property>
+        <property name="estadoCobro" type="string">
+            <column name="estado_cobro" length="20" />
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" />
+        </property>
+    </class>
+</hibernate-mapping>

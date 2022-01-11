@@ -1,0 +1,461 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+        
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel id="paneli" header="Pago a Propietarios">
+                    <h:form id="formPago" style="font-size: 10px;"> 
+                        <p:messages id="msgs1" autoUpdate="true" showDetail="true"/>     
+                        <h:inputHidden id="camion" value="#{extractoBean.selectedPropietario.idPropietario}"/>                       
+                        <h:panelGrid id="display"  columns="10" cellpadding="2" columnClasses="alinder, alinizq" >
+                            <h:outputText value="*Fecha:" />
+                            <p:calendar id="fecha" pattern="dd/MM/yyyy"   value="#{extractoBean.selectedExtracto.fecha}" showButtonPanel="true" navigator="true" required="true" requiredMessage="Seleccione la Fecha"/>                            
+                            <p:commandButton id="DataTablePro" update=":formAgregarPro"   oncomplete="PF('proDialogAgregar').show()" icon="icon-select1" title="Buscar Propietario" process="camion,pro" />
+                            <h:outputText value="Propietario:"/>
+                            <p:inputText id="pro" size="40" value="#{extractoBean.selectedPropietario.nombre} #{extractoBean.selectedPropietario.apellido}" readonly="true" required="true" requiredMessage="Seleccione el Propietario" />                            
+                            <h:outputText value="Descripcion:"/>
+                            <p:inputText size="50" id="descrip" value="#{extractoBean.selectedExtracto.descripcion}">
+                                <p:ajax listener="#{extractoBean.cargarDescrip(event)}" event="keyup"/>  
+                            </p:inputText>
+                            <h:outputText value="Select Camion/es" />
+                            <p:commandButton id="DataTableCa" update=":formAgregarCamion"   oncomplete="PF('camionDialogAgregar').show()" icon="icon-select1" title="Buscar Propietario" process="camion,pro,descrip" />
+                            <p:commandButton id="DataTablePen" update=":formPen"   oncomplete="PF('penDialogAgregar').show()" icon="icon-warning" title="Alerta" value="Alerta" />
+                        </h:panelGrid>
+                    </h:form>
+                    <h:form id="camiones" style="font-size: 10px;">
+                        <p:dataTable id="camion" var="camion" value="#{extractoBean.selectedCamiones}" selection="#{extractoBean.selectedCamion}" rowKey="#{camion.chapaCamion}" style="margin-bottom:0"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     emptyMessage="No se encontró ningún resultado">
+                            <f:facet name="header">
+                                Camiones Seleccionados
+                            </f:facet>                                                    
+                            <p:column headerText="Matricula">
+                                <h:outputText value="#{camion.chapaCamion}" />
+                            </p:column>
+                            <p:column headerText="Marca">
+                                <h:outputText value="#{camion.marca}" />
+                            </p:column>    
+                            <p:column headerText="Tipo">
+                                <h:outputText value="#{camion.tipoCamion.descripcion}" />
+                            </p:column>    
+                            <p:column headerText="Chofer">
+                                <h:outputText value="#{camion.chofer.nombre}, #{camion.chofer.apellido}" />
+                            </p:column>  
+                            <f:facet name="footer">
+                                <p:commandButton update=":detalle :datos :suma :camiones :prueba" icon="icon-pro" value="Cargar Items" action="#{extractoBean.cargarSuministro(event)}"/>
+                            </f:facet>    
+                        </p:dataTable>
+                    </h:form>
+                    <h:form id="prueba" style="font-size: 10px;">
+                        <p:dataTable value="#{extractoBean.ordenesSumi}" var="ordenDeCarga" >
+                            
+                            <f:facet name="header">
+                                Detalles
+                            </f:facet>
+
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column rowspan="2" headerText="Fecha" style="width: 5%" />           
+                                    <p:column headerText="Chapa" style="width: 5%" />  
+                                    <p:column headerText="Nro. Orden" style="width: 5%" />
+                                    <p:column headerText="Tipo" style="width: 5%"/>
+                                    <p:column headerText="Precio" style="width: 3%"/>
+                                    <p:column headerText="Descripcion" style="width: 40%" />
+                                    <p:column headerText="Monto" style="width: 5%" />   
+                                    <p:column headerText="Confirmar" style="width: 5%" /> 
+                                </p:row>
+
+                            </p:columnGroup>
+                            <p:subTable var="sumitems" value="#{ordenDeCarga.sumitems}">
+                                
+                                <f:facet name="header">
+                                    <h:outputText value="#{ordenDeCarga.idOrdenDeCarga} #{ordenDeCarga.unidadOrigen.nombre} #{ordenDeCarga.unidadDestino.nombre}" />
+                                    <h:outputText value="" />
+                                    
+                                </f:facet>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.fecha}" style = "color: #{sumitems.color}">         
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.chapa}" style = "color: #{sumitems.color}">         
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.orden}" style = "color: #{sumitems.color}">         
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.tipo}" style = "color: #{sumitems.color}">
+                                        <f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
+                                    </h:outputText>   
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.precio}" style = "color: #{sumitems.color}">
+                                        <f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
+                                    </h:outputText>   
+                                </p:column>
+                                <p:column style="width: 40%;">
+                                    <h:outputText value="#{sumitems.descrip}" style = "color: #{sumitems.color}"/>
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.monto}" style = "color: #{sumitems.color}">
+                                        <f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
+                                    </h:outputText> 
+                                </p:column>
+                                <p:column style="width: 5%;">
+                                <p:commandButton icon="ui-icon-circle-plus" value=""  action="#{extractoBean.bntAddorden(ordenDeCarga)}" update=":prueba :datos :suma :detalle :formView">
+                                        <f:setPropertyActionListener value="#{ordenesSumi}" target="#{extractoBean.selectedOrden}" />
+                                    </p:commandButton>  
+                                </p:column>
+                                <p:columnGroup type="footer">
+                                    <p:row>
+                                        <p:column footerText="Total Flete:" 
+                                                  style="text-align:left"/>
+                                        <p:column footerText="#{ordenDeCarga.asumi}">                                      
+                                        </p:column>
+                                        <p:column footerText="Total Suministros:" 
+                                                  style="text-align:left"/>
+                                        <p:column footerText="#{ordenDeCarga.anega}">
+                                        </p:column>
+                                        <p:column footerText="">
+                                        </p:column>
+                                        <p:column footerText="">
+                                        </p:column>
+                                        <p:column footerText="Saldo:" 
+                                                  style="text-align: right"/>
+                                        <p:column footerText="#{ordenDeCarga.saldo}">
+                                        </p:column>
+                                    </p:row>
+                                </p:columnGroup>
+                            </p:subTable>
+                        </p:dataTable>
+                    </h:form>
+                    <h:form id="detalle" style="font-size: 10px;">
+                       
+                    </h:form>
+                    <h:form id="formView" style="font-size: 10px;">    
+                        <p:fieldset legend="Detalles" style="margin-left:320px; margin-right:380px; margin-bottom: 30px; margin-top: 30px;">                                    
+                            <div style="width: 70%">
+                                <h:panelGrid id="display"  columns="7" cellpadding="1" columnClasses="alinder, alinizq" style="font-size: 10px; float: left;">                                                                                                                                                                                    
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" />                                     
+                                    <h:outputText value="No. Fletes:" />                                    
+                                    <p:inputText value="#{extractoBean.contafle}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                    
+                                    <h:outputText value="Creditos:" />                                    
+                                    <p:inputText  value="#{extractoBean.acucre}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                       
+                                    <h:outputText value="Fletes:" />                                    
+                                    <p:inputText  value="#{extractoBean.acufle}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>    
+                                    <h:outputText value="" />   
+                                    <h:outputText value="Comb y Aceites:" />                                    
+                                    <p:inputText  value="#{extractoBean.acucomb}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                     
+                                    <h:outputText value="Seguros:" />                                    
+                                    <p:inputText  value="#{extractoBean.acufal}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                        
+                                    <h:outputText value="Viaticos:" />                                    
+                                    <p:inputText  value="#{extractoBean.acuvia}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                    
+                                    <h:outputText value="" />   
+                                    <h:outputText value="Faltantes:" />                                    
+                                    <p:inputText  value="#{extractoBean.acuse}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText> 
+                                    <h:outputText value="Varios" />                                    
+                                    <p:inputText  value="#{extractoBean.acuvarios}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                    
+                                    <h:outputText value="Recibos" />                                    
+                                    <p:inputText  value="#{extractoBean.acureci}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>
+                                    <h:outputText value="" />
+                                    <h:outputText value="Adelanto Chofer" />                                    
+                                    <p:inputText  value="#{extractoBean.acuade}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText> 
+                                </h:panelGrid>                                       
+                            </div>            
+                        </p:fieldset>        
+                    </h:form> 
+                    <h:form id="datos" style="font-size: 10px;">  
+                        <p:dataTable value="#{extractoBean.ordenesSumi2}" var="ordenDeCarga" styleClass="" draggableRows="true">
+                            <p:ajax event="rowReorder" listener="#{ordenDeCarga.onRowReorder}" update=":msgs"/>
+                            <f:facet name="header">
+                                Detalles
+                            </f:facet>
+
+                            <p:columnGroup type="header">
+                                <p:row>
+                                    <p:column rowspan="2" headerText="Fecha" style="width: 5%" />           
+                                    <p:column headerText="Chapa" style="width: 5%" />  
+                                    <p:column headerText="Nro. Orden" style="width: 5%" />
+                                    <p:column headerText="Tipo" style="width: 5%"/>
+                                    <p:column headerText="Precio" style="width: 3%"/>
+                                    <p:column headerText="Descripcion" style="width: 40%" />
+                                    <p:column headerText="Monto" style="width: 5%" />   
+                                    <p:column headerText="Eliminar" style="width: 5%" />   
+                                </p:row>
+
+                            </p:columnGroup>
+                            <p:subTable var="sumitems" value="#{ordenDeCarga.sumitems2}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{ordenDeCarga.idOrdenDeCarga} #{ordenDeCarga.unidadOrigen.nombre} #{ordenDeCarga.unidadDestino.nombre}" />
+                                    <h:outputText value="" />
+                                    <p:commandButton icon="ui-icon-circle-plus" value="Confirmar"  action="#{pagoviBean.bntAdd(sumicli)}" update=":datos :suma :detalle :formView">
+                                        <f:setPropertyActionListener value="#{sumicli}" target="#{pagoviBean.selectedsumi}" />
+                                    </p:commandButton>  
+                                </f:facet>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.fecha}" style = "color: #{sumitems.color}">         
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.chapa}" style = "color: #{sumitems.color}">         
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.orden}" style = "color: #{sumitems.color}">         
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.tipo}" style = "color: #{sumitems.color}">
+                                        <f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
+                                    </h:outputText>   
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.precio}" style = "color: #{sumitems.color}">
+                                        <f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
+                                    </h:outputText>   
+                                </p:column>
+                                <p:column style="width: 40%;">
+                                    <h:outputText value="#{sumitems.descrip}" style = "color: #{sumitems.color}"/>
+                                </p:column>
+                                <p:column style="width: 10%;">
+                                    <h:outputText value="#{sumitems.monto}" style = "color: #{sumitems.color}">
+                                        <f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
+                                    </h:outputText> 
+                                </p:column>
+                                <p:column style="width: 5%;">
+                                    <p:commandButton icon="icon-eliminar" value=""  action="#{extractoBean.bntDescargarOrden(ordenDeCarga)}" update=":prueba :datos :suma :detalle :formView">
+                                        <f:setPropertyActionListener value="#{ordenesSumi}" target="#{extractoBean.selectedOrden}" />
+                                    </p:commandButton>  
+                                </p:column>
+                                <p:columnGroup type="footer">
+                                    <p:row>
+                                        <p:column footerText="Total Flete:" 
+                                                  style="text-align:left"/>
+                                        <p:column footerText="#{ordenDeCarga.asumi}">                                      
+                                        </p:column>
+                                        <p:column footerText="Total Suministros:" 
+                                                  style="text-align:left"/>
+                                        <p:column footerText="#{ordenDeCarga.anega}">
+                                        </p:column>
+                                        <p:column footerText="">
+                                        </p:column>
+                                        <p:column footerText="">
+                                        </p:column>
+                                        <p:column footerText="Saldo:" 
+                                                  style="text-align: right"/>
+                                        <p:column footerText="#{ordenDeCarga.saldo}">
+                                        </p:column>
+                                    </p:row>
+                                </p:columnGroup>
+                            </p:subTable>
+                        </p:dataTable> 
+                    </h:form>                     
+                    <h:form id="suma" style="font-size: 10px;">
+                        <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                            <div class="ui-datatable-tablewrapper">
+                                <table role="grid2">
+                                    <tfoot>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Total a Cobrar:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{extractoBean.totalcobrar}" >
+                                                    <f:convertNumber maxFractionDigits="2" minFractionDigits="2" type="number" />
+                                                </h:outputText>  </td>
+                                            <td class="ui-state-default"></td>
+                                        </tr>
+                                    </tfoot>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Total Activo:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{extractoBean.totalActivo}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                                </h:outputText>  </td>
+                                            <td class="ui-state-default"></td>
+                                        </tr>
+                                    </tfoot>
+                                    <tfoot>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Total Pasivo:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{extractoBean.totalPasivo}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                                </h:outputText>  </td>
+                                            <td class="ui-state-default"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <p:separator />                        
+                        <div>                        
+                            <p:commandButton id="report" ajax="false" icon="icon-pdf" value="PDF" actionListener="#{extractoBean.exportarPDFdirecto(actionEvent)}"></p:commandButton>                                                  
+                            <p:commandButton update="formPago:msgs1 :msgs"  id="bntGuardar" icon="icon-save" action="#{extractoBean.btnCreatePago()}" title="Confirmar Extracto" value="Confirmar Extracto"/> 
+                            <p:commandButton id="bntCancelar" ajax="false" immediate="true" action="/views/extracto/addextracto.xhtml" icon="icon-cancel" title="Borrar" value="Borrar" />
+                            <p:commandButton id="bntSalir" ajax="false" immediate="true" action="/views/extracto/extracto.xhtml" icon="icon-cancel" title="Salir" value="Salir" />
+                        </div>
+                    </h:form>
+
+                </p:panel>   
+                <h:form id="formAgregarPro" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Propietario" widgetVar="proDialogAgregar"  id="propietario" 
+                              showEffect="fade" width="50%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="propietario" value="#{propietarioBean.propietarios}" selection="#{extractoBean.selectedPropietario}" rowKey="#{propietario.idPropietario}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10">
+                            <p:column headerText="Nombre" style="width: 10%" filterBy="#{propietario.nombre}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                <h:outputText value="#{propietario.nombre}" />
+                            </p:column>
+                            <p:column headerText="Apellido" style="width: 10%" filterBy="#{propietario.apellido}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                <h:outputText value="#{propietario.apellido}" />
+                            </p:column>
+                            <p:column headerText="Ci" style="width: 10%">
+                                <h:outputText value="#{propietario.ciPropietario}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{propietario.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{propietario.telefono}" />
+                            </p:column>
+                            <p:ajax listener="#{extractoBean.onRowSelectPropietario(event)}" event="rowSelect" update=":formPago :formAgregarCamion :detalle :camiones :datos :suma :formView"  oncomplete="PF('proDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>   
+                <h:form id="formAgregarCamion" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Camion" widgetVar="camionDialogAgregar"  id="camion" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="camion" value="#{extractoBean.camiones}" selection="#{extractoBean.selectedCamiones}" rowKey="#{camion.chapaCamion}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10">
+                            <p:column selectionMode="multiple" width="3%" style="width:16px;text-align:center"/>
+                            <p:column headerText="Chapa Camion" style="width: 10%" filterBy="#{camion.chapaCamion}">
+                                <h:outputText value="#{camion.chapaCamion}" />
+                            </p:column>
+                            <p:column headerText="Marca" style="width: 10%">
+                                <h:outputText value="#{camion.marca}" />
+                            </p:column>
+                            <p:column headerText="Color" style="width: 10%">
+                                <h:outputText value="#{camion.color}" />
+                            </p:column>
+                            <p:column headerText="Año" style="width: 10%">
+                                <h:outputText value="#{camion.anho}" />
+                            </p:column>
+                            <p:column headerText="Chofer" style="width: 10%" filterBy="#{camion.chofer.nombre} #{camion.chofer.apellido}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                <h:outputText value="#{camion.chofer.nombre} #{camion.chofer.apellido}" />
+                            </p:column>
+                            <p:column headerText="Tipo Camion" style="width: 10%">
+                                <h:outputText value="#{camion.tipoCamion.descripcion}" />
+                            </p:column> 
+                            <f:facet name="footer">
+                                <p:commandButton id="bntA" update=":camiones :detalle formPago:msgs1" icon="icon-pro" title="Enviar" value="Enviar" actionListener="#{extractoBean.cargarPendiente(event)}" oncomplete="PF('camionDialogAgregar').hide() "/> 
+                            </f:facet>
+                        </p:dataTable>                        
+                    </p:dialog>               
+                </h:form>
+                <h:form id="formPen" style="font-size: 10px;">
+                    <p:dialog header="Items Pendientes" widgetVar="penDialogAgregar"  id="pendiente" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="itemp" value="#{extractoBean.itempen}" selection="#{extractoBean.selectedItemp}" rowKey="#{itemp.idItem}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10">                            
+                            <p:column headerText="Camion" style="width: 5%">
+                                <h:outputText value="#{itemp.camion.chapaCamion}" />
+                            </p:column>
+                            <p:column headerText="Fecha" style="width: 5%">
+                                <h:outputText value="#{itemp.fecha}" />
+                            </p:column>
+                            <p:column headerText="Descripcion" style="width: 20%">
+                                <h:outputText value="#{itemp.descrip}" />
+                            </p:column>
+                            <p:column headerText="Activo" style="width: 8%">
+                                <h:outputText value="#{itemp.activo}" />
+                            </p:column>
+                            <p:column headerText="Pasivo" style="width: 8%">
+                                <h:outputText value="#{itemp.pasivo}" />
+                            </p:column>                                                        
+                            <f:facet name="footer">
+                                <p:commandButton id="bntA" title="Salir" value="Salir" oncomplete="PF('penDialogAgregar').hide() "/> 
+                            </f:facet>
+                        </p:dataTable>                        
+                    </p:dialog>               
+                </h:form>
+            </ui:define>           
+        </ui:composition>
+        <script type="text/javascript">
+            function handleClose(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioCreate').hide();
+                }
+            }
+
+            function handleClose2(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioUpdate').hide();
+                }
+            }
+
+            function handleClose3(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogNivelCreateN').hide();
+                }
+            }
+
+            function handleClose4(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableUsu').hide();
+                }
+            }
+
+            function handleClose5(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableCli').hide();
+                }
+            }
+
+            function handleClose6(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTablePro').hide();
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Chofer" table="chofer" schema="public">
+        <id name="idChofer" type="int">
+            <column name="id_chofer" />
+            <generator class="sequence">
+                <param name="sequence">chofer_id_chofer_seq</param>
+            </generator>
+        </id>
+        <property name="NCi" type="int">
+            <column name="n_ci" not-null="true" />
+        </property>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" />
+        </property>
+        <property name="apellido" type="string">
+            <column name="apellido" length="50" not-null="true" />
+        </property>
+        <property name="fechaNacimiento" type="date">
+            <column name="fecha_nacimiento" length="13" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="50" />
+        </property>
+        <property name="telefono" type="string">
+            <column name="telefono" length="30" />
+        </property>
+        <set name="adelantoChofers" table="adelanto_chofer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="chofer_id_chofer" not-null="true" />
+            </key>
+            <one-to-many class="model.AdelantoChofer" />
+        </set>
+        <set name="itemcs" table="itemc" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="chofer_id_chofer" not-null="true" />
+            </key>
+            <one-to-many class="model.Itemc" />
+        </set>
+        <set name="viajes" table="viaje" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="chofer_id_chofer" not-null="true" />
+            </key>
+            <one-to-many class="model.Viaje" />
+        </set>
+        <set name="extractocs" table="extractoc" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="chofer_id_chofer" not-null="true" />
+            </key>
+            <one-to-many class="model.Extractoc" />
+        </set>
+        <set name="viaticos" table="viatico" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="chofer_id_chofer" not-null="true" />
+            </key>
+            <one-to-many class="model.Viatico" />
+        </set>
+        <set name="camions" table="camion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="chofer_id_chofer" not-null="true" />
+            </key>
+            <one-to-many class="model.Camion" />
+        </set>
+    </class>
+</hibernate-mapping>

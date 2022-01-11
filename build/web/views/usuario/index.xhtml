@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:form>
+                    <p:commandButton id="btnUsuarioCreate" update=":formCreate" oncomplete="PF('usuarioDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo"/>
+                </h:form>
+                <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 10px;">
+                    <p:tab title="Todos">
+                        <h:form id="formDataTable" style="font-size: 10px;">
+                            <p:dataTable id="usuarios" var="usuario" value="#{usuarioBean.usuarios}"
+                                         paginator="true" paginatorPosition="bottom"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         >
+                                <f:facet name="header">
+                                    Listado de Usuarios
+                                </f:facet>
+                                <p:column headerText="Id" style="width: 24%">
+                                    <h:outputText value="#{usuario.id}" />
+                                </p:column>
+                                <p:column headerText="Usuario" style="width: 24%"  filterBy="#{usuario.usuario}" footerText="contains" filterMatchMode="contains">
+                                    <h:outputText value="#{usuario.usuario}" />
+                                </p:column>
+                                <p:column headerText="Email" style="width: 24%">
+                                    <h:outputText value="#{usuario.email}" />
+                                </p:column>
+                                <p:column headerText="Rol" style="width: 24%">
+                                    <h:outputText value="#{usuario.rol.nombre}" />
+                                </p:column>
+                                <p:column style="width:10%">
+                                    <p:commandButton id="btnKey" update=":formKey" oncomplete="PF('usuarioDialogKey').show()" icon="icon-key" title="Modificar">
+                                        <f:setPropertyActionListener value="#{usuario}" target="#{usuarioBean.selectedUsuario}" />
+                                    </p:commandButton>
+                                    <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('usuarioDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                        <f:setPropertyActionListener value="#{usuario}" target="#{usuarioBean.selectedUsuario}" />
+                                    </p:commandButton>
+                                    <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('usuarioDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                        <f:setPropertyActionListener value="#{usuario}" target="#{usuarioBean.selectedUsuario}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:tab>
+                </p:tabView> 
+                <h:form id="formCreate" style="font-size: 10px;">
+                    <p:dialog header="Crear Usuario" widgetVar="usuarioDialogCreate" resizable="false" id="dlgUsuarioCreate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Rol:"/>
+                            <p:inputText readonly="true" value="#{usuarioBean.selectedRol.nombre}" size="40">
+                                <p:ajax event="click" update=":formAgregarRol" oncomplete="PF('rolDialogAgregar').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="Usuario:"/>
+                            <p:inputText value="#{usuarioBean.selectedUsuario.usuario}" size="40"/>
+                            <h:outputText value="Clave:"/>
+                            <p:inputText value="#{usuarioBean.selectedUsuario.clave}" size="40"/>                            
+                            <h:outputText value="Email:"/>
+                            <p:inputText value="#{usuarioBean.selectedUsuario.email}" size="40"/>
+                            <h:outputText value="Estado:"/>
+                            <p:selectOneMenu value="#{usuarioBean.selectedUsuario.estado}">
+                                <f:selectItem itemLabel="Activado" itemValue="1" />
+                                <f:selectItem itemLabel="Desactivado" itemValue="0" />
+                            </p:selectOneMenu>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable :msgs" oncomplete="PF('usuarioDialogCreate').hide()" action="#{usuarioBean.btnCreateUsuario(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('usuarioDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formAgregarRol" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Carreta" widgetVar="rolDialogAgregar"  id="tipoCamion" 
+                              showEffect="fade" width="50%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="rol" value="#{usuarioBean.roles}" selection="#{usuarioBean.selectedRol}" rowKey="#{rol.id}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Tipo Usuario" style="width: 10%" filterBy="#{rol.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{rol.nombre}" />
+                            </p:column>                      
+                            <p:ajax listener="#{usuarioBean.onRowSelectTipo(event)}" update="@this :formCreate" event="rowSelect" oncomplete="PF('usuarioDialogCreate').show(); PF('rolDialogAgregar').hide()"/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formAgregarRol2" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Carreta" widgetVar="rolDialogAgregar2"  id="tipoCamion" 
+                              showEffect="fade" width="50%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="rol" value="#{usuarioBean.roles}" selection="#{usuarioBean.selectedRol}" rowKey="#{rol.id}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Tipo Usuario" style="width: 10%" filterBy="#{rol.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{rol.nombre}" />
+                            </p:column>                      
+                            <p:ajax listener="#{usuarioBean.onRowSelectTipo(event)}" update="@this :formUpdate" event="rowSelect" oncomplete="PF('usuarioDialogUpdate').show(); PF('rolDialogAgregar2').hide()"/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formUpdate" style="font-size: 10px;">
+                    <p:dialog header="Modificar usuario" widgetVar="usuarioDialogUpdate" resizable="false" id="dlgUsuarioUpdate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Rol:"/>
+                            <p:inputText readonly="true" value="#{usuarioBean.selectedUsuario.rol.nombre}" size="40">
+                                <p:ajax event="click" update=":formAgregarRol2" oncomplete="PF('rolDialogAgregar2').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="Usuario:"/>
+                            <p:inputText value="#{usuarioBean.selectedUsuario.usuario}" size="40"/>
+                            <h:outputText value="Email:"/>
+                            <p:inputText value="#{usuarioBean.selectedUsuario.email}" size="40"/>
+                            <h:outputText value="Estado:"/>
+                            <p:selectOneMenu value="#{usuarioBean.selectedUsuario.estado}">
+                                <f:selectItem itemLabel="Activado" itemValue="1" />
+                                <f:selectItem itemLabel="Desactivado" itemValue="0" />
+                            </p:selectOneMenu>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable :msgs" oncomplete="PF('usuarioDialogUpdate').hide()" actionListener="#{usuarioBean.btnUpdateUsuario(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('usuarioDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formKey" style="font-size: 10px;">
+                    <p:dialog header="Modificar Contraseña" widgetVar="usuarioDialogKey" resizable="false" id="dlgUsuarioKey" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Usuario:"/>
+                            <p:inputText readonly="" value="#{usuarioBean.selectedUsuario.usuario}"/>    
+                            <h:outputText value="Contraseña Actual:"/>
+                            <p:inputText readonly="" value="#{usuarioBean.selectedUsuario.clave}"/>
+                            <h:outputText value="Nueva Contraseña:"/>
+                            <p:password readonly="" value="#{usuarioBean.contra}"/>
+                            <h:outputText value="Confirmar Contraseña:"/>
+                            <p:password readonly="" value="#{usuarioBean.contra1}"/>                            
+                            <h:inputHidden value="#{usuarioBean.selectedUsuario.id}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable :msgs" oncomplete="PF('usuarioDialogKey').hide()" actionListener="#{usuarioBean.btnUpdateKey(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('usuarioDialogKey').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formDelete" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Usuario" severity="alert" widgetVar="usuarioDialogDelete"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{usuarioBean.selectedUsuario.id}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update="tabla:formDataTable :msgs" oncomplete="PF('usuarioDialogDelete').hide()"
+                                         actionListener="#{usuarioBean.btnDeleteUsuario(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('usuarioDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 23/08/2021 09:14:44 AM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+  <class name="model.OrdenDeCarga" schema="public" table="orden_de_carga">
+    <id name="idOrdenDeCarga" type="int">
+      <column name="id_orden_de_carga"/>
+      <generator class="sequence">
+        <param name="sequence">orden_de_carga_id_orden_de_carga_seq</param>
+      </generator>
+    </id>
+    <many-to-one class="model.Camion" fetch="select" name="camion">
+      <column length="6" name="camion_chapa_camion" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="model.Cliente" fetch="select" name="cliente">
+      <column name="cliente_id_cliente" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="model.Producto" fetch="select" name="producto">
+      <column name="producto_id_producto" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="model.UnidadDestino" fetch="select" name="unidadDestino">
+      <column name="unidad_destino_id_unidad_destino" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="model.UnidadOrigen" fetch="select" name="unidadOrigen">
+      <column name="unidad_origen_id_unidad_origen" not-null="true"/>
+    </many-to-one>
+    <many-to-one class="model.Usuario" fetch="select" name="usuario">
+      <column name="usuario_id" not-null="true"/>
+    </many-to-one>
+    <property name="fechaEmision" type="date">
+      <column length="13" name="fecha_emision" not-null="true"/>
+    </property>
+    <property name="estadoOrden" type="string">
+      <column length="15" name="estado_orden" not-null="true"/>
+    </property>
+    <property name="estadoliq" type="string">
+      <column length="15" name="estadoliq" not-null="true"/>
+    </property>
+    <set fetch="select" inverse="true" lazy="true" name="viajes" table="viaje">
+      <key>
+        <column name="orden_de_carga_id_orden_de_carga" not-null="true"/>
+      </key>
+      <one-to-many class="model.Viaje"/>
+    </set>
+    <set fetch="select" inverse="true" lazy="true" name="valeCombustibles" table="vale_combustible">
+      <key>
+        <column name="orden_de_carga_id_orden_de_carga" not-null="true"/>
+      </key>
+      <one-to-many class="model.ValeCombustible"/>
+    </set>
+    <set fetch="select" inverse="true" lazy="true" name="viaticos" table="viatico">
+      <key>
+        <column name="orden_de_carga_id_orden_de_carga" not-null="true"/>
+      </key>
+      <one-to-many class="model.Viatico"/>
+    </set>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Suministro" table="suministro" schema="public">
+        <id name="idSuministro" type="int">
+            <column name="id_suministro" />
+            <generator class="sequence">
+                <param name="sequence">suministro_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="camion" class="model.Camion" fetch="select">
+            <column name="chapa_camion" length="6" />
+        </many-to-one>
+        <many-to-one name="chofer" class="model.Chofer" fetch="select">
+            <column name="chofer_id" />
+        </many-to-one>
+        <many-to-one name="ordenDeCarga" class="model.OrdenDeCarga" fetch="select">
+            <column name="orden_de_carga" />
+        </many-to-one>
+        <many-to-one name="precioSuministro" class="model.PrecioSuministro" fetch="select">
+            <column name="precio_id" />
+        </many-to-one>
+        <many-to-one name="tipoSuministro" class="model.TipoSuministro" fetch="select">
+            <column name="tipo_suministro" />
+        </many-to-one>
+        <many-to-one name="unidadProvee" class="model.UnidadProvee" fetch="select">
+            <column name="unidad_id" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" />
+        </many-to-one>
+        <property name="monto" type="java.lang.Double">
+            <column name="monto" precision="17" scale="17" />
+        </property>
+        <property name="montoTotal" type="java.lang.Double">
+            <column name="monto_total" precision="17" scale="17" />
+        </property>
+        <property name="litros" type="java.lang.Double">
+            <column name="litros" precision="17" scale="17" />
+        </property>
+        <property name="precioSumi" type="java.lang.Double">
+            <column name="precio_sumi" precision="17" scale="17" />
+        </property>
+        <property name="estadoPago" type="string">
+            <column name="estado_pago" length="30" />
+        </property>
+        <property name="estadoCobro" type="string">
+            <column name="estado_cobro" length="30" />
+        </property>
+        <property name="descrip" type="string">
+            <column name="descrip" length="100" />
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" />
+        </property>
+        <set name="pagoSumiDets" table="pago_sumi_det" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="suministro_id" />
+            </key>
+            <one-to-many class="model.PagoSumiDet" />
+        </set>
+        <set name="detSumis" table="det_sumi" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_suministro" />
+            </key>
+            <one-to-many class="model.DetSumi" />
+        </set>
+    </class>
+</hibernate-mapping>

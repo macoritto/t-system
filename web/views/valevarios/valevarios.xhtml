@@ -1,0 +1,385 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:form>
+                    <p:commandButton id="btnValeCreate" update=":formCreate" oncomplete="PF('valeVariosDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo" actionListener="#{valeVariosBean.btnIniciar(actionEvent)}"/>
+                </h:form>
+                <p:tabView id="tabla" dynamic="true" cache="true">
+                <p:tab title="Todos">
+                <h:form id="formDataTable" style="font-size: 10px;">
+                    <p:dataTable id="vales" var="valeVarios" value="#{valeVariosBean.valevarios}" style="letras"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 rowKey="#{valeVarios.idValeVarios}" selection="#{valeVariosBean.valelist}" rows="30" rowsPerPageTemplate="10,30,60,100"
+                                 >
+                        <f:facet name="{Exporters}">
+                            <p:commandButton ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{valeVariosBean.exportarPDF(actionEvent)}"></p:commandButton>                                                 
+                        </f:facet> 
+                        <f:facet name="header">
+                            Listado de Vales Varios
+                        </f:facet>
+                        <p:column selectionMode="multiple" width="3%" style="width:16px;text-align:center"/>
+                        <p:column headerText="N° Vale" filterStyle="width: 80%;"  style="width: 5%;" filterBy="#{valeVarios.idValeVarios}" >
+                            <h:outputText value="#{valeVarios.idValeVarios}" />
+                        </p:column>
+                        <p:column headerText="Proveedor" style="width: 15%;" filterBy="#{valeVarios.proveedorVarios.nombre}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{valeVarios.proveedorVarios.nombre}" />
+                        </p:column>
+                        <p:column headerText="Fecha Emision" style="width: 8%" filterBy="#{valeVarios.fecha}" filterMatchMode="contains" filterStyle="width: 80%;">
+                            <h:outputText value="#{valeVarios.fecha}" />
+                        </p:column>
+                        <p:column headerText="Monto" style="width: 12%">
+                            <h:outputText value="#{valeVarios.monto}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:ajax event="rowSelect" listener="#{valeVariosBean.onRowSelectVa(event)}" oncomplete="PF('valeVariosDialogView').show()" update="formView" />
+                        <p:column headerText="Descripcion" style="width: 20%"  filterBy="#{valeVarios.descripcion}" filterMatchMode="contains" sortBy="#{valeVarios.descripcion}">
+                            <h:outputText value="#{valeVarios.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;"  style="width: 8%" filterBy="#{valeVarios.camion.chapaCamion}" filterMatchMode="contains" sortBy="#{valeVarios.camion.chapaCamion}" >
+                            <h:outputText value="#{valeVarios.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Chofer" style="width: 15%" filterBy="#{valeVarios.camion.chofer.nombre} #{valeVarios.camion.chofer.apellido}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{valeVarios.camion.chofer.nombre} #{valeVarios.camion.chofer.apellido}" />
+                        </p:column>       
+                        <p:column headerText="Estado" style="width: 15%" filterBy="#{valeVarios.estado}" filterMatchMode="contains" sortBy="#{valeVarios.estado}">
+                            <h:outputText value="#{valeVarios.estado}" />
+                        </p:column>     
+                        <p:column style="width:8%">
+                            <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('valeVariosDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{valeVarios}" target="#{valeVariosBean.selectedValeVarios}" />
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('valeVariosDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{valeVarios}" target="#{valeVariosBean.selectedValeVarios}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>                 
+                </h:form>
+                </p:tab>
+                <p:tab title="Pendientes">
+                <h:form id="formDataTable1" style="font-size: 10px;">
+                    <p:dataTable id="vales1" var="valeVarios" value="#{valeVariosBean.pendientes}" style="letras"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 selectionMode="single" rowKey="#{valeVarios.idValeVarios}" selection="#{valeVariosBean.selectedValeVarios}" rows="10" rowsPerPageTemplate="10,30,60,100"
+                                 >
+                        <f:facet name="header">
+                            Listado de Vales Varios
+                        </f:facet>
+                        <p:column headerText="N° Vale" filterStyle="width: 80%;"  style="width: 5%;" filterBy="#{valeVarios.idValeVarios}" >
+                            <h:outputText value="#{valeVarios.idValeVarios}" />
+                        </p:column>
+                        <p:column headerText="Proveedor" style="width: 15%;" filterBy="#{valeVarios.proveedorVarios.nombre}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{valeVarios.proveedorVarios.nombre}" />
+                        </p:column>
+                        <p:column headerText="Fecha Emision" style="width: 8%" filterBy="#{valeVarios.fecha}" filterMatchMode="contains" filterStyle="width: 80%;">
+                            <h:outputText value="#{valeVarios.fecha}" />
+                        </p:column>
+                        <p:column headerText="Monto" style="width: 12%">
+                            <h:outputText value="#{valeVarios.monto}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:ajax event="rowSelect" listener="#{valeVariosBean.onRowSelectVa(event)}" oncomplete="PF('valeVariosDialogView').show()" update="formView" />
+                        <p:column headerText="Descripcion" style="width: 20%"  filterBy="#{valeVarios.descripcion}" filterMatchMode="contains" sortBy="#{valeVarios.descripcion}">
+                            <h:outputText value="#{valeVarios.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;"  style="width: 8%" filterBy="#{valeVarios.camion.chapaCamion}" filterMatchMode="contains" sortBy="#{valeVarios.camion.chapaCamion}" >
+                            <h:outputText value="#{valeVarios.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Chofer" style="width: 15%" filterBy="#{valeVarios.camion.chofer.nombre} #{valeVarios.camion.chofer.apellido}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{valeVarios.camion.chofer.nombre} #{valeVarios.camion.chofer.apellido}" />
+                        </p:column>       
+                        <p:column headerText="Estado" style="width: 15%" filterBy="#{valeVarios.estado}" filterMatchMode="contains" sortBy="#{valeVarios.estado}">
+                            <h:outputText value="#{valeVarios.estado}" />
+                        </p:column>                                          
+                        <p:column style="width:8%">
+                            <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('valeVariosDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{valeVarios}" target="#{valeVariosBean.selectedValeVarios}" />
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('valeVariosDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{valeVarios}" target="#{valeVariosBean.selectedValeVarios}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>                 
+                </h:form>
+                </p:tab>
+                <p:tab title="Anulados">
+                <h:form id="formDataTable2" style="font-size: 10px;">
+                    <p:dataTable id="vales2" var="valeVarios" value="#{valeVariosBean.anulados}" style="letras"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 selectionMode="single" rowKey="#{valeVarios.idValeVarios}" selection="#{valeVariosBean.selectedValeVarios}" rows="10" rowsPerPageTemplate="10,30,60,100"
+                                 >
+                        <f:facet name="header">
+                            Listado de Vales Varios
+                        </f:facet>
+                        <p:column headerText="N° Vale" filterStyle="width: 80%;"  style="width: 5%;" filterBy="#{valeVarios.idValeVarios}" >
+                            <h:outputText value="#{valeVarios.idValeVarios}" />
+                        </p:column>
+                        <p:column headerText="Proveedor" style="width: 15%;" filterBy="#{valeVarios.proveedorVarios.nombre}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{valeVarios.proveedorVarios.nombre}" />
+                        </p:column>
+                        <p:column headerText="Fecha Emision" style="width: 8%" filterBy="#{valeVarios.fecha}" filterMatchMode="contains" filterStyle="width: 80%;">
+                            <h:outputText value="#{valeVarios.fecha}" />
+                        </p:column>
+                        <p:column headerText="Monto" style="width: 12%">
+                            <h:outputText value="#{valeVarios.monto}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:ajax event="rowSelect" listener="#{valeVariosBean.onRowSelectVa(event)}" oncomplete="PF('valeVariosDialogView').show()" update="formView" />
+                        <p:column headerText="Descripcion" style="width: 20%"  filterBy="#{valeVarios.descripcion}" filterMatchMode="contains" sortBy="#{valeVarios.descripcion}">
+                            <h:outputText value="#{valeVarios.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;"  style="width: 8%" filterBy="#{valeVarios.camion.chapaCamion}" filterMatchMode="contains" sortBy="#{valeVarios.camion.chapaCamion}" >
+                            <h:outputText value="#{valeVarios.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Chofer" style="width: 15%" filterBy="#{valeVarios.camion.chofer.nombre} #{valeVarios.camion.chofer.apellido}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{valeVarios.camion.chofer.nombre} #{valeVarios.camion.chofer.apellido}" />
+                        </p:column>       
+                        <p:column headerText="Estado" style="width: 15%" filterBy="#{valeVarios.estado}" filterMatchMode="contains" sortBy="#{valeVarios.estado}">
+                            <h:outputText value="#{valeVarios.estado}" />
+                        </p:column>                                          
+                        <p:column style="width:8%">
+                            <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('valeVariosDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{valeVarios}" target="#{valeVariosBean.selectedValeVarios}" />
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('valeVariosDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{valeVarios}" target="#{valeVariosBean.selectedValeVarios}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>                 
+                </h:form>
+                </p:tab>
+                <p:tab title="Aceptados">
+                <h:form id="formDataTable3" style="font-size: 10px;">
+                    <p:dataTable id="vales3" var="valeVarios" value="#{valeVariosBean.aceptados}" style="letras"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 selectionMode="single" rowKey="#{valeVarios.idValeVarios}" selection="#{valeVariosBean.selectedValeVarios}" rows="10" rowsPerPageTemplate="10,30,60,100"
+                                 >
+                        <f:facet name="header">
+                            Listado de Vales Varios
+                        </f:facet>
+                        <p:column headerText="N° Vale" filterStyle="width: 80%;"  style="width: 5%;" filterBy="#{valeVarios.idValeVarios}" >
+                            <h:outputText value="#{valeVarios.idValeVarios}" />
+                        </p:column>
+                        <p:column headerText="Proveedor" style="width: 15%;" filterBy="#{valeVarios.proveedorVarios.nombre}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{valeVarios.proveedorVarios.nombre}" />
+                        </p:column>
+                        <p:column headerText="Fecha Emision" style="width: 8%" filterBy="#{valeVarios.fecha}" filterMatchMode="contains" filterStyle="width: 80%;">
+                            <h:outputText value="#{valeVarios.fecha}" />
+                        </p:column>
+                        <p:column headerText="Monto" style="width: 12%">
+                            <h:outputText value="#{valeVarios.monto}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:ajax event="rowSelect" listener="#{valeVariosBean.onRowSelectVa(event)}" oncomplete="PF('valeVariosDialogView').show()" update="formView" />
+                        <p:column headerText="Descripcion" style="width: 20%"  filterBy="#{valeVarios.descripcion}" filterMatchMode="contains" sortBy="#{valeVarios.descripcion}">
+                            <h:outputText value="#{valeVarios.descripcion}"/>
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;"  style="width: 8%" filterBy="#{valeVarios.camion.chapaCamion}" filterMatchMode="contains" sortBy="#{valeVarios.camion.chapaCamion}" >
+                            <h:outputText value="#{valeVarios.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Chofer" style="width: 15%" filterBy="#{valeVarios.camion.chofer.nombre} #{valeVarios.camion.chofer.apellido}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                            <h:outputText value="#{valeVarios.camion.chofer.nombre} #{valeVarios.camion.chofer.apellido}" />
+                        </p:column>       
+                        <p:column headerText="Estado" style="width: 15%" filterBy="#{valeVarios.estado}" filterMatchMode="contains" sortBy="#{valeVarios.estado}">
+                            <h:outputText value="#{valeVarios.estado}" />
+                        </p:column>                                              
+                        <p:column style="width:8%">
+                            <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('valeVariosDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{valeVarios}" target="#{valeVariosBean.selectedValeVarios}" />
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('valeVariosDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{valeVarios}" target="#{valeVariosBean.selectedValeVarios}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>                 
+                </h:form>
+                </p:tab>
+                </p:tabView>
+                <p:dialog header="Agregar Vale Varios" widgetVar="valeVariosDialogCreate" resizable="false" id="dlgValeVariosCreate" 
+                          showEffect="fade" hideEffect="explode" appendTo="@(body)" modal="true" closeOnEscape="true" position="center" dynamic="true">
+                    <h:form id="formCreate">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>
+                        <h:panelGrid id="display" columns="3" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText style="width: 15%;" value="Camion:"/>
+                            <p:inputText readonly="true" value="#{valeVariosBean.selectedCamion.chapaCamion}"/>
+                            <p:commandButton id="btnSelectCa" update=":formAgregarCamion" oncomplete="PF('camionDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">                                
+                            </p:commandButton>
+                            <h:outputText value="Chofer:"/>
+                            <p:inputText readonly="true" value="#{valeVariosBean.selectedCamion.chofer.nombre} #{valeVariosBean.selectedCamion.chofer.apellido}"/>                            
+                            <h:outputText value=""/>
+                            <h:outputText style="width: 15%;" value="Proveedor:"/>
+                            <p:inputText readonly="true" value="#{valeVariosBean.selectedProveedorVarios.nombre}"/>
+                            <p:commandButton id="btnSelecPro" update=":formAgregarPro" oncomplete="PF('proDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">                                
+                            </p:commandButton>                                                   
+                            <h:outputText value="Fecha"/>
+                            <p:calendar id="fecha" value="#{valeVariosBean.selectedValeVarios.fecha}" pattern="dd-MM-yyyy" mask="true" />                           
+                            <h:outputText value=""/>
+                            <h:outputText value="Monto Total"/>
+                            <p:inputText value="#{valeVariosBean.selectedValeVarios.monto}">
+                            </p:inputText>                           
+                            <h:outputText value=""/>
+                            <h:outputText value="Descripcion"/>
+                            <p:inputText value="#{valeVariosBean.selectedValeVarios.descripcion}"/>                          
+                            <h:inputHidden value="#{valeVariosBean.selectedCamion.chapaCamion}"/>
+                            <h:inputHidden value="#{valeVariosBean.selectedProveedorVarios.idProveedorVarios}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="report" ajax="false" icon="icon-pdf" value="PDF" actionListener="#{valeVariosBean.exportarPDF2(actionEvent)}"></p:commandButton>                                                                                  
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable tabla:formDataTable1 tabla:formDataTable2 tabla:formDataTable3 :msgs :formCreate" action="#{valeVariosBean.btnCreateValeVarios(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('valeVariosDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Salir"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <h:form id="formUpdate">
+                    <p:dialog header="Modificar Vale" widgetVar="valeVariosDialogUpdate" resizable="false" id="dlgValeVariosUpdate" 
+                              showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true">
+                        <h:panelGrid id="display" columns="3" cellpadding="2" style="margin: 0 auto; width: 50%;">
+                            <h:outputText style="width: 15%;" value="Camion:"/>
+                            <p:inputText readonly="true" value="#{valeVariosBean.selectedValeVarios.camion.chapaCamion}"/>
+                            <p:commandButton disabled="true" id="btnSelectCa" update=":formAgregarCamion" oncomplete="PF('camionDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">                                
+                            </p:commandButton>
+                            <h:outputText value="Chofer:"/>
+                            <p:inputText readonly="true" value="#{valeVariosBean.selectedValeVarios.camion.chofer.nombre} #{valeVariosBean.selectedValeVarios.camion.chofer.apellido}"/>                            
+                            <h:outputText value=""/>
+                            <h:outputText style="width: 15%;" value="Proveedor:"/>
+                            <p:inputText readonly="true" value="#{valeVariosBean.selectedValeVarios.proveedorVarios.nombre}"/>
+                            <p:commandButton disabled="true" id="btnSelecPro" update=":formAgregarPro" oncomplete="PF('proDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">                                
+                            </p:commandButton>
+                            <h:outputText value="Estado"/>
+                            <p:selectOneMenu value="#{valeVariosBean.selectedValeVarios.estado}" style="width: 100% !important;">
+                                <f:selectItem itemLabel="#{valeVariosBean.selectedValeVarios.estado}" itemValue="#{valeVariosBean.selectedValeVarios.estado}" />                                
+                                <f:selectItem itemLabel="Anulado" itemValue="Anulado" />                                
+                            </p:selectOneMenu> 
+                            <h:outputText value=""/>
+                            <h:outputText value="Fecha"/>
+                            <p:calendar id="fecha" value="#{valeVariosBean.selectedValeVarios.fecha}" pattern="dd-MM-yyyy" mask="true" />                           
+                            <h:outputText value=""/>
+                            <h:outputText value="Monto Total"/>
+                            <p:inputText value="#{valeVariosBean.selectedValeVarios.monto}"/>                           
+                            <h:outputText value=""/>
+                            <h:outputText value="Descripcion"/>
+                            <p:inputText value="#{valeVariosBean.selectedValeVarios.descripcion}"/>                          
+                            <h:inputHidden value="#{valeVariosBean.selectedCamion.chapaCamion}"/>
+                            <h:inputHidden value="#{valeVariosBean.selectedProveedorVarios.idProveedorVarios}"/>
+                            <f:facet name="footer">
+                                <p:separator/>                        
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable tabla:formDataTable1 tabla:formDataTable2 tabla:formDataTable3 :msgs" oncomplete="PF('valeVariosDialogUpdate').hide()" actionListener="#{valeVariosBean.btnUpdateValeVarios(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('valeVariosDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formView">
+                    <p:dialog header="Mostrar Vale" widgetVar="valeVariosDialogView" resizable="false" id="dlgValeVariosView" 
+                              showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true">
+                        <h:panelGrid id="display" columns="3" cellpadding="2" style="margin: 0 auto; width: 50%;">
+                            <h:outputText style="width: 15%;" value="Camion:"/>
+                            <p:inputText readonly="true" value="#{valeVariosBean.selectedValeVarios.camion.chapaCamion}"/>
+                            <p:commandButton disabled="true" id="btnSelectCa" update=":formAgregarCamion" oncomplete="PF('camionDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">                                
+                            </p:commandButton>
+                            <h:outputText value="Chofer:"/>
+                            <p:inputText readonly="true" value="#{valeVariosBean.selectedValeVarios.camion.chofer.nombre} #{valeVariosBean.selectedValeVarios.camion.chofer.apellido}"/>                            
+                            <h:outputText value=""/>
+                            <h:outputText style="width: 15%;" value="Proveedor:"/>
+                            <p:inputText readonly="true" value="#{valeVariosBean.selectedValeVarios.proveedorVarios.nombre}"/>
+                            <p:commandButton disabled="true" id="btnSelecPro" update=":formAgregarPro" oncomplete="PF('proDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">                                
+                            </p:commandButton>
+                            <h:outputText value="Estado"/>
+                            <p:inputText readonly="true" value="#{valeVariosBean.selectedValeVarios.estado}"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Fecha"/>
+                            <p:calendar id="fecha" value="#{valeVariosBean.selectedValeVarios.fecha}" pattern="dd-MM-yyyy" mask="true" />                           
+                            <h:outputText value=""/>
+                            <h:outputText value="Monto Total"/>
+                            <p:inputText value="#{valeVariosBean.selectedValeVarios.monto}"/>                           
+                            <h:outputText value=""/>
+                            <h:outputText value="Descripcion"/>
+                            <p:inputText value="#{valeVariosBean.selectedValeVarios.descripcion}"/>                          
+                            <h:outputText value=""/>
+                            <h:outputText value="Usuario:"/>
+                            <p:inputText value="#{valeVariosBean.selectedValeVarios.usuario.usuario}"/>                                                                                 
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="report" ajax="false" icon="icon-pdf" value="PDF" actionListener="#{valeVariosBean.exportarPDF3(actionEvent)}"></p:commandButton>                                                                                  
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('valeVariosDialogView').hide()" icon="icon-cancelar" title="Salir" value="Salir"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formDelete">
+                    <p:confirmDialog closeOnEscape="true" id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Vale Varios" severity="alert" widgetVar="valeVariosDialogDelete"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{valeVariosBean.selectedValeVarios.idValeVarios}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update="tabla:formDataTable tabla:formDataTable1 tabla:formDataTable2 tabla:formDataTable3 :msgs" oncomplete="PF('valeVariosDialogDelete').hide()"
+                                         actionListener="#{valeVariosBean.btnDeleteValeVarios(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('valeVariosDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+                <h:form id="formAgregarCamion">
+                    <p:dialog header="Seleccionar Camion" widgetVar="camionDialogAgregar"  id="camion" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >
+                        <p:dataTable var="camion" value="#{camionBean.camiones}" selection="#{valeVariosBean.selectedCamion}" rowKey="#{camion.chapaCamion}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Chapa Camion" style="width: 10%" filterMatchMode="contains" filterBy="#{camion.chapaCamion}">
+                                <h:outputText value="#{camion.chapaCamion}" />
+                            </p:column>
+                            <p:column headerText="Marca" style="width: 10%">
+                                <h:outputText value="#{camion.marca}" />
+                            </p:column>
+                            <p:column headerText="Color" style="width: 10%">
+                                <h:outputText value="#{camion.color}" />
+                            </p:column>
+                            <p:column headerText="Año" style="width: 10%">
+                                <h:outputText value="#{camion.anho}" />
+                            </p:column>
+                            <p:column headerText="Chofer" style="width: 10%" filterBy="#{camion.chofer.nombre} #{camion.chofer.apellido}" filterMatchMode="contains">
+                                <h:outputText value="#{camion.chofer.nombre} #{camion.chofer.apellido}" />
+                            </p:column>
+                            <p:column headerText="Tipo Camion" style="width: 10%">
+                                <h:outputText value="#{camion.tipoCamion.descripcion}" />
+                            </p:column>
+                            <p:ajax listener="#{valeVariosBean.onRowSelectCamion(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('camionDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+                 <h:form id="formAgregarPro">
+                    <p:dialog header="Seleccionar Proveedor" widgetVar="proDialogAgregar"  id="camion" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="proveedorVarios" value="#{valeVariosBean.proveedores}" selection="#{valeVariosBean.selectedProveedorVarios}" rowKey="#{proveedorVarios.idProveedorVarios}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Nombre" style="width: 10%" filterBy="#{proveedorVarios.nombre}">
+                                <h:outputText value="#{proveedorVarios.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{proveedorVarios.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{proveedorVarios.telefono}" />
+                            </p:column>
+                            <p:ajax listener="#{valeVariosBean.onRowSelectPro(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('proDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>                          
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

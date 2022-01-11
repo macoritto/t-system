@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.DetPagoFlete" table="det_pago_flete" schema="public">
+        <id name="idDetPagoFlete" type="int">
+            <column name="id_det_pago_flete" />
+            <generator class="sequence">
+                <param name="sequence">det_pago_flete_id_det_pago_flete_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="pagoFlete" class="model.PagoFlete" fetch="select">
+            <column name="pago_flete_id_pago_flete" not-null="true" />
+        </many-to-one>
+        <many-to-one name="viaje" class="model.Viaje" fetch="select">
+            <column name="viaje_id_viaje" not-null="true" />
+        </many-to-one>
+        <property name="monto" type="double">
+            <column name="monto" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descuento" type="double">
+            <column name="descuento" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="totalMonto" type="double">
+            <column name="total_monto" precision="17" scale="17" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

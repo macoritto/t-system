@@ -1,0 +1,119 @@
+/*body {
+    background-color: #ffffff;
+    font-size: 12px;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    color: #000000;  
+    margin: 10px;
+}
+
+h1 {
+    font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    border-bottom: 1px solid #AFAFAF; 
+    font-size:  16px;
+    font-weight: bold;
+    margin: 0px;
+    padding: 0px;
+    color: #D20005;
+}
+
+a:link, a:visited {
+  color: #045491;
+  font-weight : bold;
+  text-decoration: none;
+}
+
+a:link:hover, a:visited:hover  {
+  color: #045491;
+  font-weight : bold;
+  text-decoration : underline;
+}*/
+ .ui-state-default .icon-eliminar{
+     background-image: url(../imagess/icons/eliminar.png);
+     }
+ .ui-state-default .icon-nuevo{
+     background-image: url(../imagess/icons/nuevo.png);
+}
+.ui-state-default .icon-editar{
+     background-image: url(../imagess/icons/editar.png);
+}
+.ui-state-default .icon-aceptar{
+     background-image: url(../imagess/icons/aceptar.png);
+}
+.ui-state-default .icon-cancelar{
+     background-image: url(../imagess/icons/cancelar.png);
+}
+.ui-state-default .icon-guardar{
+     background-image: url(../imagess/icons/guardar.png);
+}
+.ui-state-default .icon-select{
+     background-image: url(../imagess/icons/select.png);
+}
+.ui-state-default .icon-select1{
+     background-image: url(../imagess/icons/select1.png);
+}
+.ui-state-default .icon-add{
+     background-image: url(../imagess/icons/add.png);
+}
+.ui-state-default .icon-pdf{
+     background-image: url(../imagess/icons/pdf.png);
+}
+.ui-state-default .icon-key{
+     background-image: url(../imagess/icons/key.png);
+}
+.ui-state-default .icon-pro{
+     background-image: url(../imagess/icons/pro.png);
+}
+.ui-state-default .icon-view{
+     background-image: url(../imagess/icons/view.png);
+}
+.ui-state-default .icon-delete{
+     background-image: url(../imagess/icons/delete.png);
+}
+.ui-state-default .icon-edit{
+     background-image: url(../imagess/icons/edit.png);
+}
+.ui-state-default .icon-continuo{
+     background-image: url(../images/icons/continuo.png);
+}
+.ui-state-default .icon-warning{
+     background-image: url(../imagess/icons/warning.png);
+}
+.boxphp{
+		width: 165px;
+		height: 400px;
+		-webkit-border-radius: 10px 10px;
+		-webkit-border-radius: 10px;
+		-moz-border-radius: 10px;
+		border-radius: 10px;
+		padding: 5px;
+		float:left;
+		border: solid 2px ;
+		border-color: #1E90FF;
+		margin: 2.5px;
+		font-family: 'Orbitron', sans-serif;
+		font-size: 12px;
+		
+		
+}
+.boxphp:hover{
+		width: 165px;
+		height: 400px;
+		-webkit-border-radius: 10px 10px;
+		-webkit-border-radius: 10px;
+		-moz-border-radius: 10px;
+		border-radius: 10px;
+		padding: 5px;
+		float:left;
+		border: solid 2px ;
+		border-color: #1E90FF;
+		margin: 2.5px;
+		font-family: 'Orbitron', sans-serif;
+		font-size: 12px;
+                background-color: #c2dfef;
+}
+.boxusu{
+    
+    font-size: 30px;
+    
+}
+

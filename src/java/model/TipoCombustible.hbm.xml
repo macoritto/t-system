@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.TipoCombustible" table="tipo_combustible" schema="public">
+        <id name="idTipoCombustible" type="int">
+            <column name="id_tipo_combustible" />
+            <generator class="sequence">
+                <param name="sequence">tipo_combustible_id_tipo_combustible_seq</param>
+            </generator>
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="30" not-null="true" />
+        </property>
+        <set name="valeCombustibles" table="vale_combustible" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="tipo_combustible_id_tipo_combustible" not-null="true" />
+            </key>
+            <one-to-many class="model.ValeCombustible" />
+        </set>
+        <set name="precioCombs" table="precio_comb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="tipo_combustible_id_tipo_combustible" not-null="true" />
+            </key>
+            <one-to-many class="model.PrecioComb" />
+        </set>
+    </class>
+</hibernate-mapping>

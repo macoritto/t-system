@@ -1,0 +1,222 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel id="paneli" header="Pago a Proveedores">
+                    <h:form id="formPago" style="font-size: 10px;"> 
+                        <p:messages id="msgs1" showDetail="true"/>     
+                        <h:inputHidden id="proveedor" value="#{sumiBean.selectedProvee.idProveecli}"/>                       
+                        <h:panelGrid id="display"  columns="7" cellpadding="2" columnClasses="alinder, alinizq" >
+                            <h:outputText value="*Fecha:" />
+                            <p:calendar id="fecha" pattern="dd/MM/yyyy"   value="#{sumiBean.selectedPago.fecha}" showButtonPanel="true" navigator="true" required="true" requiredMessage="Seleccione la Fecha"/>
+
+                            <p:commandButton id="DataTablePro" update=":formAgregarPro"   oncomplete="PF('proDialogAgregar').show()" icon="icon-select1" title="Buscar Proveedor" process="proveedor,proveedor2" />
+                            <p:inputText id="proveedor2" size="30" value="#{sumiBean.selectedProvee.nombre}" readonly="true" required="true" requiredMessage="Seleccione el Proveedor" />
+
+                            <h:outputText value="Descripcion:"/>
+                            <p:inputText size="60" id="descrip" value="#{sumiBean.selectedPago.descrip}">
+                                <p:ajax listener="#{sumiBean.cargarDescrip(event)}" event="keyup"/>  
+                            </p:inputText>                            
+                            <p:commandButton update=":detalle :datos :suma" icon="icon-pro" value="Cargar" action="#{sumiBean.cargarArray(event)}"/>
+                        </h:panelGrid>
+                    </h:form>
+                    <h:form id="detalle" style="font-size: 10px;">
+                        <p:dataTable id="valev" var="sumidet" editable="true" selectionMode="single" value="#{sumiBean.sumidetaux1}" selection="#{sumiBean.selectedSumidet}" rowKey="#{sumidet.id}" style="margin-bottom:0"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     emptyMessage="No se encontró ningún resultado">
+                            <f:facet name="header">
+                                Seleccionar Suministros Pendientes de Pago
+                            </f:facet>                            
+                            <p:column headerText="Id" width="5%">
+                                <h:outputText value="#{sumidet.id}" />
+                            </p:column>
+                            <p:column headerText="Descrip" width="5%">
+                                <h:outputText value="#{sumidet.descrip}" />
+                            </p:column>
+                            <p:column headerText="Camion" width="6%">
+                                <h:outputText value="#{sumidet.chapa}" />
+                            </p:column>
+                            <p:column headerText="Chofer">
+                                <h:outputText value="#{sumidet.chofer}" />
+                            </p:column>
+                            <p:column headerText="Litros" width="5%">
+                                <h:outputText value="#{sumidet.litros}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Precio" width="5%">
+                                <h:outputText value="#{sumidet.precio}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Fecha">
+                                <h:outputText value="#{sumidet.fecha}" />
+                            </p:column> 
+                              <p:column headerText="Tipo Suministro">
+                                  <h:outputText value="#{sumidet.tipo}" />
+                            </p:column> 
+                            <p:column headerText="Total">
+                                <h:outputText value="#{sumidet.total}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>
+                            </p:column> 
+                            <p:column headerText="Agregar"  style="width:5%">  
+                            <p:commandButton icon="ui-icon-circle-plus"  action="#{sumiBean.bntAdd(sumidet)}" update=":datos :suma :detalle">
+                                <f:setPropertyActionListener value="#{sumidet}" target="#{sumiBean.selectedSumidet}" />
+                            </p:commandButton>
+                        </p:column>  
+                            <!--f:facet name="footer">
+                                <p:commandButton process="valev" update=":detalle :datos :suma" icon="icon-pro" value="Enviar" action="#{sumiBean.btnCargar(event)}"/>
+                            </f:facet-->
+                        </p:dataTable>
+                    </h:form>
+                    <h:form id="datos" style="font-size: 10px;">  
+                        <p:dataTable id="datacar" var="sumidet" value="#{sumiBean.sumidetaux2}" editable="true" selectionMode="single" rowKey="#{sumidet.id}"
+                                     selection="#{sumiBean.selectedSumidet}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     emptyMessage="No se cargo ningún registro">                             
+                            <f:facet name="header">
+                                Suministros A Pagar
+                            </f:facet>
+                            <p:column headerText="Codigo" width="5%">  
+                                <h:outputText value="#{sumidet.id}" />  
+                            </p:column> 
+                            <p:column headerText="Descrip" width="6%">  
+                                <h:outputText value="#{sumidet.descrip}" />  
+                            </p:column> 
+                            <p:column headerText="Chapa Camion" width="6%">  
+                                <h:outputText value="#{sumidet.chapa}" />  
+                            </p:column>
+                            <p:column headerText="Chofer" width="15%">  
+                                <h:outputText value="#{sumidet.chofer}" />  
+                            </p:column>  
+                            <p:column headerText="Tipo Suministro" width="7%">
+                                <h:outputText value="#{sumidet.tipo}">
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Monto Total" width="7%">
+                                <h:outputText value="#{sumidet.monto}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Eliminar"  style="width:7%">  
+                                <p:commandButton icon="icon-eliminar"  action="#{sumiBean.bntDescargar(sumidet)}" update=":datos :suma :detalle" />
+                            </p:column>  
+                        </p:dataTable>  
+                    </h:form> 
+                    <h:form id="suma" style="font-size: 10px;">
+                        <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                            <div class="ui-datatable-tablewrapper">
+                                <table role="grid2">
+                                    <tfoot>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Total Suministros:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{sumiBean.totalsumi}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  </td>
+                                            <td class="ui-state-default"></td>                                               
+                                        </tr>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Total Adelantos:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{sumiBean.totalade}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  </td>
+                                            <td class="ui-state-default"></td>                                               
+                                        </tr>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Total a Pagar:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{sumiBean.total}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  </td>
+                                            <td class="ui-state-default"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <p:separator />  
+                        <div>
+
+                            <p:commandButton update="formPago:msgs1"  id="bntGuardar" icon="icon-save" action="#{sumiBean.btnCreatePago()}" title="Confirmar Pago" value="Confirmar Pago"/> 
+                            <p:commandButton id="bntCancelar" ajax="false" immediate="true" action="/views/pagoc/addpagosumi.xhtml" icon="icon-cancel" title="Borrar" value="Borrar" />
+                            <p:commandButton id="bntSalir" ajax="false" immediate="true" action="/views/pagosumi/pagoc.xhtml" icon="icon-cancel" title="Salir" value="Salir" />
+                        </div>
+                    </h:form>
+                </p:panel>   
+                <h:form id="formAgregarPro" style="font-size: 10px;">  
+                    <p:dialog header="Seleccionar Proveedor" widgetVar="proDialogAgregar"  id="prov" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+
+                        <p:dataTable var="proveeCliente" value="#{procliBean.proclientes}" selection="#{sumiBean.selectedProvee}" rowKey="#{proveeCliente.idProveecli}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Nombre" style="width: 10%" filterBy="#{proveeCliente.nombre}">
+                                <h:outputText value="#{proveeCliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{proveeCliente.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{proveeCliente.telefono}" />
+                            </p:column>
+                            <p:ajax listener="#{sumiBean.onRowSelectProvee(event)}" event="rowSelect" update=":formPago :detalle"  oncomplete="PF('proDialogAgregar').hide() "/>
+                        </p:dataTable>                   
+
+                    </p:dialog>    
+                </h:form> 
+            </ui:define>           
+        </ui:composition>
+        <script type="text/javascript">
+            function handleClose(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioCreate').hide();
+                }
+            }
+
+            function handleClose2(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioUpdate').hide();
+                }
+            }
+
+            function handleClose3(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogNivelCreateN').hide();
+                }
+            }
+
+            function handleClose4(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableUsu').hide();
+                }
+            }
+
+            function handleClose5(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableCli').hide();
+                }
+            }
+
+            function handleClose6(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTablePro').hide();
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

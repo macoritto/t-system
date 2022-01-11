@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.ValeCombustible" table="vale_combustible" schema="public">
+        <id name="idValeCombustible" type="int">
+            <column name="id_vale_combustible" />
+            <generator class="sequence">
+                <param name="sequence">vale_combustible_id_vale_combustible_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="camion" class="model.Camion" fetch="select">
+            <column name="camion_chapa_camion" length="6" not-null="true" />
+        </many-to-one>
+        <many-to-one name="ordenDeCarga" class="model.OrdenDeCarga" fetch="select">
+            <column name="orden_de_carga_id_orden_de_carga" not-null="true" />
+        </many-to-one>
+        <many-to-one name="proveedor" class="model.Proveedor" fetch="select">
+            <column name="proveedor_id_proveedor" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tipoCombustible" class="model.TipoCombustible" fetch="select">
+            <column name="tipo_combustible_id_tipo_combustible" not-null="true" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <property name="litros" type="double">
+            <column name="litros" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="precioComb" type="double">
+            <column name="precio_comb" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="montoTotal" type="double">
+            <column name="monto_total" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" not-null="true" />
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="15" not-null="true" />
+        </property>
+        <property name="extras" type="double">
+            <column name="extras" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="montoComb" type="double">
+            <column name="monto_comb" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="viatico" type="double">
+            <column name="viatico" precision="17" scale="17" not-null="true" />
+        </property>
+        <set name="combustibleContras" table="combustible_contra" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="vale_combustible_id_vale_combustible" not-null="true" />
+            </key>
+            <one-to-many class="model.CombustibleContra" />
+        </set>
+        <set name="combustibles" table="combustible" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="vale_combustible_id_vale_combustible" not-null="true" />
+            </key>
+            <one-to-many class="model.Combustible" />
+        </set>
+    </class>
+</hibernate-mapping>

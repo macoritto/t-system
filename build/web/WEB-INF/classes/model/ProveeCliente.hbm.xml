@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.ProveeCliente" table="provee_cliente" schema="public">
+        <id name="idProveecli" type="int">
+            <column name="id_proveecli" />
+            <generator class="sequence">
+                <param name="sequence">provee_cliente_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="tipoProvee" class="model.TipoProvee" fetch="select">
+            <column name="id_tipo_provee" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="100" />
+        </property>
+        <property name="ruc" type="string">
+            <column name="ruc" length="20" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="60" />
+        </property>
+        <property name="correo" type="string">
+            <column name="correo" length="60" />
+        </property>
+        <property name="telefono" type="string">
+            <column name="telefono" length="30" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="100" />
+        </property>
+        <set name="adeSuministros" table="ade_suministro" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="proveedor_id" />
+            </key>
+            <one-to-many class="model.AdeSuministro" />
+        </set>
+        <set name="unidadProvees" table="unidad_provee" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_proveecli" />
+            </key>
+            <one-to-many class="model.UnidadProvee" />
+        </set>
+        <set name="pagoSuministros" table="pago_suministro" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="proveedor_id" />
+            </key>
+            <one-to-many class="model.PagoSuministro" />
+        </set>
+    </class>
+</hibernate-mapping>

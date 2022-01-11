@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 04/11/2021 15:43:11 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.PagoFlete" table="pago_flete" schema="public" optimistic-lock="version">
+        <id name="idPagoFlete" type="int">
+            <column name="id_pago_flete" />
+            <generator class="sequence">
+                <param name="sequence">pago_flete_id_pago_flete_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="cliente" class="model.Cliente" fetch="select">
+            <column name="cliente_id_cliente" not-null="true" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+        <property name="nroLiq" type="string">
+            <column name="nro_liq" length="20" not-null="true" />
+        </property>
+        <property name="monto" type="double">
+            <column name="monto" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="iva" type="double">
+            <column name="iva" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="montoTotal" type="double">
+            <column name="monto_total" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="montoIva" type="double">
+            <column name="monto_iva" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="30" not-null="true" />
+        </property>
+        <property name="ivacom" type="string">
+            <column name="ivacom" length="3" />
+        </property>
+        <property name="retencion" type="string">
+            <column name="retencion" length="15" />
+        </property>
+        <set name="detPagoFletes" table="det_pago_flete" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pago_flete_id_pago_flete" not-null="true" />
+            </key>
+            <one-to-many class="model.DetPagoFlete" />
+        </set>
+    </class>
+</hibernate-mapping>

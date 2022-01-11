@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Carreta" table="carreta" schema="public">
+        <id name="chapaCarreta" type="string">
+            <column name="chapa_carreta" length="6" />
+            <generator class="assigned"></generator>
+        </id>
+        <many-to-one name="tipoCarreta" class="model.TipoCarreta" fetch="select">
+            <column name="tipo_carreta_id_tipo_carreta" not-null="true" />
+        </many-to-one>
+        <property name="color" type="string">
+            <column name="color" length="30" not-null="true" />
+        </property>
+        <property name="marca" type="string">
+            <column name="marca" length="30" not-null="true" />
+        </property>
+        <property name="anho" type="int">
+            <column name="anho" not-null="true" />
+        </property>
+        <property name="departamento" type="string">
+            <column name="departamento" length="50" />
+        </property>
+        <property name="fechaDinatran" type="date">
+            <column name="fecha_dinatran" length="13" not-null="true" />
+        </property>
+        <set name="camions" table="camion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="carreta_chapa_carreta" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.Camion" />
+        </set>
+    </class>
+</hibernate-mapping>

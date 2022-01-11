@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.AdelantoChofer" table="adelanto_chofer" schema="public">
+        <id name="idAdelantoChofer" type="int">
+            <column name="id_adelanto_chofer" />
+            <generator class="sequence">
+                <param name="sequence">adelanto_chofer_id_adelanto_chofer_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="camion" class="model.Camion" fetch="select">
+            <column name="camion_chapa_camion" length="6" not-null="true" />
+        </many-to-one>
+        <many-to-one name="chofer" class="model.Chofer" fetch="select">
+            <column name="chofer_id_chofer" not-null="true" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+        <property name="monto" type="int">
+            <column name="monto" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" />
+        </property>
+        <property name="estadoCobro" type="string">
+            <column name="estado_cobro" length="20" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

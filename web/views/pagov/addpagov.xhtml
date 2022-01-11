@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel id="paneli" header="Pago a Proveedores">
+                    <h:form id="formPago" style="font-size: 10px;"> 
+                        <p:messages id="msgs1" showDetail="true"/>     
+                        <h:inputHidden id="proveedor" value="#{pagovBean.selectedProveedor.idProveedorVarios}"/>                       
+                        <h:panelGrid id="display"  columns="7" cellpadding="2" columnClasses="alinder, alinizq" >
+                            <h:outputText value="*Fecha:" />
+                            <p:calendar id="fecha" pattern="dd/MM/yyyy"   value="#{pagovBean.selectedPago.fecha}" showButtonPanel="true" navigator="true" required="true" requiredMessage="Seleccione la Fecha"/>
+                            
+                            <p:commandButton id="DataTablePro" update=":formAgregarPro"   oncomplete="PF('proDialogAgregar').show()" icon="icon-select1" title="Buscar Proveedor" process="proveedor,proveedor2" />
+                            <p:inputText id="proveedor2" size="30" value="#{pagovBean.selectedProveedor.nombre}" readonly="true" required="true" requiredMessage="Seleccione el Proveedor" />
+                            
+                            <h:outputText value="Descripcion:"/>
+                            <p:inputText size="60" id="descrip" value="#{pagovBean.selectedPago.descripcion}">
+                                <p:ajax listener="#{pagovBean.cargarDescrip(event)}" event="keyup"/>  
+                            </p:inputText>                            
+                            
+                            <p:commandButton update=":detalle :datos :suma :formPago :formPago" icon="icon-pro" value="Cargar Varios" action="#{pagovBean.cargarArray(event)}"/>
+                        </h:panelGrid>
+                    </h:form>
+                    <h:form id="detalle" style="font-size: 10px;">
+                        <p:dataTable id="valev" var="varios" value="#{pagovBean.selectedAux}" selection="#{pagovBean.selectedVarios}" rowKey="#{varios.idVarios}" style="margin-bottom:0"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                      emptyMessage="No se encontró ningún resultado">
+                        <f:facet name="header">
+                            Seleccionar Varios Pendientes de Pago
+                        </f:facet>                            
+                        <p:column selectionMode="multiple" style="width:8px;text-align:center"/>
+                        <p:column headerText="Id" style="width: 5%">
+                            <h:outputText value="#{varios.idVarios}" />
+                        </p:column>
+                        <p:column headerText="Camion" style="width: 7%">
+                            <h:outputText value="#{varios.valeVarios.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Descripcion" style="width: 35%">
+                            <h:outputText value="#{varios.valeVarios.descripcion}" />
+                        </p:column>                        
+                        <p:column headerText="Proveedor" style="width: 15%">
+                            <h:outputText value="#{varios.valeVarios.proveedorVarios.nombre}" />
+                        </p:column>                        
+                        <p:column headerText="Fecha" style="width: 7%">
+                            <h:outputText value="#{varios.fecha}" />
+                        </p:column>
+                        <p:column headerText="Monto" style="width: 8%">
+                            <h:outputText value="#{varios.monto}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>                            
+                        </p:column>
+                        <p:column headerText="Usuario" style="width: 7%">
+                            <h:outputText value="#{varios.usuario.usuario}" />
+                        </p:column>                       
+                        <f:facet name="footer">
+                            <p:commandButton process="valev" update=":detalle :datos :suma" icon="icon-pro" value="Procesar" action="#{pagovBean.btnCargar(event)}"/>
+                        </f:facet>
+                        </p:dataTable>
+                    </h:form>
+                    <h:form id="datos" style="font-size: 10px;">  
+                        <p:dataTable id="datacar" var="detallePagoVarios" value="#{pagovBean.detpagov}" editable="true" selectionMode="single" rowKey="#{detallePagoVarios.varios.idVarios}"
+                                     selection="#{pagovBean.selectedDetpagvaux}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                      emptyMessage="No se cargo ningún registro">                             
+                        <f:facet name="header">
+                            Varios a Pagar
+                        </f:facet>
+                            <p:column headerText="Codigo" style="width:7%">  
+                                <h:outputText value="#{detallePagoVarios.varios.idVarios}" />  
+                            </p:column>  
+                            <p:column headerText="Chapa Camion" style="width:15%;">  
+                                <h:outputText value="#{detallePagoVarios.varios.valeVarios.camion.chapaCamion}" />  
+                            </p:column>
+                            <p:column headerText="Propietario" style="width:20%;">  
+                                <h:outputText value="#{detallePagoVarios.varios.valeVarios.camion.propietario.nombre},#{detallePagoVarios.varios.valeVarios.camion.propietario.apellido}" />  
+                            </p:column>
+                            <p:column headerText="Descripcion" style="width:37%;">  
+                                <h:outputText value="#{detallePagoVarios.descripcion}" />  
+                            </p:column>                             
+                            <p:column headerText="Monto" style="width:15%; text-align: right;" >  
+                                <h:outputText value="#{detallePagoVarios.monto}" >
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>  
+                            </p:column>
+                            <p:column headerText="Eliminar"  style="width:7%">  
+                                <p:commandButton icon="icon-eliminar"  action="#{pagovBean.bntDescargar(detallePagoVarios)}" update=":datos,:suma,:detalle" />
+                            </p:column>  
+                        </p:dataTable>  
+                    </h:form> 
+                    <h:form id="suma" style="font-size: 10px;">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                               <td class="ui-state-default"><h:outputText value="#{pagovBean.selectedPago.total}" >
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>  </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator />  
+                        <div>
+                        <p:commandButton id="report" ajax="false" icon="icon-pdf" value="PDF" actionListener="#{pagovBean.exportarPDF2(actionEvent)}"></p:commandButton>                                                  
+                        <p:commandButton update="formPago:msgs1 :detalle :suma :datos :formPago"  id="bntGuardar" icon="icon-save" action="#{pagovBean.btnCreatePago()}" title="Confirmar Pago" value="Confirmar Pago"/> 
+                        <p:commandButton id="bntCancelar" ajax="false" immediate="true" action="/views/pagov/addpagov.xhtml" icon="icon-cancel" title="Borrar" value="Borrar" />
+                        <p:commandButton id="bntSalir" ajax="false" immediate="true" action="/views/pagov/pagov.xhtml" icon="icon-cancel" title="Salir" value="Salir" />
+                        </div>
+                    </h:form>
+                </p:panel>   
+                <p:dialog header="Seleccionar Proveedor" widgetVar="proDialogAgregar"  id="prov" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                <h:form id="formAgregarPro" style="font-size: 10px;">                     
+                        <p:dataTable var="proveedorVarios" value="#{valeVariosBean.proveedores}" selection="#{pagovBean.selectedProveedor}" rowKey="#{proveedorVarios.idProveedorVarios}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Nombre" style="width: 10%" filterBy="#{proveedorVarios.nombre}">
+                                <h:outputText value="#{proveedorVarios.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{proveedorVarios.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{proveedorVarios.telefono}" />
+                            </p:column>
+                            <p:ajax listener="#{pagovBean.onRowSelectPro(event)}" event="rowSelect" update=":formPago :detalle"  oncomplete="PF('proDialogAgregar').hide() "/>
+                        </p:dataTable>                   
+                </h:form>    
+            </p:dialog>    
+            </ui:define>           
+        </ui:composition>
+                <script type="text/javascript">
+            function handleClose(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioCreate').hide();
+                }
+            }
+
+            function handleClose2(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioUpdate').hide();
+                }
+            }
+
+            function handleClose3(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogNivelCreateN').hide();
+                }
+            }
+
+            function handleClose4(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableUsu').hide();
+                }
+            }
+
+            function handleClose5(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableCli').hide();
+                }
+            }
+
+            function handleClose6(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTablePro').hide();
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

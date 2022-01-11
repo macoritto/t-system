@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 10px;">
+                    <p:tab title="Precios de Combustible">
+                        <h:form>
+                            <p:commandButton id="btnProveedorCombustibleCreate" update=":formCreate" oncomplete="PF('proCombDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo" actionListener="#{precioBean.btnIniciar(actionEvent)}"/>
+                        </h:form>
+                        <h:form id="formDataTable" > 
+                            <p:dataTable id="provComb" var="precioSuministro" value="#{precioBean.precios}"
+                                         paginator="true" paginatorPosition="bottom"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                         selectionMode="single" rowKey="#{precioSuministro.idPrecioSumi}" selection="#{precioBean.selectedPrecio}"
+                                         >
+                                <p:column headerText="Nombre" style="width: 20%;" filterBy="#{precioSuministro.nombre}" filterMatchMode="contains" sortBy="#{precioSuministro.nombre}" >
+                                    <h:outputText value="#{precioSuministro.nombre}" />
+                                </p:column>
+                                <p:column headerText="Precio" style="width: 15%">
+                                    <h:outputText value="#{precioSuministro.precio}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                    </h:outputText>
+                                </p:column> 
+                                <p:column headerText="Estado" style="width: 15%">
+                                    <h:outputText value="#{precioSuministro.estado}" />
+                                </p:column>
+                                <p:column headerText="Unidad de Proveedor" style="width: 15%" filterBy="#{precioSuministro.unidadProvee.nombre}" filterMatchMode="contains" sortBy="#{precioSuministro.unidadProvee.nombre}">
+                                    <h:outputText value="#{precioSuministro.unidadProvee.nombre}" />
+                                </p:column>
+                                <p:column style="width:10%">
+                                    <p:commandButton id="bntClienteView" action="/views/procomb/viewpro.xhtml" icon="icon-view" title="Ver Proveedor" >  
+                                        <f:setPropertyActionListener value="#{precioSuministro}" target="#{precioBean.selectedPrecio}" />  
+                                    </p:commandButton> 
+                                    <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('proCombDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                        <f:setPropertyActionListener value="#{precioSuministro}" target="#{precioBean.selectedPrecio}" />
+                                    </p:commandButton>
+                                    <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('proCombDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                        <f:setPropertyActionListener value="#{precioSuministro}" target="#{precioBean.selectedPrecio}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:tab>                
+                </p:tabView>                
+                <p:dialog width="35%" closeOnEscape="true" header="Agregar Precio de Combustible" widgetVar="proCombDialogCreate" resizable="false" id="dlgProCombCreate" 
+                          showEffect="fade" hideEffect="explode" modal="true">
+                    <h:form id="formCreate" style="font-size: 10px;">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>    
+                        <h:panelGrid id="display" columns="3" cellpadding="6" style="margin: 0 auto; margin-left: 15px;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{precioBean.selectedPrecio.nombre}" style="width: 120%;"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Precio:"/>
+                            <p:inputText value="#{precioBean.selectedPrecio.precio}" style="width: 120%;"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Estado:"/>
+                            <p:selectOneMenu value="#{precioBean.selectedPrecio.estado}" style="width: 120% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                                <f:selectItem itemLabel="Baja" itemValue="Baja" />
+                            </p:selectOneMenu>
+                            <h:outputText value=""/>
+                            <h:outputText value="Unidad de Proveedor"/>
+                            <p:inputText readonly="true" value="#{precioBean.selectedUnidad.nombre}" style="width: 120%;">                                
+                            </p:inputText>
+                            <p:commandButton id="btnSelectCa" update=":formAgregarOrigen" oncomplete="PF('origenDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">
+                            </p:commandButton>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable :formCreate :formUpdate :msgs" action="#{precioBean.btnCreateProveedorCombustible(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('proCombDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>                                                  
+
+                <p:dialog width="40%" header="Modificar Unidad de Suministro" widgetVar="proCombDialogUpdate" closeOnEscape="true" resizable="false" id="dlgProCombUpdate" 
+                          showEffect="fade" hideEffect="explode" modal="true">
+                    <h:form id="formUpdate" style="font-size: 10px;">
+                        <h:panelGrid id="display" columns="3" cellpadding="6" style="margin: 0 auto; margin-left: 15px;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{precioBean.selectedPrecio.nombre}" style="width: 120%;"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Precio"/>
+                            <p:inputText value="#{precioBean.selectedPrecio.precio}" style="width: 120%;"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Estado:"/>
+                            <p:selectOneMenu value="#{precioBean.selectedPrecio.estado}" style="width: 120% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                                <f:selectItem itemLabel="Baja" itemValue="Baja" />
+                            </p:selectOneMenu>
+                            <h:outputText value=""/>
+                            <h:outputText value="Proveedor:"/>
+                            <p:inputText value="#{precioBean.selectedPrecio.unidadProvee.nombre}" style="width: 120%;"/>
+                            <p:commandButton id="btnSelectCa" update=":formAgregarOrigen" oncomplete="PF('origenDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">
+                            </p:commandButton>
+                            <h:inputHidden value="#{precioBean.selectedPrecio.idPrecioSumi}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable :formCreate :msgs" oncomplete="PF('proCombDialogUpdate').hide()" actionListener="#{precioBean.btnUpdateProveedorCombustible(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('proCombDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form> 
+                </p:dialog>
+
+                <h:form id="formDelete" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Unidad de Suministro" severity="alert" widgetVar="proCombDialogDelete" closeOnEscape="true"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{precioBean.selectedPrecio.idPrecioSumi}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update="tabla:formDataTable :msgs" oncomplete="PF('proCombDialogDelete').hide()"
+                                         actionListener="#{precioBean.btnDeleteProveedorCombustible(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('proCombDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+                <h:form id="formAgregarOrigen" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Unidad de Suministros" widgetVar="origenDialogAgregar"  id="OrigenAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                        <p:dataTable var="unidadProvee" value="#{unidadBean.unidades}" selection="#{precioBean.selectedUnidad}" rowKey="#{unidadProvee.idUnidad}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="7" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{unidadProvee.idUnidad}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 30%" filterBy="#{unidadProvee.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{unidadProvee.nombre}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 20%">
+                                <h:outputText value="#{unidadProvee.telefono}" />
+                            </p:column>
+                            <p:column headerText="Descripcion" style="width: 10%">
+                                <h:outputText value="#{unidadProvee.descrip}" />
+                            </p:column>
+                            <p:column headerText="Proveedor" style="width: 10%">
+                                <h:outputText value="#{unidadProvee.proveeCliente.nombre}" />
+                            </p:column>    
+                            <p:ajax listener="#{precioBean.onRowSelectPro(event)}" event="rowSelect" update=":formCreate :formUpdate"  oncomplete="PF('origenDialogAgregar').hide() "/>  
+                        </p:dataTable>                       
+                    </p:dialog>
+                </h:form>  
+            </ui:define>            
+        </ui:composition>
+
+    </body>
+</html>

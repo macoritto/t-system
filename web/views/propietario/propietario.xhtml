@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:form>
+                    <p:commandButton id="btnPropietarioCreate" update=":formCreate" oncomplete="PF('propietarioDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo" actionListener="#{propietarioBean.btnIniciar(actionEvent)}"/>
+                </h:form>
+                <p:panel id="paneli" header="Listado de Propietarios">                                                            
+                    <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 11px;">
+                        <p:tab title="Propietarios">
+                            <h:form id="formDataTable" style="font-size: 10px;">
+                                <p:dataTable id="propietarios" var="propietario" value="#{propietarioBean.propietarios}" style="letras"
+                                             paginator="true" paginatorPosition="bottom"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                             selectionMode="single" rowKey="#{propietario.idPropietario}" selection="#{propietarioBean.selectedPropietario}"
+                                             >
+                                    <f:facet name="{Exporters}">
+                                        <p:commandButton onclick="form.target = '_blank'" ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{propietarioBean.exportarPDF(actionEvent)}"></p:commandButton>                                                 
+                                    </f:facet> 
+                                    <p:column headerText="Nombre" style="width: 15%;" filterBy="#{propietario.nombre}, #{propietario.apellido}" filterMatchMode="contains" filterStyle="width: 80%;" >
+                                        <h:outputText value="#{propietario.nombre} #{propietario.apellido}" />
+                                    </p:column>
+                                    <p:column headerText="Ci" style="width: 15%" filterBy="#{propietario.ciPropietario}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                        <h:outputText value="#{propietario.ciPropietario}">
+                                            <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="Telefono" style="width: 15%" filterBy="#{propietario.telefono}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                        <h:outputText value="#{propietario.telefono}" />
+                                    </p:column>
+                                    <p:column headerText="Direccion" style="width: 15%" filterBy="#{propietario.direccion}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                        <h:outputText value="#{propietario.direccion}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha de Nacimiento" style="width: 15%">
+                                        <h:outputText value="#{propietario.fechaCreacion}" />
+                                    </p:column>
+                                    <p:column style="width:8%">                            
+                                        <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('propietarioDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                            <f:setPropertyActionListener value="#{propietario}" target="#{propietarioBean.selectedPropietario}" />
+                                        </p:commandButton>
+                                        <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('propietarioDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                            <f:setPropertyActionListener value="#{propietario}" target="#{propietarioBean.selectedPropietario}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:tab>
+                    </p:tabView>
+                </p:panel>
+                <h:form id="formCreate" style="font-size: 10px;">
+                    <p:dialog header="Agregar Propietario" widgetVar="propietarioDialogCreate" resizable="false" id="dlgPropietarioCreate" 
+                              showEffect="fade" closeOnEscape="true" hideEffect="explode" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{propietarioBean.selectedPropietario.nombre}"/>
+                            <h:outputText value="Apellido:"/>
+                            <p:inputText value="#{propietarioBean.selectedPropietario.apellido}"/>
+                            <h:outputText value="Ci:"/>
+                            <p:inputText value="#{propietarioBean.selectedPropietario.ciPropietario}"/>
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText value="#{propietarioBean.selectedPropietario.telefono}"/>
+                            <h:outputText value="Direccion"/>
+                            <p:inputText value="#{propietarioBean.selectedPropietario.direccion}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":paneli :msgs" oncomplete="PF('propietarioDialogCreate').hide()" action="#{propietarioBean.btnCreatePropietario(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('propietarioDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formUpdate" style="font-size: 10px;">
+                    <p:dialog header="Modificar Chofer" widgetVar="propietarioDialogUpdate" resizable="false" id="dlgPropietarioUpdate" 
+                              showEffect="fade" hideEffect="explode" closeOnEscape="true" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{propietarioBean.selectedPropietario.nombre}"/>
+                            <h:outputText value="Apellido:"/>
+                            <p:inputText value="#{propietarioBean.selectedPropietario.apellido}"/>
+                            <h:outputText value="Ci:"/>
+                            <p:inputText value="#{propietarioBean.selectedPropietario.ciPropietario}"/>
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText value="#{propietarioBean.selectedPropietario.telefono}"/>
+                            <h:outputText value="Direccion"/>
+                            <p:inputText value="#{propietarioBean.selectedPropietario.direccion}"/>
+                            <h:inputHidden value="#{propietarioBean.selectedPropietario.idPropietario}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":paneli :msgs" oncomplete="PF('propietarioDialogUpdate').hide()" actionListener="#{propietarioBean.btnUpdatePropietario(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('propietarioDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formDelete" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Chofer" severity="alert" closeOnEscape="true" widgetVar="propietarioDialogDelete"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{propietarioBean.selectedPropietario.idPropietario}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":paneli :msgs" oncomplete="PF('propietarioDialogDelete').hide()"
+                                         actionListener="#{propietarioBean.btnDeletePropietario(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('propietarioDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

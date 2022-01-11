@@ -1,0 +1,279 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:form>
+                    <p:commandButton id="btnPagovCreate" ajax="false" immediate="true" action="/views/pagov/addpagov.xhtml" icon="ui-icon-circle-plus" title="Crear" value="Nuevo"/>
+                </h:form>
+                <p:panel id="paneli" header="Pago a Proveedores Varios">                                                            
+
+                        <h:form id="datos1" style="font-size: 10px;">  
+                            <p:dataTable id="datacar" var="pagoVarios" value="#{pagovBean.pagos}" rowKey="#{pagoVarios.idPagoVarios}" selection="#{pagovBean.selectedPago}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" paginator="true" paginatorPosition="top" rows="30" rowsPerPageTemplate="10,30,60,100">  
+                                <f:facet name="{Exporters}">
+                                    <p:commandButton ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{pagovBean.exportarPDF(actionEvent)}"></p:commandButton>                                                 
+                                </f:facet>
+                                <p:column headerText="Cod Pago" style="width:5%;" filterBy="#{pagoVarios.idPagoVarios}"   
+                                       filterMatchMode="contains" filterStyle="width: 80%;">  
+                                    <h:outputText value="#{pagoVarios.idPagoVarios}"/>  
+                                </p:column>
+                                <p:ajax listener="#{pagovBean.onRowSelectPago(event)}" event="rowSelect" update=":formPago :datos :suma"  oncomplete="PF('pagoDialogDataTable').show() "/>
+                                <p:column headerText="Proveedor" style="width:15%;" filterBy="#{pagoVarios.proveedorVarios.nombre}"   
+                                          filterMatchMode="contains" filterStyle="width: 80%;">  
+                                    <h:outputText value="#{pagoVarios.proveedorVarios.idProveedorVarios}, #{pagoVarios.proveedorVarios.nombre}" />  
+                                </p:column>
+                                <p:column headerText="Desripcion" style="width:25%;" filterBy="#{pagoVarios.descripcion}" filterMatchMode="contains" filterStyle="width: 80%;">  
+                                    <h:outputText value="#{pagoVarios.descripcion}" />  
+                                </p:column>  
+                                <p:column headerText="Fecha" style="width:8%;" filterBy="#{pagoVarios.fecha}" filterMatchMode="contains" filterStyle="width: 80%;">  
+                                    <h:outputText value="#{pagoVarios.fecha}" />  
+                                </p:column>  
+                                <p:column headerText="Estado" style="width:7%;" filterBy="#{pagoVarios.estado}" filterMatchMode="contains" filterStyle="width: 80%;">  
+                                    <h:outputText value="#{pagoVarios.estado}"/>  
+                                </p:column>  
+
+                                <p:column headerText="Total" style="width:7%;" filterBy="#{pagoVarios.total}" filterMatchMode="contains" filterStyle="width: 80%;">  
+                                    <h:outputText value="#{pagoVarios.total}"  >
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                    </h:outputText>  
+                                </p:column>  
+
+                        
+                                <p:column headerText=""  style="width:7%">  
+                                    <p:commandButton id="bntPedidoUpdate" oncomplete="PF('pagoDialogUpdate').show()" icon="icon-edit" title="Editar" update=":formUpdate :datosu :sumau">  
+                                        <f:setPropertyActionListener value="#{pagoVarios}" target="#{pagovBean.selectedPago}" />  
+                                    </p:commandButton>  
+                                    <p:commandButton id="bntPedidoDelete" update=":formDelete,:datos1 :suma1" oncomplete="PF('pagoDialogDelete').show()" icon="icon-delete" title="Borrar">  
+                                        <f:setPropertyActionListener value="#{pagoVarios}" target="#{pagovBean.selectedPago}" />  
+                                    </p:commandButton>  
+                                    
+                                </p:column>
+                            </p:dataTable>  
+                        </h:form> 
+                        <h:form id="suma1" style="font-size: 10px;">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{pagovBean.total}" >
+                                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                    </h:outputText>  </td>
+                                                <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                            <p:separator/>                            
+                        </h:form>                    
+                    </p:panel>
+                <p:confirmDialog  id="DialogMessage" message="Estas Seguro de Eliminar el Pago" header="Eliminar Pago"
+                                  severity="alert" widgetVar="pagoDialogDelete"  showEffect="fade" hideEffect="explode" appendTo="@(body)" closeOnEscape="true">  
+                    <h:form id="formDelete" style="font-size: 10px;">
+                        
+                        <h:inputHidden   value="#{pagovBean.selectedPago.idPagoVarios}"/>  
+                        <p:commandButton id="confirm" value="Eliminar"  styleClass="ui-confirmdialog-yes" update=":msgs,:datos1,:suma1" icon="icon-aceptar" oncomplete="PF('pagoDialogDelete').hide()"
+                                         actionListener="#{pagovBean.btnDeletePago(actionEvent)}" >  
+                            <f:setPropertyActionListener value="#{pagovBean.selectedPago}" target="#{pagovBean.selectedPago}" />  
+                        </p:commandButton>  
+                        <p:commandButton id="decline" value="Cancelar" styleClass="ui-confirmdialog-no" icon="icon-cancelar" oncomplete="PF('pagoDialogDelete').hide()"/>                           
+                    </h:form>
+                </p:confirmDialog>                                                                
+                <p:dialog  width="1200" dynamic="true" position="top" widgetVar="pagoDialogDataTable" resizable="true" id="dlgDataTablePago"  
+                           showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true"  maximizable="true" >
+                    <h:form id="formPago" style="font-size: 10px;"> 
+                        <h:panelGrid id="display"  columns="8" cellpadding="2" columnClasses="alinder, alinizq" >
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="*Fecha:" />
+                            <p:inputText value="#{pagovBean.selectedPago.fecha}" readonly="true"/>
+                            
+                            <p:commandButton id="DataTablePro" disabled="false"  oncomplete="PF('proDialogAgregar').show()" icon="icon-select" title="Buscar Proveedor"/>
+                            <p:inputText id="proveedor2" size="30" value="#{pagovBean.selectedPago.proveedorVarios.nombre}" readonly="true" required="true" requiredMessage="Seleccione el Proveedor" />
+                            
+                            <h:outputText value="Descripcion:"/>
+                            <p:inputText size="50" id="descrip" value="#{pagovBean.selectedPago.descripcion}"/>                            
+                            <h:outputText value="Estado:"/>
+                            <p:inputText id="estado" value="#{pagovBean.selectedPago.estado}"/>                            
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                        </h:panelGrid>
+                    </h:form>           
+                    <h:form id="datos" style="font-size: 10px;">  
+                        <p:dataTable id="datacar" var="detallePagoVarios" value="#{pagovBean.detpagovista}" editable="true" selectionMode="single" rowKey="#{detallePagoVarios.varios.idVarios}"
+                                     selection="#{pagovBean.selectedDetpagvaux}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                      emptyMessage="No se encontró ningún resultado" rows="20" rowsPerPageTemplate="20,30" paginatorPosition="top" paginator="true">                             
+                        <f:facet name="header">
+                            Varios Pagados
+                        </f:facet>
+                            <p:column headerText="Codigo" style="width:7%">  
+                                <h:outputText value="#{detallePagoVarios.varios.idVarios}" />  
+                            </p:column>  
+                            <p:column headerText="Chapa Camion" style="width:37%;">  
+                                <h:outputText value="#{detallePagoVarios.varios.valeVarios.camion.chapaCamion}" />  
+                            </p:column>
+                            <p:column headerText="Propietario" style="width:37%;">  
+                                <h:outputText value="#{detallePagoVarios.varios.valeVarios.camion.propietario.nombre},#{detallePagoVarios.varios.valeVarios.camion.propietario.apellido}" />  
+                            </p:column>
+                            <p:column headerText="Descripcion" style="width:37%;">  
+                                <h:outputText value="#{detallePagoVarios.descripcion}" />  
+                            </p:column>                             
+                            <p:column headerText="Monto" style="width:15%; text-align: right;" >  
+                                <h:outputText value="#{detallePagoVarios.monto}" >
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>  
+                            </p:column>                              
+                        </p:dataTable>  
+                    </h:form> 
+                    <h:form id="suma" style="font-size: 10px;">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                                    <td class="ui-state-default">
+                                                        <h:outputText value="#{pagovBean.total}" >
+                                                             <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                        </h:outputText>  
+                                                    </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator /> 
+                        <div>                                                   
+                        <p:commandButton id="report" ajax="false" icon="icon-pdf" value="PDF" actionListener="#{pagovBean.exportarPDF3(actionEvent)}"></p:commandButton>                                                  
+                        <p:commandButton id="bntSalir" ajax="false" immediate="true" oncomplete="PF('pagoDialogDataTable').hide()" icon="icon-cancelar" title="Salir" value="Salir" />
+                        </div>
+                    </h:form>                                        
+                </p:dialog>
+                
+                <p:dialog  width="1200" dynamic="true" position="top" widgetVar="pagoDialogUpdate" resizable="true" id="dlgDataTableUpdate"  
+                           showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true"  maximizable="true" >                
+                    <h:form id="formUpdate" style="font-size: 10px;"> 
+                        <h:panelGrid id="display"  columns="8" cellpadding="2">
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="*Fecha:" />
+                            <p:inputText value="#{pagovBean.selectedPago.fecha}" readonly="true"/>
+                            
+                            <p:commandButton id="DataTablePro" disabled="false"  oncomplete="PF('proDialogAgregar').show()" icon="icon-select" title="Buscar Proveedor"/>
+                            <p:inputText id="proveedor2" size="20" value="#{pagovBean.selectedPago.proveedorVarios.nombre}" readonly="true" required="true" requiredMessage="Seleccione el Proveedor" />                            
+                            <h:outputText value="Descripcion:"/>
+                            <p:inputText size="40" id="descrip" value="#{pagovBean.selectedPago.descripcion}"/>                            
+                            <h:outputText value="Estado Pago"/>
+                            <p:selectOneMenu value="#{pagovBean.selectedPago.estado}">                                
+                                
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                <f:selectItem itemLabel="Anulado" itemValue="Anulado" />
+                            </p:selectOneMenu>                            
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:inputHidden value="#{pagovBean.selectedPago.idPagoVarios}"/> 
+                            <f:facet name="footer">                                
+                                <p:commandButton icon="icon-aceptar" value="Guardar" update=":msgs, :paneli,:datos1,suma1" oncomplete="PF('pagoDialogUpdate').hide()" action="#{pagovBean.btnUpdatePago(actionEvent)}"></p:commandButton>                                                  
+                                <p:commandButton id="bntSalir" ajax="false" immediate="true" oncomplete="PF('pagoDialogUpdate').hide()" icon="icon-cancelar" title="Salir" value="Salir" />
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form>           
+                    <h:form id="datosu" style="font-size: 10px;">  
+                        <p:dataTable id="datacar" var="detallePagoVarios" value="#{pagovBean.detpagovista}" editable="true" selectionMode="single" rowKey="#{detallePagoVarios.varios.idVarios}"
+                                     selection="#{pagovBean.selectedDetpagvaux}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     emptyMessage="No se encontró ningún resultado" rows="20" rowsPerPageTemplate="20,30" paginatorPosition="top" paginator="true">                             
+                        <f:facet name="header">
+                            Varios Pagados
+                        </f:facet>
+                            <p:column headerText="Codigo" style="width:7%">  
+                                <h:outputText value="#{detallePagoVarios.varios.idVarios}" />  
+                            </p:column>  
+                            <p:column headerText="Chapa Camion" style="width:37%;">  
+                                <h:outputText value="#{detallePagoVarios.varios.valeVarios.camion.chapaCamion}" />  
+                            </p:column>
+                            <p:column headerText="Propietario" style="width:37%;">  
+                                <h:outputText value="#{detallePagoVarios.varios.valeVarios.camion.propietario.nombre},#{detallePagoVarios.varios.valeVarios.camion.propietario.apellido}" />  
+                            </p:column>
+                            <p:column headerText="Descripcion" style="width:37%;">  
+                                <h:outputText value="#{detallePagoVarios.descripcion}" />  
+                            </p:column>                             
+                            <p:column headerText="Monto" style="width:15%; text-align: right;" >  
+                                <h:outputText value="#{detallePagoVarios.monto}" >
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>  
+                            </p:column>                              
+                        </p:dataTable>  
+                    </h:form> 
+                    <h:form id="sumau" style="font-size: 10px;">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                               <td class="ui-state-default"><h:outputText value="#{pagovBean.selectedPago.total}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  
+                                               </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator />                         
+                    </h:form>                                        
+                </p:dialog>
+              
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

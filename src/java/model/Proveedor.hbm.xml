@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Proveedor" table="proveedor" schema="public">
+        <id name="idProveedor" type="int">
+            <column name="id_proveedor" />
+            <generator class="sequence">
+                <param name="sequence">proveedor_id_proveedor_seq</param>
+            </generator>
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="30" />
+        </property>
+        <property name="telefono" type="string">
+            <column name="telefono" length="20" />
+        </property>
+        <property name="ruc" type="string">
+            <column name="ruc" length="30" />
+        </property>
+        <property name="emblema" type="string">
+            <column name="emblema" length="50" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" />
+        </property>
+        <set name="valeCombustibles" table="vale_combustible" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="proveedor_id_proveedor" not-null="true" />
+            </key>
+            <one-to-many class="model.ValeCombustible" />
+        </set>
+        <set name="precioCombs" table="precio_comb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="proveedor_id_proveedor" not-null="true" />
+            </key>
+            <one-to-many class="model.PrecioComb" />
+        </set>
+        <set name="pagoCombustibles" table="pago_combustible" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="proveedor_id_proveedor" not-null="true" />
+            </key>
+            <one-to-many class="model.PagoCombustible" />
+        </set>
+    </class>
+</hibernate-mapping>

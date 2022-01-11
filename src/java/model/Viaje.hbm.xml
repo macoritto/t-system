@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 01/11/2021 19:58:58 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Viaje" table="viaje" schema="public" optimistic-lock="version">
+        <id name="idViaje" type="int">
+            <column name="id_viaje" />
+            <generator class="sequence">
+                <param name="sequence">viaje_id_viaje_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="chofer" class="model.Chofer" fetch="select">
+            <column name="chofer_id_chofer" not-null="true" />
+        </many-to-one>
+        <many-to-one name="ordenDeCarga" class="model.OrdenDeCarga" fetch="select">
+            <column name="orden_de_carga_id_orden_de_carga" not-null="true" />
+        </many-to-one>
+        <many-to-one name="precioFlete" class="model.PrecioFlete" fetch="select">
+            <column name="precio_flete_id_precio_flete" not-null="true" />
+        </many-to-one>
+        <many-to-one name="seguro" class="model.Seguro" fetch="select">
+            <column name="seguro_id_seguro" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tolerancia" class="model.Tolerancia" fetch="select">
+            <column name="tolerancia_id_tolerancia" not-null="true" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <property name="remisionOrigen" type="string">
+            <column name="remision_origen" length="20" not-null="true" />
+        </property>
+        <property name="remisionDestino" type="string">
+            <column name="remision_destino" length="20" not-null="true" />
+        </property>
+        <property name="pesoOrigen" type="int">
+            <column name="peso_origen" not-null="true" />
+        </property>
+        <property name="pesoDestino" type="int">
+            <column name="peso_destino" not-null="true" />
+        </property>
+        <property name="fechaOrigen" type="date">
+            <column name="fecha_origen" length="13" not-null="true" />
+        </property>
+        <property name="fechaDestino" type="date">
+            <column name="fecha_destino" length="13" not-null="true" />
+        </property>
+        <property name="precioPago" type="double">
+            <column name="precio_pago" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="precioCobro" type="double">
+            <column name="precio_cobro" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="estadoPago" type="string">
+            <column name="estado_pago" length="15" not-null="true" />
+        </property>
+        <property name="estadoCobro" type="string">
+            <column name="estado_cobro" length="15" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" not-null="true" />
+        </property>
+        <property name="montoPagar" type="double">
+            <column name="monto_pagar" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="montoCobrar" type="double">
+            <column name="monto_cobrar" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="montofaltante" type="double">
+            <column name="montofaltante" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="montoBruto" type="double">
+            <column name="monto_bruto" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="dif" type="double">
+            <column name="dif" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="falCobrar" type="double">
+            <column name="fal_cobrar" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="montoseguro" type="double">
+            <column name="montoseguro" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="estadocontra" type="string">
+            <column name="estadocontra" length="50" not-null="true" />
+        </property>
+        <property name="precioiva" type="java.lang.Double">
+            <column name="precioiva" precision="17" scale="17" />
+        </property>
+        <property name="montoconiva" type="java.lang.Double">
+            <column name="montoconiva" precision="17" scale="17" />
+        </property>
+        <set name="contrasenhas" table="contrasenha" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="viaje_id_viaje" not-null="true" />
+            </key>
+            <one-to-many class="model.Contrasenha" />
+        </set>
+        <set name="detPagoFletes" table="det_pago_flete" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="viaje_id_viaje" not-null="true" />
+            </key>
+            <one-to-many class="model.DetPagoFlete" />
+        </set>
+    </class>
+</hibernate-mapping>

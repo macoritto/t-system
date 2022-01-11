@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Viatico" table="viatico" schema="public">
+        <id name="idViatico" type="int">
+            <column name="id_viatico" />
+            <generator class="sequence">
+                <param name="sequence">viatico_id_viatico_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="camion" class="model.Camion" fetch="select">
+            <column name="camion_chapa_camion" length="6" not-null="true" />
+        </many-to-one>
+        <many-to-one name="chofer" class="model.Chofer" fetch="select">
+            <column name="chofer_id_chofer" not-null="true" />
+        </many-to-one>
+        <many-to-one name="ordenDeCarga" class="model.OrdenDeCarga" fetch="select">
+            <column name="orden_de_carga_id_orden_de_carga" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tipoViatico" class="model.TipoViatico" fetch="select">
+            <column name="tipo_viatico_id_tipo" not-null="true" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <property name="monto" type="double">
+            <column name="monto" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="15" not-null="true" />
+        </property>
+        <set name="viaticoContras" table="viatico_contra" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="viatico_id_viatico" not-null="true" />
+            </key>
+            <one-to-many class="model.ViaticoContra" />
+        </set>
+        <set name="combustibles" table="combustible" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="viatico_id_viatico" not-null="true" />
+            </key>
+            <one-to-many class="model.Combustible" />
+        </set>
+    </class>
+</hibernate-mapping>

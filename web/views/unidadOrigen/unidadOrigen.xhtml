@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:form>
+                    <p:commandButton id="btnUnidadOrigenBtn" update=":formCreate" oncomplete="PF('origenDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo" actionListener="#{origenBean.btnIniciar(actionEvent)}"/>
+                </h:form>
+                <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 10px;">  
+                <p:tab title="Unidades de Origen">
+                <h:form id="formDataTable" style="font-size: 10px;">
+                    <p:dataTable id="provComb" var="unidadOrigen" value="#{origenBean.origenes}"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 selectionMode="single" rowKey="#{unidadOrigen.idUnidadOrigen}" selection="#{origenBean.selectedUnidadOrigen}"
+                                 >
+                        <f:facet name="header">
+                            Unidades de Embarques
+                        </f:facet>
+                        <p:column headerText="Id" style="width: 15%;" filterBy="#{unidadOrigen.idUnidadOrigen}" filterMatchMode="contains" >
+                            <h:outputText value="#{unidadOrigen.idUnidadOrigen}" />
+                        </p:column>
+                        <p:column headerText="Nombre" style="width: 15%;" filterBy="#{unidadOrigen.nombre}" filterMatchMode="contains">
+                            <h:outputText value="#{unidadOrigen.nombre}" />
+                        </p:column>
+                        <p:column headerText="Correo" style="width: 15%" >
+                            <h:outputText value="#{unidadOrigen.correo}" />
+                        </p:column>
+                        <p:column headerText="Direccion" style="width: 15%">
+                            <h:outputText value="#{unidadOrigen.direccion}" />
+                        </p:column>
+                        <p:column headerText="Descripcion" style="width: 15%">
+                            <h:outputText value="#{unidadOrigen.descripcion}" />
+                        </p:column>
+                        <p:column style="width:8%">
+                            <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('origenDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{unidadOrigen}" target="#{origenBean.selectedUnidadOrigen}" />
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('origenDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{unidadOrigen}" target="#{origenBean.selectedUnidadOrigen}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                    </p:tab>
+                    </p:tabView>
+                <h:form id="formCreate" style="font-size: 10px;">
+                    <p:dialog width="35%" header="Agregar Unidad Origen" widgetVar="origenDialogCreate" resizable="false" id="dlgOrigenCreate" 
+                              showEffect="fade" hideEffect="explode" closeOnEscape="true" modal="true">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px; ">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{origenBean.selectedUnidadOrigen.nombre}"/>
+                            <h:outputText value="Direccion:"/>
+                            <p:inputText value="#{origenBean.selectedUnidadOrigen.direccion}" />
+                            <h:outputText value="Descripcion:"/>
+                            <p:inputText value="#{origenBean.selectedUnidadOrigen.descripcion}"/>
+                            <h:outputText value="Correo"/>
+                            <p:inputText value="#{origenBean.selectedUnidadOrigen.correo}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable :msgs :formCreate" action="#{origenBean.btnCreateUnidadOrigen(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('origenDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formUpdate" style="font-size: 10px;">
+                    <p:dialog width="35%" header="Modificar Unidad Origen" widgetVar="origenDialogUpdate" closeOnEscape="true" resizable="false" id="origenCombUpdate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px; ">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{origenBean.selectedUnidadOrigen.nombre}" style="width: 150%"/>
+                            <h:outputText value="Direccion:"/>
+                            <p:inputText value="#{origenBean.selectedUnidadOrigen.direccion}" style="width: 150%"/>
+                            <h:outputText value="Descripcion:"/>
+                            <p:inputText value="#{origenBean.selectedUnidadOrigen.descripcion}" style="width: 150%"/>
+                            <h:outputText value="Correo"/>
+                            <p:inputText value="#{origenBean.selectedUnidadOrigen.correo}" style="width: 150%"/>
+                            <h:inputHidden value="#{origenBean.selectedUnidadOrigen.idUnidadOrigen}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable :msgs" oncomplete="PF('origenDialogUpdate').hide()" actionListener="#{origenBean.btnUpdateUnidadOrigen(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('origenDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formDelete" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Proveedor" severity="alert" widgetVar="origenDialogDelete" closeOnEscape="true"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{origenBean.selectedUnidadOrigen.idUnidadOrigen}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update="tabla:formDataTable :msgs" oncomplete="PF('origenDialogDelete').hide()"
+                                         actionListener="#{origenBean.btnDeleteUnidadOrigen(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('origenDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

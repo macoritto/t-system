@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Contrasenha" table="contrasenha" schema="public">
+        <id name="idContrasenha" type="int">
+            <column name="id_contrasenha" />
+            <generator class="sequence">
+                <param name="sequence">contrasenha_id_contrasenha_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="viaje" class="model.Viaje" fetch="select">
+            <column name="viaje_id_viaje" not-null="true" />
+        </many-to-one>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" />
+        </property>
+        <property name="saldo" type="double">
+            <column name="saldo" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="combustible" type="double">
+            <column name="combustible" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="viatico" type="double">
+            <column name="viatico" precision="17" scale="17" not-null="true" />
+        </property>
+        <set name="combustibleContras" table="combustible_contra" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="contrasenha_id_contrasenha" not-null="true" />
+            </key>
+            <one-to-many class="model.CombustibleContra" />
+        </set>
+        <set name="viaticoContras" table="viatico_contra" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="contrasenha_id_contrasenha" not-null="true" />
+            </key>
+            <one-to-many class="model.ViaticoContra" />
+        </set>
+    </class>
+</hibernate-mapping>

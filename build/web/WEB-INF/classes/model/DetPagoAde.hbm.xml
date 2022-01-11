@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:40:08 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.DetPagoAde" table="det_pago_ade" schema="public" optimistic-lock="version">
+        <id name="idDetPagoAde" type="int">
+            <column name="id_det_pago_ade" />
+            <generator class="sequence">
+                <param name="sequence">detpagoadeseq</param>
+            </generator>
+        </id>
+        <many-to-one name="adeCliente" class="model.AdeCliente" fetch="select">
+            <column name="adelanto_id" />
+        </many-to-one>
+        <many-to-one name="pagoFlete" class="model.PagoFlete" fetch="select">
+            <column name="pago_id" />
+        </many-to-one>
+        <property name="monto" type="java.lang.Double">
+            <column name="monto" precision="17" scale="17" />
+        </property>
+        <property name="descuento" type="java.lang.Double">
+            <column name="descuento" precision="17" scale="17" />
+        </property>
+        <property name="totalMonto" type="java.lang.Double">
+            <column name="total_monto" precision="17" scale="17" />
+        </property>
+    </class>
+</hibernate-mapping>

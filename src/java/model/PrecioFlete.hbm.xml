@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 01/11/2021 16:08:51 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.PrecioFlete" table="precio_flete" schema="public" optimistic-lock="version">
+        <id name="idPrecioFlete" type="int">
+            <column name="id_precio_flete" />
+             <generator class="sequence">
+                <param name="sequence">precio_flete_id_precio_flete_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="cliente" class="model.Cliente" fetch="select">
+            <column name="cliente_id_cliente" not-null="true" />
+        </many-to-one>
+        <many-to-one name="unidadDestino" class="model.UnidadDestino" fetch="select">
+            <column name="unidad_destino_id_unidad_destino" not-null="true" />
+        </many-to-one>
+        <many-to-one name="unidadOrigen" class="model.UnidadOrigen" fetch="select">
+            <column name="unidad_origen_id_unidad_origen" not-null="true" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <property name="precioPago" type="double">
+            <column name="precio_pago" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" not-null="true" />
+        </property>
+        <property name="precioCobro" type="double">
+            <column name="precio_cobro" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="20" not-null="true" />
+        </property>
+        <property name="precioiva" type="java.lang.Double">
+            <column name="precioiva" precision="17" scale="17" />
+        </property>
+        <set name="viajes" table="viaje" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="precio_flete_id_precio_flete" not-null="true" />
+            </key>
+            <one-to-many class="model.Viaje" />
+        </set>
+    </class>
+</hibernate-mapping>

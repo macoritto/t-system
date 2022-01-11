@@ -1,0 +1,250 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel id="paneli" header="Pago a Proveedores">
+                    <h:form id="formPago" style="font-size: 10px;"> 
+                        <p:messages id="msgs1" showDetail="true"/>     
+                        <h:inputHidden id="proveedor" value="#{pagocBean.selectedProveedor.idProveedor}"/>                       
+                        <h:panelGrid id="display"  columns="7" cellpadding="2" columnClasses="alinder, alinizq" >
+                            <h:outputText value="*Fecha:" />
+                            <p:calendar id="fecha" pattern="dd/MM/yyyy"   value="#{pagocBean.selectedPago.fecha}" showButtonPanel="true" navigator="true" required="true" requiredMessage="Seleccione la Fecha"/>
+                            
+                            <p:commandButton id="DataTablePro" update=":formAgregarPro"   oncomplete="PF('proDialogAgregar').show()" icon="icon-select1" title="Buscar Proveedor" process="proveedor,proveedor2" />
+                            <p:inputText id="proveedor2" size="30" value="#{pagocBean.selectedProveedor.nombre}" readonly="true" required="true" requiredMessage="Seleccione el Proveedor" />
+                            
+                            <h:outputText value="Descripcion:"/>
+                            <p:inputText size="60" id="descrip" value="#{pagocBean.selectedPago.descripcion}">
+                                <p:ajax listener="#{pagocBean.cargarDescrip(event)}" event="keyup"/>  
+                            </p:inputText>                            
+                            
+                            <p:commandButton update=":detalle :datos :suma" icon="icon-pro" value="Cargar" action="#{pagocBean.cargarArray(event)}"/>
+                        </h:panelGrid>
+                    </h:form>
+                    <h:form id="detalle" style="font-size: 10px;">
+                        <p:dataTable id="valev" var="combustible" value="#{pagocBean.selectedCombAux}" selection="#{pagocBean.selectedCombustibles}" rowKey="#{combustible.idCombustible}" style="margin-bottom:0"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                      emptyMessage="No se encontró ningún resultado">
+                        <f:facet name="header">
+                            Seleccionar Combustibles Pendientes de Pago
+                        </f:facet>                            
+                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                        <p:column headerText="Id" width="5%">
+                            <h:outputText value="#{combustible.idCombustible}" />
+                        </p:column>
+                        <p:column headerText="N° Boleta" width="5%">
+                            <h:outputText value="#{combustible.NBoleta}" />
+                        </p:column>
+                        <p:column headerText="Camion" width="6%">
+                            <h:outputText value="#{combustible.valeCombustible.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Chofer">
+                            <h:outputText value="#{combustible.valeCombustible.camion.chofer.nombre},#{combustible.valeCombustible.camion.chofer.apellido}" />
+                        </p:column>
+                        <p:column headerText="Litros" width="5%">
+                            <h:outputText value="#{combustible.litros}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Precio" width="5%">
+                            <h:outputText value="#{combustible.precio}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                         <p:column headerText="Fecha">
+                            <h:outputText value="#{combustible.fecha}" />
+                        </p:column> 
+                        <p:column headerText="Extras">
+                            <h:outputText value="#{combustible.extras}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Viatico">
+                            <h:outputText value="#{combustible.viatico_1}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Comb">
+                            <h:outputText value="#{combustible.montoComb}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>                        
+                        <p:column headerText="Total">
+                            <h:outputText value="#{combustible.montoTotal}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>                                                                                                                                         
+                        <f:facet name="footer">
+                            <p:commandButton process="valev" update=":detalle :datos :suma" icon="icon-pro" value="Enviar" action="#{pagocBean.btnCargar(event)}"/>
+                        </f:facet>
+                        </p:dataTable>
+                    </h:form>
+                    <h:form id="datos" style="font-size: 10px;">  
+                        <p:dataTable id="datacar" var="detallePagoComb" value="#{pagocBean.detpagoc}" editable="true" selectionMode="single" rowKey="#{detallePagoComb.combustible.idCombustible}"
+                                     selection="#{pagocBean.selectedDetCombAux}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                      emptyMessage="No se cargo ningún registro">                             
+                        <f:facet name="header">
+                            Combustibles a Pagar
+                        </f:facet>
+                            <p:column headerText="Codigo" width="5%">  
+                                <h:outputText value="#{detallePagoComb.combustible.idCombustible}" />  
+                            </p:column> 
+                            <p:column headerText="N° Boleta" width="6%">  
+                                <h:outputText value="#{detallePagoComb.combustible.NBoleta}" />  
+                            </p:column> 
+                            <p:column headerText="Chapa Camion" width="6%">  
+                                <h:outputText value="#{detallePagoComb.combustible.valeCombustible.camion.chapaCamion}" />  
+                            </p:column>
+                            <p:column headerText="Chofer" width="15%">  
+                                <h:outputText value="#{detallePagoComb.combustible.valeCombustible.camion.chofer.nombre},#{detallePagoComb.combustible.valeCombustible.camion.chofer.apellido}" />  
+                            </p:column>  
+                            <p:column headerText="Combustible" width="7%">
+                                <h:outputText value="#{detallePagoComb.combustible.montoComb}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                            </p:column>
+                            <p:column headerText="Extras" width="7%">
+                            <h:outputText value="#{detallePagoComb.combustible.extras}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                            </p:column>
+                            <p:column headerText="Viatico" width="7%">
+                                <h:outputText value="#{detallePagoComb.combustible.viatico_1}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                            </p:column>    
+                            <p:column headerText="Total" width="7%">
+                                <h:outputText value="#{detallePagoComb.monto}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>
+                            </p:column>  
+                            <p:column headerText="Eliminar"  style="width:7%">  
+                                <p:commandButton icon="icon-eliminar"  action="#{pagocBean.bntDescargar(detallePagoComb)}" update=":datos,:suma,:detalle" />
+                            </p:column>  
+                        </p:dataTable>  
+                    </h:form> 
+                    <h:form id="suma" style="font-size: 10px;">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Total Comb:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{pagocBean.totalcomb}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                            </h:outputText>  </td>
+                                               <td class="ui-state-default"></td>                                               
+                                            </tr>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Total Viatico:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{pagocBean.totalviatico}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                            </h:outputText>  </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Total Extras:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{pagocBean.totalex}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                            </h:outputText>  </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                               <td class="ui-state-default"><h:outputText value="#{pagocBean.selectedPago.total}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                            </h:outputText>  </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator />  
+                        <div>
+                        
+                        <p:commandButton update="formPago:msgs1"  id="bntGuardar" icon="icon-save" action="#{pagocBean.btnCreatePago()}" title="Confirmar Pago" value="Confirmar Pago"/> 
+                        <p:commandButton id="bntCancelar" ajax="false" immediate="true" action="/views/pagoc/addpagoc.xhtml" icon="icon-cancel" title="Borrar" value="Borrar" />
+                        <p:commandButton id="bntSalir" ajax="false" immediate="true" action="/views/pagoc/pagoc.xhtml" icon="icon-cancel" title="Salir" value="Salir" />
+                        </div>
+                    </h:form>
+                </p:panel>   
+                <p:dialog header="Seleccionar Proveedor" widgetVar="proDialogAgregar"  id="prov" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                <h:form id="formAgregarPro" style="font-size: 10px;">                    
+                    <p:dataTable var="proveedor" value="#{proCombBean.proCombustibles}" selection="#{pagocBean.selectedProveedor}" rowKey="#{proveedor.idProveedor}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Nombre" style="width: 10%" filterBy="#{proveedor.nombre}">
+                                <h:outputText value="#{proveedor.nombre}" />
+                            </p:column>
+                            <p:column headerText="Emblema" style="width: 10%" filterBy="#{proveedor.emblema}">
+                                <h:outputText value="#{proveedor.emblema}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{proveedor.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{proveedor.telefono}" />
+                            </p:column>
+                            <p:ajax listener="#{pagocBean.onRowSelectPro(event)}" event="rowSelect" update=":formPago :detalle"  oncomplete="PF('proDialogAgregar').hide() "/>
+                        </p:dataTable>                   
+                </h:form>    
+            </p:dialog>    
+            </ui:define>           
+        </ui:composition>
+                <script type="text/javascript">
+            function handleClose(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioCreate').hide();
+                }
+            }
+
+            function handleClose2(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioUpdate').hide();
+                }
+            }
+
+            function handleClose3(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogNivelCreateN').hide();
+                }
+            }
+
+            function handleClose4(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableUsu').hide();
+                }
+            }
+
+            function handleClose5(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableCli').hide();
+                }
+            }
+
+            function handleClose6(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTablePro').hide();
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 10px;">
+                    <p:tab title="Adelantos de Cliente">
+                        <h:form>
+                            <p:commandButton id="btnProveedorCombustibleCreate" update=":formCreate" oncomplete="PF('proCombDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo" actionListener="#{adeClienteBean.btnIniciar(actionEvent)}"/>
+                        </h:form>
+                        <h:form id="formDataTable" > 
+                            <p:dataTable id="provComb" var="adeCliente" value="#{adeClienteBean.adelantos}"
+                                         paginator="true" paginatorPosition="bottom"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                         selectionMode="single" rowKey="#{adeCliente.idAdeCliente}" selection="#{adeClienteBean.selectedAdelanto}"
+                                         >
+                                <p:column headerText="Cliente" style="width: 20%;" filterBy="#{adeCliente.cliente.nombre}" filterMatchMode="contains" sortBy="#{adeCliente.cliente.nombre}" >
+                                    <h:outputText value="#{adeCliente.cliente.nombre}" />
+                                </p:column>
+                                <p:column headerText="Monto" style="width: 15%;" >
+                                    <h:outputText value="#{adeCliente.monto}" >
+                                      <f:convertNumber maxFractionDigits="2" minFractionDigits="0" type="number" />
+                                  </h:outputText> 
+                                </p:column>
+                                <p:column headerText="Fecha" style="width: 15%">
+                                    <h:outputText value="#{adeCliente.fecha}" />
+                                </p:column>
+                                <p:column headerText="Descrip" style="width: 25%">
+                                    <h:outputText value="#{adeCliente.descrip}" />
+                                </p:column>
+                                <p:column headerText="Estado Pago" style="width: 15%">
+                                    <h:outputText value="#{adeCliente.estadoPago}" />
+                                </p:column>
+                                <p:column style="width:10%">
+                                    <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('proCombDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                        <f:setPropertyActionListener value="#{adeCliente}" target="#{adeClienteBean.selectedAdelanto}" />
+                                    </p:commandButton>
+                                    <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('proCombDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                        <f:setPropertyActionListener value="#{adeCliente}" target="#{adeClienteBean.selectedAdelanto}" />
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:tab>                
+                </p:tabView>
+
+                <p:dialog width="35%" closeOnEscape="true" header="Agregar Adelanto" widgetVar="proCombDialogCreate" resizable="false" id="dlgProCombCreate" 
+                          showEffect="fade" hideEffect="explode" modal="true">
+                    <h:form id="formCreate" style="font-size: 10px;">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>    
+                        <h:panelGrid id="display" columns="3" cellpadding="4" style="margin: 0 auto; margin-left: 15px;">
+                            <h:outputText value="Monto:"/>
+                            <p:inputText value="#{adeClienteBean.selectedAdelanto.monto}" size="40"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Feccha:"/>
+                            <p:calendar id="fecha" pattern="dd/MM/yyyy" value="#{adeClienteBean.selectedAdelanto.fecha}" showButtonPanel="true" navigator="true" required="true" requiredMessage="Seleccione la Fecha" size="40"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Descrip"/>
+                            <p:inputText value="#{adeClienteBean.selectedAdelanto.descrip}" size="40"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Cliente:"/>
+                            <p:inputText readonly="true" value="#{adeClienteBean.selectedCliente.nombre}" size="40">
+                                <!--<p:ajax listener="#{unidadBean.onRowSelectPro(event)}" event="click" update=":formAgregarOrigen" oncomplete="PF('origenDialogAgregar').show()"/> -->
+                            </p:inputText>
+                            <p:commandButton id="btnSelectCa" update=":formAgregarOrigen" oncomplete="PF('origenDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">
+                            </p:commandButton>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable :formCreate :formUpdate :msgs" action="#{adeClienteBean.btnCreateProveedorCombustible(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('proCombDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>                                                  
+
+                <p:dialog width="35%" header="Modificar Adelanto" widgetVar="proCombDialogUpdate" closeOnEscape="true" resizable="false" id="dlgProCombUpdate" 
+                          showEffect="fade" hideEffect="explode" modal="true">
+                    <h:form id="formUpdate" style="font-size: 10px;">
+                        <h:panelGrid id="display" columns="3" cellpadding="4" style="margin: 0 auto; margin-left: 15px;">
+                            <h:outputText value="Monto:"/>
+                            <p:inputText value="#{adeClienteBean.selectedAdelanto.monto}" size="40"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Feccha:"/>
+                            <p:calendar id="fecha" pattern="dd/MM/yyyy" value="#{adeClienteBean.selectedAdelanto.fecha}" showButtonPanel="true" navigator="true" required="true" requiredMessage="Seleccione la Fecha" size="40"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Descrip"/>
+                            <p:inputText value="#{adeClienteBean.selectedAdelanto.descrip}" size="40"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Proveedor:"/>
+                            <p:inputText readonly="true" value="#{adeClienteBean.selectedAdelanto.cliente.nombre}" size="40">
+                                <!--<p:ajax listener="#{unidadBean.onRowSelectPro(event)}" event="click" update=":formAgregarOrigen" oncomplete="PF('origenDialogAgregar').show()"/> -->
+                            </p:inputText>
+                            <p:commandButton id="btnSelectCa" update=":formAgregarOrigen" oncomplete="PF('origenDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">
+                            </p:commandButton>
+                            <h:inputHidden value="#{adeBean.selectedAdelanto.idAde}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable :formCreate :msgs :formUpdate" oncomplete="PF('proCombDialogUpdate').hide()" actionListener="#{adeClienteBean.btnUpdateProveedorCombustible(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('proCombDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form> 
+                </p:dialog>
+
+                <h:form id="formDelete" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Adelanto" severity="alert" widgetVar="proCombDialogDelete" closeOnEscape="true"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{adeClienteBean.selectedAdelanto.idAdeCliente}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update="tabla:formDataTable :msgs" oncomplete="PF('proCombDialogDelete').hide()"
+                                         actionListener="#{adeClienteBean.btnDeleteProveedorCombustible(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('proCombDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+                <h:form id="formAgregarOrigen" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Cliente" widgetVar="origenDialogAgregar"  id="OrigenAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                        <p:dataTable var="cliente" value="#{clienteBean.clientes}" selection="#{adeClienteBean.selectedCliente}" rowKey="#{cliente.idCliente}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="7" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{cliente.idCliente}" />
+                            </p:column>
+                            <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 30%" filterBy="#{unidadOrigen.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Correo" style="width: 20%">
+                                <h:outputText value="#{cliente.correo}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{cliente.telefono}" />
+                            </p:column> 
+                            <p:ajax listener="#{adeClienteBean.onRowSelectPro(event)}" event="rowSelect" update=":formCreate :formUpdate"  oncomplete="PF('origenDialogAgregar').hide() "/>  
+                        </p:dataTable>                       
+                    </p:dialog>
+                </h:form>  
+            </ui:define>            
+        </ui:composition>
+
+    </body>
+</html>

@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel id="paneli" header="Pago a Propietarios">
+                    <h:form id="formPago" style="font-size: 10px;"> 
+                        <p:messages id="msgs1" showDetail="true"/>                                                    
+                        <h:panelGrid id="display"  columns="9" cellpadding="2" columnClasses="alinder, alinizq" >
+                            <h:outputText value="*Fecha:" />
+                            <p:calendar id="fecha" pattern="dd/MM/yyyy"   value="#{extractoBean.selectedExtracto.fecha}" showButtonPanel="true" navigator="true" required="true" requiredMessage="Seleccione la Fecha"/>                            
+                            <p:commandButton id="DataTablePro"   oncomplete="PF('proDialogAgregar').show()" icon="icon-select" title="Buscar Propietario" />
+                            <h:outputText value="Propietario:"/>
+                            <p:inputText id="pro1" size="30" value="#{extractoBean.selectedExtracto.propietario.nombre} #{extractoBean.selectedExtracto.propietario.apellido}" readonly="true" required="true" requiredMessage="Seleccione el Propietario" />                            
+                            <h:outputText value="Descripcion:"/>
+                            <p:inputText id="h" size="30" value="#{extractoBean.selectedExtracto.descripcion}" required="true" requiredMessage="Seleccione el Propietario" />                            
+                            <h:outputText value="*Estado"/>
+                            <p:selectOneMenu style="width: 120px;;" value="#{extractoBean.selectedExtracto.estado}">
+                                <f:selectItem itemLabel="Anulado" itemValue="Anulado" />                                                             
+                            </p:selectOneMenu>  
+                            <h:inputHidden value="#{extractoBean.selectedExtracto.idLiquidacion}"/>                            
+                            <f:facet name="footer">                                
+                                <p:commandButton icon="icon-guardar" value="Guardar" update=":formPago" action="#{extractoBean.btnUpdateExtracto(actionEvent)}"></p:commandButton>                                                  
+                                <p:commandButton id="bntSalir" ajax="false" immediate="true" action="/views/extracto/extracto.xhtml" icon="icon-cancel" title="Salir" value="Salir" />
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form>
+                    <h:form id="camiones" style="font-size: 10px;">
+                        <p:dataTable id="camion" var="exCamion" value="#{extractoBean.camionVista}" selection="#{extractoBean.selectedCamion}" rowKey="#{exCamion.camion.chapaCamion}" style="margin-bottom:0"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                      emptyMessage="No se encontró ningún resultado">
+                        <f:facet name="header">
+                            Camiones Seleccionados
+                        </f:facet>                                                    
+                        <p:column headerText="Matricula">
+                            <h:outputText value="#{exCamion.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Marca">
+                            <h:outputText value="#{exCamion.camion.marca}" />
+                        </p:column>    
+                        <p:column headerText="Tipo">
+                            <h:outputText value="#{exCamion.camion.tipoCamion.descripcion}" />
+                        </p:column>    
+                        <p:column headerText="Chofer">
+                            <h:outputText value="#{exCamion.camion.chofer.nombre}, #{exCamion.camion.chofer.apellido}" />
+                        </p:column>                                                                                                             
+                        </p:dataTable>
+                    </h:form>         
+                    <h:form id="datos" style="font-size: 10px;">  
+                        <p:dataTable id="datacar" var="detExtracto" value="#{extractoBean.detextractoAux}" editable="true" selectionMode="single" rowKey="#{detExtracto.item.idItem}"
+                                     selection="#{extractoBean.selectedDetExtractoAux}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                      emptyMessage="No se cargo ningún registro">                             
+                        <f:facet name="header">
+                            Items a Pagar
+                        </f:facet>
+                            <p:column headerText="Id" width="5%">
+                                <h:outputText value="#{detExtracto.idDet}" />
+                        </p:column>
+                            <p:column headerText="Camion" width="8%">
+                            <h:outputText value="#{detExtracto.item.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Tipo Item" width="8%">
+                            <h:outputText value="#{detExtracto.item.tipoItem.descrip}" />
+                        </p:column>
+                            <p:column headerText="Descripcion" width="30%">
+                            <h:outputText value="#{detExtracto.descrip}" />
+                        </p:column>
+                        <p:column headerText="Activo" width="8%">
+                            <h:outputText value="#{detExtracto.activo}">
+                                <f:convertNumber maxFractionDigits="2" minFractionDigits="2" type="number" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Pasivo" width="8%">
+                            <h:outputText value="#{detExtracto.pasivo}">
+                                <f:convertNumber maxFractionDigits="2" minFractionDigits="2" type="number" />
+                            </h:outputText>
+                        </p:column>                                
+                        </p:dataTable>  
+                    </h:form> 
+                    <h:form id="formView" style="font-size: 10px;">    
+                                <p:fieldset legend="Detalles" style="margin-left:320px; margin-right:380px; margin-bottom: 30px; margin-top: 30px;">                                    
+                                <div style="width: 70%">
+                                <h:panelGrid id="display"  columns="7" cellpadding="1" columnClasses="alinder, alinizq" style="font-size: 10px; float: left;">                                                                                                                                                                                    
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" />                                     
+                                    <h:outputText value="No. Fletes:" />                                    
+                                    <p:inputText value="#{extractoBean.contafle}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                    
+                                    <h:outputText value="Creditos:" />                                    
+                                    <p:inputText  value="#{extractoBean.acucre}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                    
+                                    <h:outputText value="Fletes:" />                                    
+                                    <p:inputText  value="#{extractoBean.acufle}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>    
+                                    <h:outputText value="" />   
+                                    <h:outputText value="Comb y Aceites:" />                                    
+                                    <p:inputText  value="#{extractoBean.acucomb}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                     
+                                    <h:outputText value="Faltantes:" />                                    
+                                    <p:inputText  value="#{extractoBean.acufal}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                        
+                                    <h:outputText value="Viaticos:" />                                    
+                                    <p:inputText  value="#{extractoBean.acuvia}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                    
+                                    <h:outputText value="" />   
+                                    <h:outputText value="Seguros:" />                                    
+                                    <p:inputText  value="#{extractoBean.acuse}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText> 
+                                    <h:outputText value="Varios" />                                    
+                                    <p:inputText  value="#{extractoBean.acuvarios}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>                                    
+                                    <h:outputText value="Recibos" />                                    
+                                    <p:inputText  value="#{extractoBean.acureci}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText>  
+                                    <h:outputText value="" />
+                                    <h:outputText value="Adelanto Chofer" />                                    
+                                    <p:inputText  value="#{extractoBean.acuade}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                    </p:inputText> 
+                                </h:panelGrid>                                       
+                                </div>            
+                            </p:fieldset>        
+                            </h:form>
+                    <h:form id="suma" style="font-size: 10px;">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Total a Cobrar:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{extractoBean.totalcobrar}" >
+                                                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2" type="number" />
+                                                    </h:outputText>  </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Total Activo:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{extractoBean.totalActivo}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                                    </h:outputText>  </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Total Pasivo:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{extractoBean.totalPasivo}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                                    </h:outputText>  </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator />  
+                        <div>                                                                        
+                        </div>
+                    </h:form>
+                </p:panel>   
+                
+            </ui:define>           
+        </ui:composition>
+                <script type="text/javascript">
+            function handleClose(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioCreate').hide();
+                }
+            }
+
+            function handleClose2(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioUpdate').hide();
+                }
+            }
+
+            function handleClose3(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogNivelCreateN').hide();
+                }
+            }
+
+            function handleClose4(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableUsu').hide();
+                }
+            }
+
+            function handleClose5(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableCli').hide();
+                }
+            }
+
+            function handleClose6(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTablePro').hide();
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

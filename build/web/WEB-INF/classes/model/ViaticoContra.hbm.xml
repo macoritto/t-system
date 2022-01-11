@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.ViaticoContra" table="viatico_contra" schema="public">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="sequence">
+                <param name="sequence">viatico_contra_id_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="contrasenha" class="model.Contrasenha" fetch="select">
+            <column name="contrasenha_id_contrasenha" not-null="true" />
+        </many-to-one>
+        <many-to-one name="viatico" class="model.Viatico" fetch="select">
+            <column name="viatico_id_viatico" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

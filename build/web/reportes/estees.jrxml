@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" language="groovy" pageWidth="510" pageHeight="150" columnWidth="510" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7ed2d2d3-9f9a-47b2-90ef-4c01ef87f9eb">
+	<property name="ireport.zoom" value="2.1435888100000016"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="vCodventa" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="vEx" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     i.*,
+     i."pasivo" AS i_pasivo,
+     i."activo" AS i_activo,
+     i."descrip" AS i_descrip,
+     i."camion_chapa_camion" AS i_camion_chapa_camion,
+     i."tipo_item_id_tipo" AS i_tipo_item_id_tipo,
+     i."orden_id" AS i_orden_id,
+     ti."descrip" AS ti_descrip
+FROM
+     "item" i INNER JOIN "extracto" ex ON i."extracto_id" = ex."id_liquidacion"
+     INNER JOIN "tipo_item" ti ON i."tipo_item_id_tipo" = ti."id_tipo"
+WHERE
+     i."orden_id" = $P{vCodventa}
+     and i."extracto_id" = $P{vEx} ORDER BY id_item]]>
+	</queryString>
+	<field name="id_item" class="java.lang.Integer"/>
+	<field name="pasivo" class="java.lang.Double"/>
+	<field name="activo" class="java.lang.Double"/>
+	<field name="descrip" class="java.lang.String"/>
+	<field name="cod" class="java.lang.Integer"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="fecha" class="java.sql.Date"/>
+	<field name="camion_chapa_camion" class="java.lang.String"/>
+	<field name="tipo_item_id_tipo" class="java.lang.Integer"/>
+	<field name="orden_id" class="java.lang.Integer"/>
+	<field name="extracto_id" class="java.lang.Integer"/>
+	<field name="i_pasivo" class="java.lang.Double"/>
+	<field name="i_activo" class="java.lang.Double"/>
+	<field name="i_descrip" class="java.lang.String"/>
+	<field name="i_camion_chapa_camion" class="java.lang.String"/>
+	<field name="i_tipo_item_id_tipo" class="java.lang.Integer"/>
+	<field name="i_orden_id" class="java.lang.Integer"/>
+	<field name="ti_descrip" class="java.lang.String"/>
+	<variable name="tactivo" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{i_activo}]]></variableExpression>
+	</variable>
+	<variable name="tpasivo" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{i_pasivo}]]></variableExpression>
+	</variable>
+	<variable name="saldo" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{tactivo}+$V{tpasivo}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="6" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="11" splitType="Stretch">
+			<staticText>
+				<reportElement x="21" y="0" width="39" height="11" uuid="46599da6-f022-46b2-907b-8a151d2eec43"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nro. Orden]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="64" y="0" width="39" height="11" uuid="a338cb24-5c22-4fb5-9711-8a8a5d69ecea"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="121" y="0" width="39" height="11" uuid="62f1d144-fd17-449a-891e-96dd162f511d"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descripción]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="0" width="39" height="11" uuid="8064e159-9505-4ac5-b01b-c261e0044e20"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Activo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="0" width="39" height="11" uuid="26f9f7d6-5f75-4cd3-bb9e-8c3fa8385748"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pasivo]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="21" y="0" width="43" height="20" uuid="81cf611e-873b-4cad-993d-a7ead8757b76"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{i_orden_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="64" y="0" width="57" height="20" uuid="85b5a5a4-82fa-4340-b4d4-626b04d98728"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ti_descrip}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="121" y="0" width="278" height="20" uuid="477bd322-297b-4ee4-a043-2fe78a747f6f"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{i_descrip}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="452" y="0" width="51" height="20" uuid="881a0903-f878-45f5-9d95-f3dcaa3ca6c0"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{i_pasivo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="403" y="0" width="39" height="20" uuid="49b67394-37e2-41e9-8783-182c723ebc8e"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{i_activo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="13">
+			<staticText>
+				<reportElement x="283" y="1" width="39" height="11" uuid="3b941489-13ef-4969-8aa3-8b8139bfd26b"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Activo:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="324" y="1" width="38" height="11" uuid="04ef97b9-3556-4db0-bd84-fa6fc37fd57a"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{tactivo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="363" y="1" width="39" height="11" uuid="694b7375-0021-4119-bfe8-a2f5fbdb183e"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Pasivo:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="402" y="1" width="38" height="11" uuid="6d282f2e-acf2-45e6-b394-bef023923390"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{tpasivo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="440" y="1" width="23" height="11" uuid="d2b12b95-df17-4c84-8535-e1200a8cb432"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Saldo:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="463" y="1" width="36" height="11" uuid="4ebba691-3983-417f-8cb8-202c805ce837"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{saldo}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="12" width="510" height="1" uuid="16162b6c-c4bc-4d42-90f0-1d4060c7e45a"/>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="4"/>
+	</pageFooter>
+</jasperReport>

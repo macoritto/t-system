@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:form>
+                    <p:commandButton id="btnProveedorVariosCreate" update=":formCreate" oncomplete="PF('proVariosDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo"/>
+                </h:form>
+                <h:form id="formDataTable" style="font-size: 10px;">
+                    <p:dataTable id="provVarios" var="proveedorVarios" value="#{proVariosBean.proCombustiblesVarios}"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" rowKey="#{proveedorVarios.idProveedorVarios}" selection="#{proVariosBean.selectedProveedorVarios}"
+                                 >
+                        <f:facet name="{Exporters}">
+                            <p:commandButton onclick="form.target='_blank'" ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{proVariosBean.exportarPDF(actionEvent)}"></p:commandButton>                                                 
+                        </f:facet>  
+                        <f:facet name="header">
+                            Listado de Proveedores Varios
+                        </f:facet>
+                        <p:column headerText="Nombre" style="width: 15%;" filterBy="#{proveedorVarios.nombre}" >
+                            <h:outputText value="#{proveedorVarios.nombre}" />
+                        </p:column>
+                        <p:column headerText="Telefono" style="width: 15%" filterBy="#{proveedorVarios.telefono}" filterMatchMode="contains" >
+                            <h:outputText value="#{proveedorVarios.telefono}" />
+                        </p:column>
+                        <p:column headerText="Direccion" style="width: 15%">
+                            <h:outputText value="#{proveedorVarios.direccion}" />
+                        </p:column>
+                        <!--p:ajax listener="#{proVariosBean.onRowSelectPro(event)}" event="rowSelect" update=":formMostrar :datos :suma"  oncomplete="PF('proveedorDialogMostrar').show() "/-->
+                        <p:column headerText="Ruc" style="width: 15%" filterBy="#{proveedorVarios.telefono}" filterMatchMode="contains" sortBy="#{proveedorVarios.telefono}">
+                            <h:outputText value="#{proveedorVarios.ruc}" />
+                        </p:column>
+                        <p:column headerText="Fecha Inicio" style="width: 15%">
+                            <h:outputText value="#{proveedorVarios.fechaInicio}" />
+                        </p:column>
+                        <p:column style="width:8%">
+                            <p:commandButton id="bntClienteView" action="/views/provarios/viewpro.xhtml" icon="icon-view" title="Ver Proveedor" >  
+                                        <f:setPropertyActionListener value="#{proveedorVarios}" target="#{proVariosBean.selectedProveedorVarios}" />  
+                                </p:commandButton> 
+                            <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('proVariosDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{proveedorVarios}" target="#{proVariosBean.selectedProveedorVarios}" />
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('proVariosDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{proveedorVarios}" target="#{proVariosBean.selectedProveedorVarios}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+               
+                    <p:dialog width="27%" header="Agregar Proveedor Varios" widgetVar="proVariosDialogCreate" resizable="false" id="dlgProVariosCreate" 
+                              showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true">
+                        <h:form id="formCreate" style="font-size: 10px;">
+                            <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>    
+                                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px;">
+                                    <h:outputText value="Nombre:"/>
+                                    <p:inputText value="#{proVariosBean.selectedProveedorVarios.nombre}" style="width: 120%;"/>
+                                    <h:outputText value="Telefono:"/>
+                                    <p:inputText value="#{proVariosBean.selectedProveedorVarios.telefono}" style="width: 120%;"/>
+                                    <h:outputText value="Direccion:"/>
+                                    <p:inputText value="#{proVariosBean.selectedProveedorVarios.direccion}" style="width: 120%;"/>
+                                    <h:outputText value="Ruc:"/>
+                                    <p:inputText value="#{proVariosBean.selectedProveedorVarios.ruc}" style="width: 120%;"/>
+                                    <h:outputText value="Fecha Inicio:"/>
+                                    <p:calendar id="dina" value="#{proVariosBean.selectedProveedorVarios.fechaInicio}" pattern="dd-MM-yyyy" mask="true" style="width: 120%;" />
+                                    <f:facet name="footer">
+                                        <p:separator/>
+                                        <p:commandButton id="btnCreateAceptar" update=":formDataTable :msgs :formCreate" action="#{proVariosBean.btnCreateProveedorVarios(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                        <p:commandButton id="btnCreateCancelar" oncomplete="PF('proVariosDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                                    </f:facet>
+                                </h:panelGrid>
+                        </h:form>        
+                    </p:dialog>
+                
+                <h:form id="formUpdate" style="font-size: 10px;">
+                    <p:dialog width="27%" header="Modificar Proveedor Varios" widgetVar="proVariosDialogUpdate" resizable="false" id="dlgProVariosUpdate" 
+                              showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{proVariosBean.selectedProveedorVarios.nombre}" style="width: 120%;"/>
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText value="#{proVariosBean.selectedProveedorVarios.telefono}" style="width: 120%;"/>
+                            <h:outputText value="Direccion:"/>
+                            <p:inputText value="#{proVariosBean.selectedProveedorVarios.direccion}" style="width: 120%;"/>
+                            <h:outputText value="Ruc:"/>
+                            <p:inputText value="#{proVariosBean.selectedProveedorVarios.ruc}" style="width: 120%;"/>
+                            <h:outputText value="Fecha Inicio:"/>
+                            <p:calendar id="dina" value="#{proVariosBean.selectedProveedorVarios.fechaInicio}" pattern="dd-MM-yyyy" mask="true" style="width: 120%;"/>
+                            <h:inputHidden value="#{proVariosBean.selectedProveedorVarios.idProveedorVarios}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":formDataTable :msgs" oncomplete="PF('proVariosDialogUpdate').hide()" actionListener="#{proVariosBean.btnUpdateProveedorVarios(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('proVariosDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formDelete">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" closeOnEscape="true" 
+                                     header="Eliminar Proveedor" severity="alert" widgetVar="proVariosDialogDelete"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{proVariosBean.selectedProveedorVarios.idProveedorVarios}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":formDataTable :msgs" oncomplete="PF('proVariosDialogDelete').hide()"
+                                         actionListener="#{proVariosBean.btnDeleteProveedorCombustible(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('proVariosDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+                <p:dialog  width="1200" dynamic="true" position="top" widgetVar="proveedorDialogMostrar" resizable="true" id="dlgDataTablePago"  
+                           showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true"  maximizable="true" >                                        
+                    <h:form id="formMostrar" style="font-size: 10px;"> 
+                        <h:panelGrid id="display"  columns="7" cellpadding="2" columnClasses="alinder, alinizq" >
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="*Nombre:" />
+                            <p:inputText value="#{proVariosBean.selectedProveedorVarios.nombre}" readonly="true"/>     
+                            <h:outputText value="Direccion:"/>
+                            <p:inputText id="proveedor2" size="30" value="#{proVariosBean.selectedProveedorVarios.direccion}" readonly="true"/>                            
+                            <h:outputText value="Telefono.:"/>
+                            <p:inputText size="20" id="descrip" value="#{proVariosBean.selectedProveedorVarios.telefono}"/>                            
+                            <h:outputText value="" />                            
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                        </h:panelGrid>
+                    </h:form>
+                    <h:form id="datos" style="font-size: 10px;">  
+                        <p:dataTable id="vales" var="valeVarios" value="#{proVariosBean.vales}" style="letras"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" rowKey="#{valeVarios.idValeVarios}" selection="#{proVariosBean.selectedVale}" rows="10" rowsPerPageTemplate="10,30,60,100"
+                                 >                          
+                        <f:facet name="{Exporters}">
+                            <p:commandButton onclick="form.target='_blank'" ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{clienteBean.exportarPDForden(actionEvent)}"></p:commandButton>                                                 
+                        </f:facet>                          
+                        <f:facet name="header">
+                            Listado de Vales Pendientes
+                        </f:facet>
+                        <p:column headerText="N° Vale" filterStyle="width: 80%;"  style="width: 5%;" filterBy="#{valeVarios.idValeVarios}" >
+                            <h:outputText value="#{valeVarios.idValeVarios}" />
+                        </p:column>
+                        <p:column headerText="Proveedor" style="width: 15%;" >
+                            <h:outputText value="#{valeVarios.proveedorVarios.nombre}" />
+                        </p:column>
+                        <p:column headerText="Fecha Emision" style="width: 8%" >
+                            <h:outputText value="#{valeVarios.fecha}" />
+                        </p:column>                                               
+                        <p:column headerText="Descripcion" style="width: 20%">
+                            <h:outputText value="#{valeVarios.descripcion}" />
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;"  style="width: 8%" filterBy="#{valeVarios.camion.chapaCamion}" filterMatchMode="contains" sortBy="#{valeVarios.camion.chapaCamion}" >
+                            <h:outputText value="#{valeVarios.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Chofer" style="width: 15%">
+                            <h:outputText value="#{valeVarios.camion.chofer.nombre} #{valeVarios.camion.chofer.apellido}" />
+                        </p:column>                 
+                        <p:column headerText="Monto" style="width: 12%">
+                            <h:outputText value="#{valeVarios.monto}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>     
+                        </p:dataTable>  
+                    </h:form>
+                    <h:form id="suma" style="font-size: 10px;">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="720px" style="text-align:right">Totales:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{proVariosBean.total}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  
+                                               </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator />                         
+                    </h:form> 
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

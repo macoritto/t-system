@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Seguro" table="seguro" schema="public">
+        <id name="idSeguro" type="int">
+            <column name="id_seguro" />
+            <generator class="sequence">
+                <param name="sequence">seguro_id_seguro_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="cliente" class="model.Cliente" fetch="select">
+            <column name="cliente_id_cliente" not-null="true" />
+        </many-to-one>
+        <property name="monto" type="double">
+            <column name="monto" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" />
+        </property>
+        <set name="viajes" table="viaje" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="seguro_id_seguro" not-null="true" />
+            </key>
+            <one-to-many class="model.Viaje" />
+        </set>
+    </class>
+</hibernate-mapping>

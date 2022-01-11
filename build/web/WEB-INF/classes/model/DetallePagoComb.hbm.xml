@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.DetallePagoComb" table="detalle_pago_comb" schema="public">
+        <id name="idDetalle" type="int">
+            <column name="id_detalle" />
+            <generator class="sequence">
+                <param name="sequence">detalle_pago_comb_id_detalle_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="combustible" class="model.Combustible" fetch="select">
+            <column name="combustible_id_combustible" not-null="true" />
+        </many-to-one>
+        <many-to-one name="pagoCombustible" class="model.PagoCombustible" fetch="select">
+            <column name="pago_combustible_id_pago_combustible" not-null="true" />
+        </many-to-one>
+        <property name="monto" type="double">
+            <column name="monto" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="litros" type="double">
+            <column name="litros" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="precioComb" type="double">
+            <column name="precio_comb" precision="17" scale="17" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

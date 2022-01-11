@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <style>
+          .heading { color: #FF0000; }
+        </style>
+    </head>
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                    <h:form id="formCreate" style="font-size: 10px;">
+                        <p:fieldset legend="Agregar Combustibles" style="margin-left:360px; margin-right:380px; margin-bottom: 30px; margin-top: 30px;">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>
+                        <h:panelGrid id="display" columns="6" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText style="width: 15%;" value="Camion:"/>
+                            <p:inputText readonly="true" value="#{comBean.selectedCamion.chapaCamion}"/>
+                            <p:commandButton id="btnSelectCa" update=":formAgregarCamion" oncomplete="PF('camionDialogAgregar').show()" icon="icon-select1" title="Seleccionar">                                
+                            </p:commandButton>
+                            <h:outputText value="Chofer:"/>
+                            <p:inputText readonly="true" value="#{comBean.selectedCamion.chofer.nombre} #{contraBean.selectedCamion.chofer.apellido}"/>                            
+                            <h:outputText value=""/>
+                            
+                            <h:outputText style="width: 15%;" value="Proveedor:"/>
+                            <p:inputText readonly="true" value="#{comBean.selectedProveedor.nombre}"/>
+                            <p:commandButton id="btnSelecPro" oncomplete="PF('proDialogAgregar').show()" update="formAgregarPro" icon="icon-select1" title="Seleccionar">                                
+                            </p:commandButton>
+                            <h:outputText value="Precio Comb:"/>
+                            <p:inputText value="#{comBean.selectedPrecio.monto}"/>    
+                            <p:commandButton id="btnSelecPrecio" oncomplete="PF('precioDialogAgregar').show()" icon="icon-select1" title="Seleccionar">                                
+                            </p:commandButton>             
+                            <h:outputText value="Extras:"/>
+                            <p:inputText value="#{comBean.selectedValeComb.extras}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                            </p:inputText>
+                            <h:outputText value=""/>
+                            <h:outputText value="Viatico:"/>
+                            <p:inputText value="#{comBean.selectedValeComb.viatico}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                            </p:inputText>
+                            <h:outputText value=""/>                                                 
+                            <h:outputText value="Litros:"/>
+                            <p:inputText value="#{comBean.selectedCombustible.litros}">
+                                
+                            </p:inputText>
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value="N° Boleta"/>
+                            <p:inputText value="#{comBean.selectedCombustible.NBoleta}"/>   
+                            <h:outputText value=""/>
+                            <h:outputText value="Fecha"/>
+                            <p:calendar id="fecha2" value="#{comBean.selectedCombustible.fecha}" pattern="dd-MM-yyyy" mask="true"/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <p:commandButton update=":formCreate" icon="icon-pro" value="Procesar" action="#{comBean.btnProcesar(event)}"/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            
+                            <h:outputText style="heading" value="Comb="/>
+                            <p:inputText value="#{comBean.selectedValeComb.montoComb}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                            </p:inputText>                           
+                            <h:outputText value=""/>
+                            <h:outputText style="heading" value="Viatico="/>
+                            <p:inputText value="#{comBean.selectedCombustible.viatico_1}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                            </p:inputText>                           
+                            <h:outputText value=""/>
+                            
+                            <h:outputText style="heading" value="Extras="/>
+                            <p:inputText value="#{comBean.selectedCombustible.extras}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                            </p:inputText>
+                            <h:outputText value=""/>   
+                            <h:outputText  value="Total="/>
+                                <p:inputText class="heading" value="#{comBean.selectedValeComb.montoTotal}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                                </p:inputText>
+                            <h:outputText value=""/>  
+                            <h:inputHidden value="#{comBean.selectedValeCombustible.idValeCombustible}"/>                            
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="report" ajax="false" icon="icon-pdf" value="PDF" actionListener="#{comBean.exportarPDF2(actionEvent)}"></p:commandButton>
+                                <p:commandButton id="btnCreateAceptar" disabled="#{comBean.btnDisabled}" update=":msgs :formCreate" action="#{comBean.btnCreateComb(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>                                
+                                <p:commandButton id="bntSalir" ajax="false" immediate="true" action="/views/inicio.xhtml" icon="icon-cancel" title="Salir" value="Salir" />
+                            </f:facet>
+                        </h:panelGrid>
+                        </p:fieldset>
+                    </h:form>
+                
+                <h:form id="formAgregarCamion" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Camion" widgetVar="camionDialogAgregar"  id="camion" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="camion" value="#{comBean.camiones}" selection="#{comBean.selectedCamion}" rowKey="#{camion.chapaCamion}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10">
+                            <p:column headerText="Chapa Camion" style="width: 5%" filterBy="#{camion.chapaCamion}" filterStyle="width: 80%">
+                                <h:outputText value="#{camion.chapaCamion}" />
+                            </p:column>
+                            <p:column headerText="Marca" style="width: 10%">
+                                <h:outputText value="#{camion.marca}" />
+                            </p:column>
+                            <p:column headerText="Color" style="width: 7%">
+                                <h:outputText value="#{camion.color}" />
+                            </p:column>
+                            <p:column headerText="Año" style="width: 5%">
+                                <h:outputText value="#{camion.anho}" />
+                            </p:column>
+                            <p:column headerText="Chofer" style="width: 20%" filterBy="#{camion.chofer.nombre} #{camion.chofer.apellido}" filterMatchMode="contains">
+                                <h:outputText value="#{camion.chofer.nombre} #{camion.chofer.apellido}" />
+                            </p:column>
+                            <p:column headerText="Propietario" style="width: 20%" filterBy="#{camion.propietario.nombre} #{camion.propietario.apellido}" filterMatchMode="contains">
+                                <h:outputText value="#{camion.propietario.nombre} #{camion.propietario.apellido}" />
+                            </p:column>                            
+                            <p:ajax listener="#{comBean.onRowSelectCamion(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('camionDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>   
+                <h:form id="formAgregarPro" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Proveedor" widgetVar="proDialogAgregar"  id="camion" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="proveedor" value="#{comBean.proCombustibles}" selection="#{comBean.selectedProveedor}" rowKey="#{proveedor.idProveedor}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Nombre" style="width: 10%" filterBy="#{proveedor.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{proveedor.nombre}" />
+                            </p:column>
+                            <p:column headerText="Emblema" style="width: 10%">
+                                <h:outputText value="#{proveedor.emblema}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{proveedor.direccion}" />
+                            </p:column>
+                            <p:column headerText="Ruc" style="width: 10%">
+                                <h:outputText value="#{proveedor.ruc}" />
+                            </p:column>
+                            <p:ajax listener="#{comBean.onRowSelectPro(event)}" event="rowSelect" update=":formCreate :formAgregarPrecio"  oncomplete="PF('proDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formAgregarVale" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Vale" widgetVar="valeDialogAgregar"  id="vale" 
+                              showEffect="fade" width="80%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >
+                        <p:dataTable var="valeCombustible" value="#{comBean.valespen}" selection="#{comBean.selectedValeCombustible}" rowKey="#{valeCombustible.idValeCombustible}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10">
+                            <p:column headerText="N°" filterStyle="width: 80%;" style="width: 5%" filterBy="#{valeCombustible.idValeCombustible}">
+                                <h:outputText value="#{valeCombustible.idValeCombustible}" />
+                            </p:column>
+                            <p:column headerText="Proveedor" style="width: 15%" filterBy="#{valeCombustible.proveedor.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{valeCombustible.proveedor.nombre}" />
+                            </p:column>
+                            <p:column headerText="Fecha" style="width: 8%">
+                                <h:outputText value="#{valeCombustible.fecha}" />
+                            </p:column>                            
+                            <p:column headerText="Litros" style="width: 7%">
+                                <h:outputText value="#{valeCombustible.litros}" />
+                            </p:column>
+                            <p:column headerText="Precio" style="width: 5%">
+                                <h:outputText value="#{valeCombustible.precioComb}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>
+                            </p:column>                                                     
+                            <p:column headerText="Extras" style="width: 8%">
+                                <h:outputText value="#{valeCombustible.extras}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Viatico" style="width: 8%">
+                                <h:outputText value="#{valeCombustible.viatico}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>
+                            </p:column>
+                             <p:column headerText="Monto Total" style="width: 10%">
+                                <h:outputText value="#{valeCombustible.montoTotal}">        
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>
+                            </p:column>  
+                            <p:column headerText="Camion" filterStyle="width: 80%;" style="width: 5%" filterBy="#{valeCombustible.camion.chapaCamion}">
+                                <h:outputText value="#{valeCombustible.camion.chapaCamion}" />
+                            </p:column>
+                            <p:column headerText="Chofer" style="width: 18%" filterBy="#{valeCombustible.camion.chofer.nombre} #{valeCombustible.camion.chofer.apellido}" filterMatchMode="contains">
+                                <h:outputText value="#{valeCombustible.camion.chofer.nombre} #{valeCombustible.camion.chofer.apellido}" />
+                            </p:column>
+                            <p:ajax listener="#{comBean.onRowSelectVale(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('valeDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>  
+                <h:form id="formAgregarPrecio">
+                    <p:dialog header="Seleccionar Extras" widgetVar="precioDialogAgregar"  id="ordenDeCarga" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >
+                        <p:dataTable var="precioComb" value="#{comBean.precios}" selection="#{comBean.selectedPrecio}" rowKey="#{precioComb.idPrecioComb}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Proveedor" style="width: 5%">
+                                <h:outputText value="#{precioComb.proveedor.nombre}" />
+                            </p:column>
+                            <p:column headerText="Tipo Combustible" style="width: 10%">
+                                <h:outputText value="#{precioComb.tipoCombustible.nombre}" />
+                            </p:column>
+                            <p:column headerText="Monto" style="width: 15%">
+                                <h:outputText value="#{precioComb.monto}" />
+                            </p:column>
+                            <p:ajax listener="#{comBean.onRowSelectPrecio(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('precioDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

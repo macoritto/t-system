@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Varios" table="varios" schema="public">
+        <id name="idVarios" type="int">
+            <column name="id_varios" />
+            <generator class="sequence">
+                <param name="sequence">varios_id_varios_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="valeVarios" class="model.ValeVarios" fetch="select">
+            <column name="vale_varios_id_vale_varios" not-null="true" />
+        </many-to-one>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+        <property name="monto" type="double">
+            <column name="monto" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" not-null="true" />
+        </property>
+        <property name="estadoCobro" type="string">
+            <column name="estado_cobro" length="15" not-null="true" />
+        </property>
+        <property name="estadoPago" type="string">
+            <column name="estado_pago" length="20" not-null="true" />
+        </property>
+        <set name="detallePagoVarioses" table="detalle_pago_varios" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="varios_id_varios" not-null="true" />
+            </key>
+            <one-to-many class="model.DetallePagoVarios" />
+        </set>
+    </class>
+</hibernate-mapping>

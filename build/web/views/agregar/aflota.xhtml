@@ -1,0 +1,266 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <style>
+          .heading { color: #FF0000; }
+        </style>
+    </head>
+    <body>
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:form id="formCreate" style="font-size: 10px;">
+                    <p:fieldset legend="Agregar Flota" style="margin-left:200px; margin-right:380px; margin-bottom: 20px; margin-top: 30px;">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>
+                        <h:panelGrid id="display" columns="4" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Chapa Camion:"/>
+                            <p:inputText value="#{camionBean.selectedCamion.chapaCamion}"/>
+                            <h:outputText value="Marca:"/>
+                            <p:inputText value="#{camionBean.selectedCamion.marca}" required="true"/>
+                            <h:outputText value="Modelo:"/>
+                            <p:inputText value="#{camionBean.selectedCamion.modelo}" required="true"/>
+                            <h:outputText value="Año:"/>
+                            <p:inputText value="#{camionBean.selectedCamion.anho}" required="true"/>
+                            <h:outputText value="Color"/>
+                            <p:inputText value="#{camionBean.selectedCamion.color}" required="true"/>
+                            <h:outputText value="Departamento:"/>
+                            <p:inputText value="#{camionBean.selectedCamion.departamento}" required="true"/>
+                            <h:outputText value="Vto. Dinatran"/>
+                            <p:calendar id="dina" value="#{camionBean.selectedCamion.fechaVencimiento}" pattern="dd-MM-yyyy" mask="true" required="true" />
+                            <h:outputText value="Peso Bruto:"/>
+                            <p:inputText readonly="true" disabled="true" value="#{camionBean.selectedCamion.peso}"/>
+                            <h:outputText value="Tipo Camion:"/>                            
+                            <p:inputText readonly="true" value="#{camionBean.selectedTipoCamion.descripcion}"/>
+                            <p:commandButton id="btnSelectTipo" oncomplete="PF('tipoDialogAgregar').show()" update=":formAgregarTipo"  value="Seleccionar" icon="icon-select" title="Seleccionar">
+                            </p:commandButton>
+                            <h:outputText value=""/>
+                            <h:outputText value="Chofer:"/>
+                            <p:inputText readonly="true" value="#{camionBean.selectedChofer.nombre} #{camionBean.selectedChofer.apellido}"/>
+                            <p:commandButton id="btnSelectCho" update=":formAgregarChofer" oncomplete="PF('choferDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">
+                            </p:commandButton>
+                            <p:commandButton id="btnAgregarCho" update=":formCreateChofer" oncomplete="PF('choferDialogCreate').show()" value="Agregar" icon="icon-nuevo" title="Agregar">
+                            </p:commandButton>
+                            <h:outputText value="Carreta:"/>
+                            <p:inputText readonly="true" value="#{camionBean.selectedCarreta.chapaCarreta}"/>
+                            <p:commandButton id="btnSelectCa" update=":formAgregarCarreta" oncomplete="PF('carretaDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar" disabled="#{camionBean.btnDisabled}">
+                            </p:commandButton>
+                            <p:commandButton id="btnAgregarCa" update=":formCreateCarreta" oncomplete="PF('carretaDialogCreate').show()" value="Agregar" icon="icon-nuevo" title="Agregar" disabled="#{camionBean.btnDisabled}">
+                            </p:commandButton>
+                            <h:outputText value="Propietario:"/>
+                            <p:inputText readonly="true" value="#{camionBean.selectedPropietario.nombre} #{camionBean.selectedPropietario.apellido}"/>
+                            <p:commandButton id="btnSelectPro" update=":formAgregarPro" oncomplete="PF('proDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">
+                            </p:commandButton>
+                            <p:commandButton id="btnAgregarPro" update=":formCreatePro" oncomplete="PF('proDialogCreate').show()" value="Agregar" icon="icon-nuevo" title="Agregar">
+                            </p:commandButton>
+                            <h:inputHidden id="cho" value="#{camionBean.selectedChofer.idChofer}"/>
+                            <h:inputHidden id="ca" value="#{camionBean.selectedCarreta.chapaCarreta}"/>
+                            <h:inputHidden id="pro" value="#{camionBean.selectedPropietario.idPropietario}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=" :msgs :formCreate" action="#{camionBean.btnCreateCamion(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('camionDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:fieldset>
+                </h:form>
+                <h:form id="formAgregarChofer" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Chofer" widgetVar="choferDialogAgregar"  id="choferAgre" 
+                              showEffect="fade" width="50%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >
+
+                        <p:dataTable var="chofer" value="#{choferBean.choferes}" selection="#{camionBean.selectedChofer}" rowKey="#{chofer.idChofer}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="N° CI" style="width: 10%" filterBy="#{chofer.nombre}">
+                                <h:outputText value="#{chofer.NCi}"  />
+                            </p:column>
+                            <p:column headerText="Nombre" style="width: 10%" filterBy="#{chofer.nombre}, #{chofer.apellido}" filterMatchMode="contains">
+                                <h:outputText value="#{chofer.nombre} #{chofer.apellido}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{chofer.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{chofer.telefono}" />
+                            </p:column>
+                            <p:ajax listener="#{camionBean.onRowSelectChofer(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('choferDialogAgregar').hide() "/>  
+                        </p:dataTable>                    
+                    </p:dialog>
+                </h:form>
+                <h:form id="formCreateChofer" style="font-size: 10px;">
+                    <p:dialog header="Agregar Chofer" widgetVar="choferDialogCreate" resizable="false" id="dlgChoferCreate" 
+                              showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{camionBean.selectedChofer.nombre}"/>
+                            <h:outputText value="Apellido:"/>
+                            <p:inputText value="#{camionBean.selectedChofer.apellido}"/>
+                            <h:outputText value="N°CI:"/>
+                            <p:inputText value="#{camionBean.selectedChofer.NCi}"/>
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText value="#{camionBean.selectedChofer.telefono}"/>
+                            <h:outputText value="Direccion"/>
+                            <p:inputText value="#{camionBean.selectedChofer.direccion}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptarCho" update=":formAgregarChofer :msgs :formCreate" oncomplete="PF('choferDialogCreate').hide()" action="#{camionBean.btnCreateChofer(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar">
+                                </p:commandButton>
+                                <p:commandButton id="btnCreateCancelarCho" oncomplete="PF('choferDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formAgregarCarreta" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Carreta" widgetVar="carretaDialogAgregar"  id="carreta" 
+                              showEffect="fade" width="60%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="carreta" value="#{carretaBean.carretas}" selection="#{camionBean.selectedCarreta}" rowKey="#{carreta.chapaCarreta}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="ChapaCarreta" style="width: 10%" filterBy="#{carreta.chapaCarreta}" filterMatchMode="contains">
+                                <h:outputText value="#{carreta.chapaCarreta}" />
+                            </p:column>
+                            <p:column headerText="Marca" style="width: 10%">
+                                <h:outputText value="#{carreta.marca}" />
+                            </p:column>
+                            <p:column headerText="Color" style="width: 10%">
+                                <h:outputText value="#{carreta.color}" />
+                            </p:column>
+                            <p:column headerText="Color" style="width: 10%">
+                                <h:outputText value="#{carreta.tipoCarreta.descripcion}" />
+                            </p:column>
+                            <p:column headerText="Año" style="width: 10%">
+                                <h:outputText value="#{carreta.anho}" />
+                            </p:column>
+                            <p:ajax listener="#{camionBean.onRowSelectCarreta(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('carretaDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formCreateCarreta" style="font-size: 10px;">
+                    <p:dialog header="Agregar Carreta" widgetVar="carretaDialogCreate" resizable="false" id="dlgCarretaCreate" 
+                              showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Tipo Carreta"/>
+                            <p:inputText readonly="true" value="#{camionBean.selectedTipo.descripcion}">
+                                <p:ajax event="click" update=":formAgregarTipo2" oncomplete="PF('tipoDialogAgregar2').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="ChapaCarreta:"/>
+                            <p:inputText value="#{camionBean.selectedCarreta.chapaCarreta}"/>
+                            <h:outputText value="Marca:"/>
+                            <p:inputText value="#{camionBean.selectedCarreta.marca}"/>
+                            <h:outputText value="Color:"/>
+                            <p:inputText value="#{camionBean.selectedCarreta.color}"/>
+                            <h:outputText value="Año:"/>
+                            <p:inputText value="#{camionBean.selectedCarreta.anho}"/>
+                            <h:outputText value="Departamento:"/>
+                            <p:inputText value="#{camionBean.selectedCarreta.departamento}"/>
+                            <h:outputText value="Vto. Dinatran"/>
+                            <p:calendar id="dina" value="#{camionBean.selectedCarreta.fechaDinatran}" pattern="dd-MM-yyyy" mask="true" />
+                            <!--p:selectOneMenu value="#{camionBean.selectedCarreta.tipoCarreta.idTipoCarreta}">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{tipoCarretaBean.selectOneItemsTipoCarreta}" />
+                            </p:selectOneMenu-->
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptarCa" update=":msgs :formCreate" oncomplete="PF('carretaDialogCreate').hide()" action="#{camionBean.btnCreateCarreta(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelarCa" oncomplete="PF('carretaDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formAgregarPro" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Propietario" widgetVar="proDialogAgregar"  id="propietario" 
+                              showEffect="fade" width="50%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="propietario" value="#{propietarioBean.propietarios}" selection="#{camionBean.selectedPropietario}" rowKey="#{propietario.idPropietario}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10">
+                            <p:column headerText="Nombre" style="width: 10%" filterBy="#{propietario.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{propietario.nombre}" />
+                            </p:column>
+                            <p:column headerText="Apellido" style="width: 10%" filterBy="#{propietario.apellido}" filterMatchMode="contains">
+                                <h:outputText value="#{propietario.apellido}" />
+                            </p:column>
+                            <p:column headerText="Ci" style="width: 10%">
+                                <h:outputText value="#{propietario.ciPropietario}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{propietario.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{propietario.telefono}" />
+                            </p:column>
+                            <p:ajax listener="#{camionBean.onRowSelectPropietario(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('proDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formCreatePro" style="font-size: 10px;">
+                    <p:dialog header="Agregar Propietario" widgetVar="proDialogCreate" resizable="false" id="dlgPropietarioCreate" 
+                              modal="true" closeOnEscape="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{camionBean.selectedPropietario.nombre}"/>
+                            <h:outputText value="Apellido:"/>
+                            <p:inputText value="#{camionBean.selectedPropietario.apellido}"/>
+                            <h:outputText value="Ci:"/>
+                            <p:inputText value="#{camionBean.selectedPropietario.ciPropietario}"/>
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText value="#{camionBean.selectedPropietario.telefono}"/>
+                            <h:outputText value="Direccion"/>
+                            <p:inputText value="#{camionBean.selectedPropietario.direccion}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":msgs :formCreate" oncomplete="PF('proDialogCreate').hide()" action="#{camionBean.btnCreatePropietario(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('proDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formAgregarTipo" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Carreta" widgetVar="tipoDialogAgregar"  id="tipoCamion" 
+                              showEffect="fade" width="50%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="tipoCamion" value="#{camionBean.tipos}" selection="#{camionBean.selectedTipoCamion}" rowKey="#{tipoCamion.idTipoCamion}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Tipo Camion" style="width: 10%" filterBy="#{tipoCamion.descripcion}" filterMatchMode="contains">
+                                <h:outputText value="#{tipoCamion.descripcion}" />
+                            </p:column>
+                            <p:column headerText="Peso" style="width: 10%">
+                                <h:outputText value="#{tipoCamion.peso}" />
+                            </p:column>                           
+                            <p:ajax listener="#{camionBean.onRowSelectTipo(event)}" event="rowSelect" update=":formCreate, formCreate:btnSelectCa, formCreate:btnAgregarCa"  oncomplete="PF('tipoDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formAgregarTipo2" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Carreta" widgetVar="tipoDialogAgregar2"  id="tipoCamion" 
+                              showEffect="fade" width="50%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="tipoCarreta" value="#{carretaBean.tipos}" selection="#{camionBean.selectedTipo}" rowKey="#{tipoCarreta.idTipoCarreta}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Tipo Camion" style="width: 10%" filterBy="#{tipoCarreta.descripcion}" filterMatchMode="contains">
+                                <h:outputText value="#{tipoCarreta.descripcion}" />
+                            </p:column>
+                            <p:column headerText="Peso" style="width: 10%">
+                                <h:outputText value="#{tipoCarreta.peso}" />
+                            </p:column>                           
+                            <p:ajax listener="#{camionBean.onRowSelectTipo2(event)}" update="@this :formCreateCarreta" event="rowSelect" oncomplete="PF('carretaDialogCreate').show(); PF('tipoDialogAgregar2').hide()"/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formConfirm" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" closeOnEscape="true" message="Estas Seguro de editar el registro?" 
+                                     header="Confirmar Edicion" severity="alert" widgetVar="flotaDialogEdit"
+                                     showEffect="fade" hideEffect="explode">                        
+
+                        <p:commandButton id="confirm" value="Aceptar" onclick="PF('camionDialogUpdate').show()" oncomplete="PF('flotaDialogEdit').hide()"
+                                         actionListener="#{camionBean.btncargar(actionEvent)}" icon="icon-aceptar">
+                                <!--p:ajax listener="#{viajeBean.onRowSelectF(event)}" event="click" update=":formUpdate" oncomplete="PF('viajeDialogUpdate').show()"/-->
+                        </p:commandButton>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('flotaDialogEdit').hide()" type="button" icon="icon-cancelar"/>
+
+                    </p:confirmDialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
+

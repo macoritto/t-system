@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel id="paneli" header="Detalle Flota" style="font-size: 10px;">
+                    <p:tabView id="tabla">
+                        <p:tab title="Datos del Camion">                            
+                            <h:form id="formView">    
+                                <p:fieldset legend="Camion" style="margin-bottom:20px;">
+                                    <div style="float: left; width: 30%">
+                                        <h:panelGrid id="display1"  columns="7" cellpadding="1" columnClasses="alinder, alinizq" style="font-size: 10px; float: left;">                                                                                                                                                
+                                            <p:graphicImage value="/resources/images/flota2.png" style="margin-left: 50px;" width="50%"/>                                   
+                                        </h:panelGrid>    
+                                    </div>
+                                    <div style="float: left; width: 70%">
+                                <h:panelGrid id="display"  columns="7" cellpadding="1" columnClasses="alinder, alinizq" style="font-size: 10px; float: left;">                                                                                                                                                                                    
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" />                                     
+                                    <h:outputText value="Camion:" />                                    
+                                    <p:inputText value="#{camionBean.selectedCamion.chapaCamion}"></p:inputText>                                    
+                                    <h:outputText value="Marca:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.marca}"></p:inputText>                                    
+                                    <h:outputText value="Color:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.color}"></p:inputText>    
+                                    <h:outputText value="" />   
+                                    <h:outputText value="Modelo:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.modelo}"></p:inputText>                                     
+                                    <h:outputText value="Departamento:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.departamento}"></p:inputText>                                        
+                                    <h:outputText value="Vto Dinatran:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.fechaVencimiento}"></p:inputText>                                    
+                                    <h:outputText value="" />   
+                                    <h:outputText value="Año:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.anho}"></p:inputText> 
+                                    <h:outputText value="Tipo" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.tipoCamion.descripcion}, #{camionBean.selectedCamion.carreta.tipoCarreta.descripcion}"></p:inputText>                                    
+                                    <h:outputText value="" />  
+                                    <h:outputText value="" />  
+                                    <h:outputText value="" />                                      
+                                    <p:separator/>
+                                    <p:separator/>
+                                    <p:separator/>
+                                    <p:separator/>
+                                    <p:separator/>
+                                    <p:separator/>
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="Carreta:" />                                    
+                                    <p:inputText value="#{camionBean.selectedCamion.carreta.chapaCarreta}"></p:inputText>
+                                    <h:outputText value="Marca:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.carreta.marca}"></p:inputText>   
+                                    <h:outputText value="Color:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.carreta.color}"></p:inputText>  
+                                    <h:outputText value="" />   
+                                    <h:outputText value="Año:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.carreta.anho}"></p:inputText>                                     
+                                    <h:outputText value="Departamento:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.carreta.departamento}"></p:inputText>                                        
+                                    <h:outputText value="Vto Dinatran:" />                                    
+                                    <p:inputText  value="#{camionBean.selectedCamion.carreta.fechaDinatran}"></p:inputText>                                   
+                                </h:panelGrid>                                       
+                                </div>            
+                            </p:fieldset>        
+                            </h:form>                                 
+                            <h:form id="formChofer">                                 
+                                <p:fieldset legend="Chofer" style="margin-bottom:20px;">
+                                    <div style="float: left; width: 30%">
+                                        <h:panelGrid id="display3"  columns="7" cellpadding="1" columnClasses="alinder, alinizq" style="font-size: 10px; float: left;">                                                                                                                                                
+                                            <p:graphicImage value="/resources/images/chofer1.png" style="margin-left: 50px;" width="50%"/>                                   
+                                        </h:panelGrid>    
+                                    </div>
+                                    <div style="float: left; width: 70%">
+                                        <h:panelGrid id="display2" cellspacing="17"  columns="6" cellpadding="1" columnClasses="alinder, alinizq" style="font-size: 10px; float: left;">                                                                                                                                                
+                                            <h:outputText value="Chofer:" style="width: 120%;" />                                    
+                                            <p:inputText value="#{camionBean.selectedCamion.chofer.nombre} #{camionBean.selectedCamion.chofer.apellido}" style="width: 120%;"></p:inputText>                                    
+                                            <h:outputText value="" />                                 
+                                            <h:outputText value="N° CI:" style="width: 120%;" />                                    
+                                            <p:inputText  value="#{camionBean.selectedCamion.chofer.NCi}" style="width: 100%;"></p:inputText>  
+                                            <h:outputText value="" />
+                                            <h:outputText value="Telefono:" />                                    
+                                            <p:inputText  value="#{camionBean.selectedCamion.chofer.telefono}" style="width: 120%;"></p:inputText>  
+                                            <h:outputText value="" />                                   
+                                            <h:outputText value="Direccion:" />                                    
+                                            <p:inputText  value="#{camionBean.selectedCamion.chofer.direccion}" style="width: 100%;"></p:inputText>                                                                                                                 
+                                            <h:outputText value="" />                                                                     
+                                        </h:panelGrid>
+                                    </div>    
+                             </p:fieldset>       
+                            </h:form> 
+                            <p:separator style="width:1200px;height:5px" />
+                            <h:form id="formPropietario">    
+                                <p:fieldset legend="Propietario" style="margin-bottom:20px;">  
+                                        <div style="float: left; width: 30%">
+                                            <h:panelGrid id="display4"  columns="7" cellpadding="1" columnClasses="alinder, alinizq" style="font-size: 10px; float: left;">                                                                                                                                                
+                                                <p:graphicImage value="/resources/images/propietario.png" style="margin-left: 50px;" width="50%"/>                                   
+                                            </h:panelGrid>    
+                                        </div>
+                                        <div style="float: left; width: 70%">
+                                        <h:panelGrid id="display6" cellspacing="17"  columns="6" cellpadding="1" columnClasses="alinder, alinizq" style="font-size: 10px; float: left;">                                                                                                                                                
+                                            <h:outputText value="Propietario:" />                                    
+                                            <p:inputText value="#{camionBean.selectedCamion.propietario.nombre} #{camionBean.selectedCamion.propietario.apellido}" style="width: 120%;"></p:inputText>                                    
+                                            <h:outputText value="" />                                 
+                                            <h:outputText value="N° CI:" />                                    
+                                            <p:inputText  value="#{camionBean.selectedCamion.propietario.ciPropietario}" style="width: 120%;"></p:inputText>  
+                                            <h:outputText value="" />
+                                            <h:outputText value="Telefono:" />                                    
+                                            <p:inputText  value="#{camionBean.selectedCamion.propietario.telefono}" style="width: 120%;"></p:inputText>  
+                                            <h:outputText value="" />                                   
+                                            <h:outputText value="Direccion:" />                                    
+                                            <p:inputText  value="#{camionBean.selectedCamion.propietario.direccion}" style="width: 120%;"></p:inputText>                                                                                                                 
+                                            <h:outputText value="" />                                                                     
+                                        </h:panelGrid>
+                                        </div>
+                                </p:fieldset>    
+                            </h:form>                            
+                        </p:tab>                            
+                        <p:tab title="Fletes">
+                            <h:form id="formDataTable" style="font-size: 10px;">
+                                <p:dataTable id="viajes" var="viaje" value="#{camionBean.fleteview}" rows="50" rowsPerPageTemplate="50,100, 1000"
+                                             paginator="true" paginatorPosition="top"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                             rowKey="#{viaje.idViaje}" selection="#{viajeBean.selectedViajes}"
+                                             >
+                                    <f:facet name="{Exporters}">
+                                        <p:commandButton ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{viajeBean.exportarPDFflete(actionEvent)}"></p:commandButton>                                                 
+                                    </f:facet> 
+                                    <f:facet name="header">
+                                        Listado de Fletes
+                                    </f:facet>
+                                    <p:column selectionMode="multiple" width="3%" style="width:16px;text-align:center"/>                            
+                                    <p:column headerText="R. Origen" filterStyle="width: 70%;" style="width: 10% !important;" filterBy="#{viaje.remisionOrigen}" filterMatchMode="contains">
+                                        <h:outputText value="#{viaje.remisionOrigen}" />
+                                    </p:column>
+                                    <p:column headerText="R. Destino" filterStyle="width: 70%;" style="width: 10%;" filterBy="#{viaje.remisionDestino}">
+                                        <h:outputText value="#{viaje.remisionDestino}" />
+                                    </p:column>
+                                    <p:column headerText="Orden N°" filterStyle="width: 70%;" style="width: 7%; text-align: center;" filterBy="#{viaje.ordenDeCarga.idOrdenDeCarga}" filterMatchMode="contains">
+                                        <h:outputText value="#{viaje.ordenDeCarga.idOrdenDeCarga}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha Descarga" style="width: 8%" filterBy="#{viaje.fechaDestino}" filterMatchMode="contains" filterStyle="width: 70%;">
+                                        <h:outputText value="#{viaje.fechaDestino}" />
+                                    </p:column>
+                                    <p:column headerText="P. Origen" style="width: 5%">
+                                        <h:outputText value="#{viaje.pesoOrigen}">
+                                            <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                                        </h:outputText>                            
+                                    </p:column>
+                                    <p:column headerText="P. Destino" style="width: 5%">
+                                        <h:outputText value="#{viaje.pesoDestino}">
+                                            <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                                        </h:outputText>
+                                    </p:column>                                                
+                                    <p:column headerText="Precio" style="width: 4%">
+                                        <h:outputText value="#{viaje.precioPago}" />
+                                    </p:column>                                                                    
+                                    <p:column headerText="Origen" style="width: 13%" filterBy="#{viaje.ordenDeCarga.unidadOrigen.nombre}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                         <h:outputText value="#{viaje.ordenDeCarga.unidadOrigen.nombre}" />
+                                    </p:column>  
+                                    <p:column headerText="Destino" style="width: 12%" filterStyle="width: 80%;" filterMatchMode="contains" filterBy="#{viaje.ordenDeCarga.unidadDestino.nombre}">
+                                        <h:outputText value="#{viaje.ordenDeCarga.unidadDestino.nombre}" />
+                                    </p:column>                                      
+                                    <p:column headerText="Total a Cobrar" style="width: 8%">
+                                        <h:outputText value="#{viaje.montoPagar}">
+                                         <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs." type="currency"/>
+                                        </h:outputText>                            
+                                    </p:column>
+                                    <p:column headerText="E. Pago" style="width: 5%" filterStyle="width: 80%;" filterMatchMode="contains" filterBy="#{viaje.estadoPago}">
+                                        <h:outputText value="#{viaje.estadoPago}"/>
+                                    </p:column>                                                                      
+                                </p:dataTable>
+                            </h:form>
+                            <h:form id="suma">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">                                                                                                                                                                             
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Peso Total:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{camionBean.totalpeso}" >                                                    
+                                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" type="number" />
+                                                    </h:outputText>  </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>    
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Total Monto:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{camionBean.totalbruto}" >
+                                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency" />
+                                                    </h:outputText>  </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>  
+                                        <tfoot>
+                                                    <tr>
+                                                        <td class="ui-state-default" width="690px" style="text-align:right">N° Fletes:</td>
+                                                        <td class="ui-state-default"><h:outputText value="#{camionBean.totalflete}" >
+                                                            <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs "  type="currency"/>
+                                                            </h:outputText>  </td>
+                                                       <td class="ui-state-default"></td>
+                                                    </tr>
+                                                </tfoot>
+                                    </table>
+                               </div>
+                           </div>                                                
+                    </h:form>
+                        </p:tab>    
+                    </p:tabView>    
+                </p:panel>   
+                
+            </ui:define>           
+        </ui:composition>
+                <script type="text/javascript">
+            function handleClose(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioCreate').hide();
+                }
+            }
+
+            function handleClose2(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioUpdate').hide();
+                }
+            }
+
+            function handleClose3(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogNivelCreateN').hide();
+                }
+            }
+
+            function handleClose4(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableUsu').hide();
+                }
+            }
+
+            function handleClose5(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableCli').hide();
+                }
+            }
+
+            function handleClose6(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTablePro').hide();
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

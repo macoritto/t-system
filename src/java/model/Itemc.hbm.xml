@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Itemc" table="itemc" schema="public">
+        <id name="idItem" type="int">
+            <column name="id_item" />
+            <generator class="assigned"></generator>
+        </id>
+        <many-to-one name="camion" class="model.Camion" fetch="select">
+            <column name="camion_chapa_camion" length="6" not-null="true" />
+        </many-to-one>
+        <many-to-one name="chofer" class="model.Chofer" fetch="select">
+            <column name="chofer_id_chofer" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tipoItemc" class="model.TipoItemc" fetch="select">
+            <column name="tipo_itemc_id_tipo" not-null="true" />
+        </many-to-one>
+        <property name="pasivo" type="double">
+            <column name="pasivo" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="activo" type="double">
+            <column name="activo" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descrip" type="string">
+            <column name="descrip" length="100" not-null="true" />
+        </property>
+        <property name="cod" type="int">
+            <column name="cod" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="20" not-null="true" />
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+        <set name="detExtractocs" table="det_extractoc" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="itemc_id_item" not-null="true" />
+            </key>
+            <one-to-many class="model.DetExtractoc" />
+        </set>
+    </class>
+</hibernate-mapping>

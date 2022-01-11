@@ -1,0 +1,282 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 10px;">                
+                    <p:tab title="Tolerancias">
+                    <h:form>
+                        <p:commandButton id="btnToleranciaCreate" actionListener="#{clienteBean.btniniciar(actionEvent)}" update=":formCreate1" oncomplete="PF('toleranciaDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo"/>
+                    </h:form>
+                    <h:form id="formDataTable1">
+                        <p:dataTable id="tolerancia" var="tolerancia" value="#{clienteBean.tolerancias}"
+                                     paginator="true" paginatorPosition="bottom"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                     selectionMode="single" rowKey="#{tolerancia.idTolerancia}" selection="#{clienteBean.selectedTolerancia}"
+                                     >                             
+                            <f:facet name="header">
+                                Listado de Tolerancias
+                            </f:facet>
+                            <p:column headerText="Id" style="width: 15%;" filterBy="#{tolerancia.idTolerancia}" filterMatchMode="contains" >
+                                <h:outputText value="#{tolerancia.idTolerancia}" />
+                            </p:column>
+                            <p:column headerText="Cliente" style="width: 15%;" filterBy="#{tolerancia.cliente.nombre}" filterMatchMode="contains" >
+                                <h:outputText value="#{tolerancia.cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Tolerancia" style="width: 15%" >
+                                <h:outputText value="#{tolerancia.tolerancia}" />
+                            </p:column>                            
+                            <p:column style="width:5%">
+                                <p:commandButton id="btnUpdate" update=":formUpdate1" oncomplete="PF('toleranciaDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                    <f:setPropertyActionListener value="#{tolerancia}" target="#{clienteBean.selectedTolerancia}" />
+                                </p:commandButton>
+                                <p:commandButton id="btnDelete" update=":formDelete1" oncomplete="PF('toleranciaDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                    <f:setPropertyActionListener value="#{tolerancia}" target="#{clienteBean.selectedTolerancia}" />
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:tab>                   
+                </p:tabView>    
+                <h:form id="formAgregarCliente" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Cliente" widgetVar="clienteDialogAgregar"  id="clienteAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                            <p:dataTable var="cliente" value="#{clienteBean.clientes}" selection="#{clienteBean.selectedCliente}" rowKey="#{cliente.idCliente}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="6" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{cliente.idCliente}" />
+                            </p:column>
+                                <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 20%" filterBy="#{cliente.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 20%">
+                                <h:outputText value="#{cliente.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{cliente.telefono}" />
+                            </p:column>                             
+                                <p:ajax listener="#{clienteBean.onRowSelectTipo(event)}" event="rowSelect" update="@this :formCreate1"  oncomplete="PF('clienteDialogAgregar').hide(); PF('toleranciaDialogCreate').show() "/>  
+                        </p:dataTable>                        
+                </p:dialog>
+                </h:form> 
+                <h:form id="formAgregarCliente2" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Cliente" widgetVar="clienteDialogAgregar2"  id="clienteAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                            <p:dataTable var="cliente" value="#{clienteBean.clientes}" selection="#{clienteBean.selectedCliente}" rowKey="#{cliente.idCliente}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="6" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{cliente.idCliente}" />
+                            </p:column>
+                                <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 20%" filterBy="#{cliente.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 20%">
+                                <h:outputText value="#{cliente.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{cliente.telefono}" />
+                            </p:column>                             
+                                <p:ajax listener="#{clienteBean.onRowSelectTipo(event)}" event="rowSelect" update="@this :formUpdate1"  oncomplete="PF('toleranciaDialogUpdate').show(); PF('clienteDialogAgregar2').hide() "/>  
+                        </p:dataTable>                        
+                </p:dialog>
+                </h:form> 
+                <h:form id="formCreate1" style="font-size: 10px;">
+                    <p:dialog width="35%" header="Agregar Tolerancia" widgetVar="toleranciaDialogCreate" resizable="false" id="dlgChoferCreate" 
+                              showEffect="fade" closeOnEscape="true" modal="true">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px; ">
+                            <h:outputText value="Cliente:"/>
+                            <p:inputText readonly="true" value="#{clienteBean.selectedCliente.nombre}" size="40">
+                                <p:ajax event="click" update=":formAgregarCliente" oncomplete="PF('clienteDialogAgregar').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="Tipo:"/>
+                            <p:selectOneMenu value="#{clienteBean.selectedTolerancia.tipo}" style="width: 100% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItem itemLabel="Porcentaje" itemValue="Porciento" />
+                                <f:selectItem itemLabel="Kilogramos" itemValue="Kilogramos" />
+                            </p:selectOneMenu>
+                            <h:outputText value="Tolerancia:"/>
+                            <p:inputText value="#{clienteBean.selectedTolerancia.tolerancia}" style="width: 100%"/>                                                        
+                            <f:facet name="footer">
+                                <p:separator style=" width: 100%"/>
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable1 :formCreate1 :msgs" action="#{clienteBean.btnCreateTole(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('toleranciaDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formUpdate1" style="font-size: 10px;">
+                    <p:dialog width="35%" header="Modificar Tolerancia" closeOnEscape="true" widgetVar="toleranciaDialogUpdate" resizable="false" id="dlgClienteUpdate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px; ">
+                            <h:outputText value="Cliente:"/>
+                            <p:inputText readonly="true" value="#{clienteBean.selectedTolerancia.cliente.nombre}" size="40">
+                                <p:ajax event="click" update=":formAgregarCliente2" oncomplete="PF('clienteDialogAgregar2').show()"/> 
+                            </p:inputText>         
+                            <h:outputText value="Tipo:"/>
+                            <p:selectOneMenu value="#{clienteBean.selectedTolerancia.tipo}" style="width: 100% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItem itemLabel="Porciento" itemValue="Porciento" />
+                                <f:selectItem itemLabel="Kilogramos" itemValue="Kilogramos" />
+                            </p:selectOneMenu>
+                            <h:outputText value="Tolerancia:"/>
+                            <p:inputText value="#{clienteBean.selectedTolerancia.tolerancia}"/>                                                        
+                            <h:inputHidden value="#{clienteBean.selectedTolerancia.idTolerancia}"/>
+                            <f:facet name="footer">
+                                <p:separator style=" width: 100%"/>
+                                <p:commandButton id="btnCreateAceptar" update="tabla:formDataTable1 :formCreate1 :msgs" oncomplete="PF('toleranciaDialogUpdate').hide()" action="#{clienteBean.btnUpdateTole(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('toleranciaDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formDelete1" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Tolerancia" severity="alert" closeOnEscape="true" widgetVar="toleranciaDialogDelete"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{clienteBean.selectedTolerancia.idTolerancia}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update="tabla:formDataTable1 :formCreate1 :msgs" oncomplete="PF('toleranciaDialogDelete').hide()"
+                                         actionListener="#{clienteBean.btnDeleteDelete(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('toleranciaDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>               
+                <p:dialog  width="1200" dynamic="true" position="top" widgetVar="clienteDialogMostrar" resizable="true" id="dlgDataTablePago"  
+                           showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true"  maximizable="true" >                    
+                    
+                    <h:form id="formMostrar" style="font-size: 10px;"> 
+                        <h:panelGrid id="display"  columns="7" cellpadding="2" columnClasses="alinder, alinizq" >
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="*Nombre:" />
+                            <p:inputText value="#{clienteBean.selectedCliente.nombre}" readonly="true"/>     
+                            <h:outputText value="Direccion:"/>
+                            <p:inputText id="proveedor2" size="30" value="#{clienteBean.selectedCliente.direccion}" readonly="true"/>                            
+                            <h:outputText value="Telefono.:"/>
+                            <p:inputText size="20" id="descrip" value="#{clienteBean.selectedCliente.telefono}"/>                            
+                            <h:outputText value="" />                            
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                        </h:panelGrid>
+                    </h:form>  
+                    <p:tabView id="tabla1" dynamic="true" cache="true" style="font-size: 10px;">
+                    <p:tab id="orden" title="Ordenes">
+                    <h:form id="datos">  
+                        <p:dataTable id="ordenes" var="ordenDeCarga" value="#{clienteBean.ordenes}" style="letras"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" rowKey="#{ordenDeCarga.idOrdenDeCarga}" selection="#{clienteBean.selectedOrden}" rows="10" rowsPerPageTemplate="10,30,60,100"
+                                 >                          
+                        <f:facet name="{Exporters}">
+                            <p:commandButton onclick="form.target='_blank'" ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{clienteBean.exportarPDForden(actionEvent)}"></p:commandButton>                                                 
+                        </f:facet>  
+                        <f:facet name="header">
+                            Ordenes Pendientes
+                        </f:facet>
+                        <p:column headerText="N° Orden" filterStyle="width: 80%;" style="width: 7%;" filterBy="#{ordenDeCarga.idOrdenDeCarga}" >
+                            <h:outputText value="#{ordenDeCarga.idOrdenDeCarga}" />
+                        </p:column>
+                        <p:column headerText="Cliente" style="width:20%;" >
+                            <h:outputText value="#{ordenDeCarga.cliente.nombre}" />
+                        </p:column>
+                        <p:column headerText="Producto" style="width: 8%" >
+                            <h:outputText value="#{ordenDeCarga.producto.nombre}" />
+                        </p:column>
+                        <p:column headerText="Origen" style="width: 15%">
+                            <h:outputText value="#{ordenDeCarga.unidadOrigen.nombre}" />
+                        </p:column>
+                        <p:column headerText="Destino" style="width: 15%">
+                            <h:outputText value="#{ordenDeCarga.unidadDestino.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;" style="width: 8%" filterMatchMode="contains" filterBy="#{ordenDeCarga.camion.chapaCamion}" >
+                            <h:outputText value="#{ordenDeCarga.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Chofer" style="width: 15%">
+                            <h:outputText value="#{ordenDeCarga.camion.chofer.nombre} #{ordenDeCarga.camion.chofer.apellido}" />
+                        </p:column>                             
+                        </p:dataTable>  
+                    </h:form>  
+                    </p:tab>
+                    <p:tab id="flete" title="Fletes">
+                    <h:form id="datos2">  
+                        <p:dataTable id="viajes" var="flete" value="#{clienteBean.fletes}" style="letras"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" rowKey="#{flete.idViaje}" selection="#{clienteBean.selectedFlete}" rows="10" rowsPerPageTemplate="10,30,60,100"
+                                 >                          
+                        <f:facet name="{Exporters}">
+                            <p:commandButton onclick="form.target='_blank'" ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{clienteBean.exportarPDForden(actionEvent)}"></p:commandButton>                                                 
+                        </f:facet>  
+                        <f:facet name="header">
+                            Fletes Pendientes
+                        </f:facet>
+                        <p:column headerText="N° Remision" filterStyle="width: 80%;" style="width: 7%;" filterBy="#{ordenDeCarga.idOrdenDeCarga}" >
+                            <h:outputText value="#{flete.remisionDestino}" />
+                        </p:column>                                               
+                        <p:column headerText="Origen" style="width: 15%">
+                            <h:outputText value="#{flete.ordenDeCarga.unidadOrigen.nombre}" />
+                        </p:column>
+                        <p:column headerText="Destino" style="width: 15%">
+                            <h:outputText value="#{flete.ordenDeCarga.unidadDestino.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Total" style="width: 8%">
+                            <h:outputText value="#{flete.montoCobrar}">
+                                <f:convertNumber maxFractionDigits="2" type="number"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;" style="width: 8%" filterMatchMode="contains" filterBy="#{ordenDeCarga.camion.chapaCamion}" >
+                            <h:outputText value="#{flete.ordenDeCarga.camion.chapaCamion}" />
+                        </p:column>                                                  
+                        </p:dataTable>  
+                    </h:form>  
+                    <h:form id="suma">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{clienteBean.total}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  
+                                               </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator />                         
+                    </h:form>             
+                    </p:tab>
+                    </p:tabView>       
+                </p:dialog>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

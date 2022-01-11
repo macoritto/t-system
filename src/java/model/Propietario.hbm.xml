@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Propietario" table="propietario" schema="public">
+        <id name="idPropietario" type="int">
+            <column name="id_propietario" />
+            <generator class="sequence">
+                <param name="sequence">propietario_id_propietario_seq</param>
+            </generator>
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" />
+        </property>
+        <property name="apellido" type="string">
+            <column name="apellido" length="50" not-null="true" />
+        </property>
+        <property name="fechaCreacion" type="date">
+            <column name="fecha_creacion" length="13" not-null="true" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="50" not-null="true" />
+        </property>
+        <property name="telefono" type="string">
+            <column name="telefono" length="30" not-null="true" />
+        </property>
+        <property name="ciPropietario" type="int">
+            <column name="ci_propietario" not-null="true" />
+        </property>
+        <set name="extractos" table="extracto" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="propietario_id_propietario" not-null="true" />
+            </key>
+            <one-to-many class="model.Extracto" />
+        </set>
+        <set name="camions" table="camion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="propietario_id_propietario" not-null="true" />
+            </key>
+            <one-to-many class="model.Camion" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.PagoCombustible" table="pago_combustible" schema="public">
+        <id name="idPagoCombustible" type="int">
+            <column name="id_pago_combustible" />
+            <generator class="sequence">
+                <param name="sequence">orden_de_carga_id_orden_de_carga_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="proveedor" class="model.Proveedor" fetch="select">
+            <column name="proveedor_id_proveedor" not-null="true" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="30" not-null="true" />
+        </property>
+        <property name="total" type="double">
+            <column name="total" precision="17" scale="17" not-null="true" />
+        </property>
+        <set name="detallePagoCombs" table="detalle_pago_comb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pago_combustible_id_pago_combustible" not-null="true" />
+            </key>
+            <one-to-many class="model.DetallePagoComb" />
+        </set>
+    </class>
+</hibernate-mapping>

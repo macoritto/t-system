@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Extracto" table="extracto" schema="public">
+        <id name="idLiquidacion" type="int">
+            <column name="id_liquidacion" />
+            <generator class="sequence">
+                <param name="sequence">extracto_id_liquidacion_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="propietario" class="model.Propietario" fetch="select">
+            <column name="propietario_id_propietario" not-null="true" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+        <property name="fechaPago" type="date">
+            <column name="fecha_pago" length="13" not-null="true" />
+        </property>
+        <property name="monto" type="double">
+            <column name="monto" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="20" not-null="true" />
+        </property>
+        <set name="exCamions" table="ex_camion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="extracto_id_liquidacion" not-null="true" />
+            </key>
+            <one-to-many class="model.ExCamion" />
+        </set>
+        <set name="detExtractos" table="det_extracto" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="extracto_id_liquidacion" not-null="true" />
+            </key>
+            <one-to-many class="model.DetExtracto" />
+        </set>
+    </class>
+</hibernate-mapping>

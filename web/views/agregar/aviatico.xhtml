@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                    <h:form id="formCreate">
+                        <p:fieldset legend="Agregar Viatico" style="margin-left:360px; margin-right:380px; margin-bottom: 30px; margin-top: 30px;">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>    
+                        <h:panelGrid id="display" columns="3" cellpadding="2" style="margin: 0 auto; width: 50%;">
+                            <h:outputText style="width: 15%;" value="Camion:"/>
+                            <p:inputText readonly="true" value="#{viaticoBean.selectedCamion.chapaCamion}"/>
+                            <p:commandButton id="btnSelectCa" update=":formAgregarCamion" oncomplete="PF('camionDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">
+                            </p:commandButton>
+                            <h:outputText value="Chofer"/>
+                            <p:inputText value="#{viaticoBean.selectedCamion.chofer.nombre}"/>
+                            <h:outputText value=""/>
+                            
+                            <h:outputText value="Fecha"/>
+                            <p:calendar id="fecha1" value="#{viaticoBean.selectedViatico.fecha}" pattern="dd-MM-yyyy" mask="true"/>                            
+                            <h:outputText value=""/>
+                            <h:outputText value="Tipo Viatico"/>
+                            <p:selectOneMenu value="#{viaticoBean.selectedViatico.tipoViatico.idTipo}" style="width: 100% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{viaticoBean.selectOneItemsTipoViatico}" />
+                            </p:selectOneMenu>
+                            <h:outputText value=""/>
+                            <h:outputText value="Monto"/>
+                            <p:inputText value="#{viaticoBean.selectedViatico.monto}"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Descripcion"/>
+                            <p:inputText value="#{viaticoBean.selectedViatico.descripcion}"/>
+                            <h:inputHidden id="cam" value="#{viaticoBean.selectedCamion.chapaCamion}"/>
+                           
+                            <h:inputHidden id="cho" value="#{viaticoBean.selectedCamion.chofer.idChofer}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="report" ajax="false" icon="icon-pdf" value="PDF" actionListener="#{viaticoBean.exportarPDF2(actionEvent)}"></p:commandButton>                                                  
+                                <p:commandButton id="btnCreateAceptar" update=":msgs :formCreate"  action="#{viaticoBean.btnCreateViatico(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="bntSalir" ajax="false" immediate="true" action="/views/inicio.xhtml" icon="icon-cancel" title="Salir" value="Salir" />
+                            </f:facet>
+                        </h:panelGrid>
+                        </p:fieldset>
+                    </h:form>
+                
+                <h:form id="formAgregarCamion" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Camion" widgetVar="camionDialogAgregar"  id="camion" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >
+                        <p:dataTable var="camion" value="#{camionBean.camiones}" selection="#{viaticoBean.selectedCamion}" rowKey="#{camion.chapaCamion}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Chapa Camion" style="width: 7%" filterStyle="width: 80%" filterBy="#{camion.chapaCamion}" filterMatchMode="contains">
+                                <h:outputText value="#{camion.chapaCamion}" />
+                            </p:column>
+                            <p:column headerText="Marca" style="width: 10%">
+                                <h:outputText value="#{camion.marca}" />
+                            </p:column>
+                            <p:column headerText="Color" style="width: 7%">
+                                <h:outputText value="#{camion.color}" />
+                            </p:column>
+                            <p:column headerText="Año" style="width: 5%">
+                                <h:outputText value="#{camion.anho}" />
+                            </p:column>
+                            <p:column headerText="Chofer" style="width: 20%" filterBy="#{camion.chofer.nombre} #{camion.chofer.apellido}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                <h:outputText value="#{camion.chofer.nombre} #{camion.chofer.apellido}" />
+                            </p:column>
+                            <p:column headerText="Propietario" style="width: 20%" filterBy="#{camion.propietario.nombre} #{camion.propietario.apellido}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                <h:outputText value="#{camion.propietario.nombre} #{camion.propietario.apellido}" />
+                            </p:column>
+                            <p:ajax listener="#{viaticoBean.onRowSelectCamion(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('camionDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

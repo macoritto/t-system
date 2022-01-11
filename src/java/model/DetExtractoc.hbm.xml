@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.DetExtractoc" table="det_extractoc" schema="public">
+        <id name="idDet" type="int">
+            <column name="id_det" />
+            <generator class="assigned"></generator>
+        </id>
+        <many-to-one name="extractoc" class="model.Extractoc" fetch="select">
+            <column name="extractoc_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="itemc" class="model.Itemc" fetch="select">
+            <column name="itemc_id_item" not-null="true" />
+        </many-to-one>
+        <property name="pasivo" type="double">
+            <column name="pasivo" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="activo" type="double">
+            <column name="activo" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descrip" type="string">
+            <column name="descrip" length="100" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.TipoProvee" table="tipo_provee" schema="public">
+        <id name="idProvee" type="int">
+            <column name="id_provee" />
+            <generator class="assigned"></generator>
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="60" />
+        </property>
+        <set name="proveedors" table="proveedor" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_proveecli" />
+            </key>
+            <one-to-many class="model.Proveedor" />
+        </set>
+    </class>
+</hibernate-mapping>

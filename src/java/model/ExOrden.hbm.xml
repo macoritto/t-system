@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 23/11/2021 15:18:07 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.ExOrden" table="ex_orden" schema="public" optimistic-lock="version">
+        <id name="idExOrden" type="int">
+            <column name="id_ex_orden" />
+            <generator class="sequence">
+                <param name="sequence">extracto_orden</param>
+            </generator>
+        </id>
+        <many-to-one name="extracto" class="model.Extracto" fetch="select">
+            <column name="extracto_id" />
+        </many-to-one>
+        <many-to-one name="ordenDeCarga" class="model.OrdenDeCarga" fetch="select">
+            <column name="orden_id" />
+        </many-to-one>
+        <property name="descrip" type="string">
+            <column name="descrip" length="300" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.UnidadProvee" table="unidad_provee" schema="public">
+        <id name="idUnidad" type="int">
+            <column name="id_unidad" />
+            <generator class="sequence">
+                <param name="sequence">unidad_provee_id_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="proveeCliente" class="model.ProveeCliente" fetch="select">
+            <column name="id_proveecli" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="80" />
+        </property>
+        <property name="telefono" type="string">
+            <column name="telefono" length="30" />
+        </property>
+        <property name="descrip" type="string">
+            <column name="descrip" length="80" />
+        </property>
+        <set name="suministros" table="suministro" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="unidad_id" />
+            </key>
+            <one-to-many class="model.Suministro" />
+        </set>
+        <set name="precioSuministros" table="precio_suministro" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_unidad_pro" />
+            </key>
+            <one-to-many class="model.PrecioSuministro" />
+        </set>
+    </class>
+</hibernate-mapping>

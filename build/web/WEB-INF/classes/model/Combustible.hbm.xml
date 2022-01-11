@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Combustible" table="combustible" schema="public">
+        <id name="idCombustible" type="int">
+            <column name="id_combustible" />
+            <generator class="sequence">
+                <param name="sequence">combustible_id_combustible_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="valeCombustible" class="model.ValeCombustible" fetch="select">
+            <column name="vale_combustible_id_vale_combustible" not-null="true" />
+        </many-to-one>
+        <many-to-one name="viatico" class="model.Viatico" fetch="select">
+            <column name="viatico_id_viatico" not-null="true" />
+        </many-to-one>
+        <property name="NBoleta" type="string">
+            <column name="n_boleta" length="20" not-null="true" />
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" not-null="true" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" />
+        </property>
+        <property name="precio" type="double">
+            <column name="precio" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="litros" type="double">
+            <column name="litros" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="montoTotal" type="double">
+            <column name="monto_total" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="extras" type="double">
+            <column name="extras" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="estadoCobro" type="string">
+            <column name="estado_cobro" length="15" not-null="true" />
+        </property>
+        <property name="estadoPago" type="string">
+            <column name="estado_pago" length="20" not-null="true" />
+        </property>
+        <property name="viatico_1" type="double">
+            <column name="viatico" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="montoComb" type="double">
+            <column name="monto_comb" precision="17" scale="17" not-null="true" />
+        </property>
+        <set name="detallePagoCombs" table="detalle_pago_comb" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="combustible_id_combustible" not-null="true" />
+            </key>
+            <one-to-many class="model.DetallePagoComb" />
+        </set>
+    </class>
+</hibernate-mapping>

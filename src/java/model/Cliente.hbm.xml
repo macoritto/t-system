@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Cliente" table="cliente" schema="public">
+        <id name="idCliente" type="int">
+            <column name="id_cliente" />
+            <generator class="sequence">
+                <param name="sequence">cliente_id_cliente_seq</param>
+            </generator>
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" />
+        </property>
+        <property name="ruc" type="string">
+            <column name="ruc" length="30" not-null="true" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="50" />
+        </property>
+        <property name="correo" type="string">
+            <column name="correo" length="50" />
+        </property>
+        <property name="telefono" type="string">
+            <column name="telefono" length="20" />
+        </property>
+        <set name="seguros" table="seguro" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cliente_id_cliente" not-null="true" />
+            </key>
+            <one-to-many class="model.Seguro" />
+        </set>
+        <set name="precioFletes" table="precio_flete" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cliente_id_cliente" not-null="true" />
+            </key>
+            <one-to-many class="model.PrecioFlete" />
+        </set>
+        <set name="ordenDeCargas" table="orden_de_carga" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cliente_id_cliente" not-null="true" />
+            </key>
+            <one-to-many class="model.OrdenDeCarga" />
+        </set>
+        <set name="pagoFletes" table="pago_flete" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cliente_id_cliente" not-null="true" />
+            </key>
+            <one-to-many class="model.PagoFlete" />
+        </set>
+        <set name="productos" table="producto" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cliente_id_cliente" not-null="true" />
+            </key>
+            <one-to-many class="model.Producto" />
+        </set>
+        <set name="tolerancias" table="tolerancia" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="cliente_id_cliente" not-null="true" />
+            </key>
+            <one-to-many class="model.Tolerancia" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel id="paneli" header="Pago a Propietarios">
+                    <h:form id="formPago" style="font-size: 10px;"> 
+                        <p:messages id="msgs1" showDetail="true"/>                             
+                        <h:panelGrid id="display"  columns="9" cellpadding="4" columnClasses="alinder, alinizq" >
+                            <h:outputText value="*Cliente:" />
+                            <p:inputText size="30" value="#{clienteBean.selectedCliente.nombre}" readonly="true"/>                                                                                    
+                            <h:outputText value="Ruc:"/>
+                            <p:inputText size="30" value="#{clienteBean.selectedCliente.ruc}" readonly="true" />
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText size="30" value="#{clienteBean.selectedCliente.telefono}" readonly="true" />
+                            <h:outputText value="Direccion:"/>
+                            <p:inputText size="30" value="#{clienteBean.selectedCliente.direccion}" readonly="true" />
+                        </h:panelGrid>
+                    </h:form>
+                    <p:tabView id="tabla1" dynamic="true" cache="true" style="font-size: 10px;">
+                    <p:tab id="orden" title="Ordenes Pendientes">
+                    <h:form id="datos">  
+                        <p:dataTable id="ordenes" var="ordenDeCarga" value="#{clienteBean.ordenes}" style="letras"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" rowKey="#{ordenDeCarga.idOrdenDeCarga}" selection="#{clienteBean.selectedOrden}" rows="20" rowsPerPageTemplate="10,30,60,100"
+                                 >                          
+                        <f:facet name="{Exporters}">
+                            <p:commandButton ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{clienteBean.exportarPDForden(actionEvent)}"></p:commandButton>                                                 
+                        </f:facet>  
+                        <f:facet name="header">
+                            Ordenes Pendientes
+                        </f:facet>
+                        <p:column headerText="N° Orden" filterStyle="width: 80%;" style="width: 7%;" filterBy="#{ordenDeCarga.idOrdenDeCarga}" >
+                            <h:outputText value="#{ordenDeCarga.idOrdenDeCarga}" />
+                        </p:column>
+                        <p:column headerText="Cliente" style="width:20%;" >
+                            <h:outputText value="#{ordenDeCarga.cliente.nombre}" />
+                        </p:column>
+                        <p:column headerText="Fecha" style="width:20%;" >
+                            <h:outputText value="#{ordenDeCarga.fechaEmision}" />
+                        </p:column>    
+                        <p:column headerText="Producto" style="width: 8%" >
+                            <h:outputText value="#{ordenDeCarga.producto.nombre}" />
+                        </p:column>
+                        <p:column headerText="Origen" style="width: 15%">
+                            <h:outputText value="#{ordenDeCarga.unidadOrigen.nombre}" />
+                        </p:column>
+                        <p:column headerText="Destino" style="width: 15%">
+                            <h:outputText value="#{ordenDeCarga.unidadDestino.nombre}"/>
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;" style="width: 8%" filterMatchMode="contains" filterBy="#{ordenDeCarga.camion.chapaCamion}" >
+                            <h:outputText value="#{ordenDeCarga.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Chofer" style="width: 15%">
+                            <h:outputText value="#{ordenDeCarga.camion.chofer.nombre} #{ordenDeCarga.camion.chofer.apellido}" />
+                        </p:column>                             
+                        </p:dataTable>  
+                    </h:form>  
+                    </p:tab>
+                    <p:tab id="flete" title="Fletes Pendientes">
+                    <h:form id="datos2">  
+                        <p:dataTable id="viajes" var="flete" value="#{clienteBean.fletes}" style="letras"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" rowKey="#{flete.idViaje}" selection="#{clienteBean.selectedFlete}" rows="10" rowsPerPageTemplate="10,30,60,100"
+                                 >                          
+                        <f:facet name="{Exporters}">
+                            <p:commandButton ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{clienteBean.exportarPDFflete(actionEvent)}"></p:commandButton>                                                 
+                        </f:facet>  
+                        <f:facet name="header">
+                            Fletes Pendientes
+                        </f:facet>
+                        <p:column headerText="N° Remision" filterStyle="width: 80%;" style="width: 7%;" filterBy="#{ordenDeCarga.idOrdenDeCarga}" >
+                            <h:outputText value="#{flete.remisionDestino}" />
+                        </p:column>                                               
+                        <p:column headerText="Fecha" style="width: 8%">
+                            <h:outputText value="#{flete.fechaDestino}" />
+                        </p:column>                        
+                        <p:column headerText="Origen" style="width: 15%">
+                            <h:outputText value="#{flete.ordenDeCarga.unidadOrigen.nombre}" />
+                        </p:column>
+                        <p:column headerText="Destino" style="width: 15%">
+                            <h:outputText value="#{flete.ordenDeCarga.unidadDestino.nombre}"/>
+                        </p:column>
+                        <p:column headerText="P. Origen" style="width: 6%">
+                            <h:outputText value="#{flete.pesoOrigen}" />
+                        </p:column>
+                        <p:column headerText="P. Destino" style="width: 6%">
+                            <h:outputText value="#{flete.pesoDestino}" />
+                        </p:column>        
+                        <p:column headerText="Total" style="width: 8%">
+                            <h:outputText value="#{flete.montoCobrar}">
+                                <f:convertNumber maxFractionDigits="2" type="number"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;" style="width: 8%" filterMatchMode="contains" filterBy="#{ordenDeCarga.camion.chapaCamion}" >
+                            <h:outputText value="#{flete.ordenDeCarga.camion.chapaCamion}" />
+                        </p:column>  
+                            <p:column headerText="Chofer" filterStyle="width: 80%;" style="width: 8%" filterMatchMode="contains" filterBy="#{flete.chofer.nombre}, #{flete.chofer.apellido}" >
+                                <h:outputText value="#{flete.chofer.nombre}, #{flete.chofer.apellido}" />
+                        </p:column>      
+                        </p:dataTable>  
+                    </h:form>  
+                    <h:form id="suma">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{clienteBean.total}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  
+                                               </td>
+                                               <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                               </div>
+                           </div>
+                        <p:separator />                         
+                    </h:form>             
+                    </p:tab>
+                    <p:tab id="pagos" title="Ultimos Pagos">
+                    <h:form id="datos3">  
+                        <p:dataTable id="datacar" var="pagoFlete" value="#{clienteBean.pagospen}" rowKey="#{pagoFlete.idPagoFlete}" selection="#{pagoviBean.selectedPago}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" paginator="true" paginatorPosition="top">  
+                                <f:facet name="{Exporters}">
+                                    <p:commandButton ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{pagoviBean.exportarPDF(actionEvent)}"></p:commandButton>                                                 
+                                </f:facet>
+                                <p:column headerText="Cod Pago" style="width:5%;" filterBy="#{pagoFlete.idPagoFlete}"   
+                                          filterMatchMode="contains" filterStyle="width: 80%;">  
+                                    <h:outputText value="#{pagoFlete.idPagoFlete}"/>  
+                                </p:column>                                
+                                <p:column headerText="Cliente" filterStyle="width: 80%;" style="width:15%;" filterBy="#{pagoFlete.cliente.nombre}"   
+                                       filterMatchMode="contains">  
+                                    <h:outputText value="#{pagoFlete.cliente.idCliente}, #{pagoFlete.cliente.nombre}" />  
+                                </p:column>
+                                <p:column headerText="Fecha" style="width:7%;" filterBy="#{pagoFlete.fecha}" filterMatchMode="contains">  
+                                    <h:outputText value="#{pagoFlete.fecha}" />  
+                                </p:column>  
+                                <p:column headerText="N° Liq." style="width:7%;" filterBy="#{pagoFlete.nroLiq}" filterMatchMode="contains">  
+                                    <h:outputText value="#{pagoFlete.nroLiq}" />  
+                                </p:column>   
+                                <p:column headerText="Descripcion." filterStyle="width: 80%;" style="width:15%;" filterBy="#{pagoFlete.descripcion}" filterMatchMode="contains">  
+                                    <h:outputText value="#{pagoFlete.descripcion}" />  
+                                </p:column>    
+                                <p:column headerText="Total" style="width:7%; text-align: right;">  
+                                    <h:outputText value="#{pagoFlete.montoTotal}"  >
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                    </h:outputText>  
+                                </p:column>                                 
+                            </p:dataTable>  
+                        </h:form> 
+                        <h:form id="suma1">
+                            <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                <div class="ui-datatable-tablewrapper">
+                                    <table role="grid2">
+                                        <tfoot>
+                                            <tr>
+                                                <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                                <td class="ui-state-default"><h:outputText value="#{clienteBean.totalpago}" >
+                                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                    </h:outputText>  </td>
+                                                <td class="ui-state-default"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        <p:separator />                         
+                    </h:form>             
+                    </p:tab>    
+                    </p:tabView>                                                
+                </p:panel>   
+                
+            </ui:define>           
+        </ui:composition>
+                <script type="text/javascript">
+            function handleClose(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioCreate').hide();
+                }
+            }
+
+            function handleClose2(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioUpdate').hide();
+                }
+            }
+
+            function handleClose3(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogNivelCreateN').hide();
+                }
+            }
+
+            function handleClose4(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableUsu').hide();
+                }
+            }
+
+            function handleClose5(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableCli').hide();
+                }
+            }
+
+            function handleClose6(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTablePro').hide();
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

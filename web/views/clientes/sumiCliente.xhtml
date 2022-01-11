@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 10px;">
+                <p:tab title="Suministros entregados por Clientes">
+                <h:form id="formDataTable" > 
+                    <p:dataTable id="provComb" var="sumiCliente" value="#{sumiCliBean.suministros}"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" rowKey="#{sumiCliente.idSumiCli}" selection="#{sumiCliBean.selectedSuministro}"
+                                 >
+
+                        <p:column headerText="N. Sumi" filterStyle="width: 80%;" style="width: 4%;" filterBy="#{sumiCliente.idSumiCli}" filterMatchMode="contains">
+                            <h:outputText value="#{sumiCliente.idSumiCli}" />
+                        </p:column>
+                        <p:column headerText="Fecha" style="width: 8%">
+                            <h:outputText value="#{sumiCliente.fecha}" >
+                            </h:outputText>                                                                                                    
+                        </p:column>
+                        <p:column headerText="N. Orden" filterStyle="width: 80%;" style="width: 4%;" filterBy="#{sumiCliente.ordenDeCarga.idOrdenDeCarga}" filterMatchMode="contains">
+                            <h:outputText value="#{sumiCliente.ordenDeCarga.idOrdenDeCarga}" />
+                        </p:column>
+                        <p:column headerText="Camion" filterStyle="width: 80%;" style="width: 6%;" filterBy="#{sumiCliente.camion.chapaCamion}" filterMatchMode="contains">
+                            <h:outputText value="#{sumiCliente.camion.chapaCamion}" />
+                        </p:column>
+                        <p:column headerText="Chofer" filterStyle="width: 80%;" style="width: 14%;" filterBy="#{suministro.chofer.nombre}, #{suministro.chofer.apellido}" filterMatchMode="contains">
+                            <h:outputText value="#{sumiCliente.chofer.nombre} #{sumiCliente.chofer.apellido}" />
+                        </p:column>
+                        <p:column headerText="Monto" style="width: 8%">
+                            <h:outputText value="#{sumiCliente.monto}" >
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>                                                                                                    
+                        </p:column>
+                        <p:column headerText="Cliente" filterStyle="width: 80%;" style="width: 15%;" filterBy="#{sumiCliente.cliente.nombre}" filterMatchMode="contains">
+                            <h:outputText value="#{sumiCliente.cliente.nombre}" />
+                        </p:column>
+                        <p:column headerText="Descripcion" filterStyle="width: 80%;" style="width: 15%;" filterBy="#{sumiCliente.descrip}" filterMatchMode="contains">
+                            <h:outputText value="#{sumiCliente.descrip}" />
+                        </p:column>
+                        <p:column style="width:10%">
+                            <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('proCombDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{sumiCliente}" target="#{sumiCliBean.selectedSuministro}" />
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('proCombDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{sumiCliente}" target="#{sumiCliBean.selectedSuministro}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                </p:tab>                
+                </p:tabView>
+                
+                    <p:dialog width="27%" closeOnEscape="true" header="Agregar Proveedor de Suministro" widgetVar="proCombDialogCreate" resizable="false" id="dlgProCombCreate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:form id="formCreate" style="font-size: 10px;">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>    
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{procliBean.selectedProveedor.nombre}" style="width: 120%;"/>
+                            <h:outputText value="Correo:"/>
+                            <p:inputText value="#{procliBean.selectedProveedor.correo}" style="width: 120%;"/>
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText value="#{procliBean.selectedProveedor.telefono}" style="width: 120%;"/>
+                            <h:outputText value="Direccion:"/>
+                            <p:inputText value="#{procliBean.selectedProveedor.direccion}" style="width: 120%;"/>
+                            <h:outputText value="Ruc:"/>
+                            <p:inputText value="#{procliBean.selectedProveedor.ruc}" style="width: 120%;"/>
+                             <h:outputText value="Descripcion:"/>
+                            <p:inputText value="#{procliBean.selectedProveedor.descripcion}" style="width: 120%;"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable :formCreate :formUpdate :msgs" action="#{procliBean.btnCreateProveedorCombustible(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('proCombDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>                                                  
+                <h:form id="formUpdate" style="font-size: 10px;">
+                    <p:dialog width="50%" closeOnEscape="true" header="Modificar Suministro" widgetVar="proCombDialogUpdate" resizable="false" id="dlgProCombCreate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <p:fieldset legend="Modificar el Suministro" style="margin-bottom: 30px; margin-top: 30px;">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>
+                        <h:panelGrid id="display" columns="6" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText style="width: 15%;" value="Orden:"/>
+                            <p:inputText onkeypress="if (event.keyCode == 13) {onchange(); return false; }" readonly="true" onfocus="true" value="#{sumiCliBean.selectedSuministro.ordenDeCarga.idOrdenDeCarga}">
+                                <p:ajax listener="#{sumiCliBean.onRowSelectOrden}" event="change" update=":formUpdate"/> 
+                            </p:inputText>    
+                            <h:outputText value=""/>  
+                            <h:outputText style="width: 15%;" value="Camion:"/>
+                            <p:inputText value="#{sumiCliBean.selectedSuministro.camion.chapaCamion}" readonly="true"/>                            
+                            <h:outputText value=""/>  
+                            <h:outputText value="Chofer:"/>
+                            <p:inputText readonly="true" value="#{sumiCliBean.selectedSuministro.chofer.nombre} #{sumiCliBean.selectedSuministro.chofer.apellido}"/>                            
+                            <h:outputText value=""/>  
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+
+                            <h:outputText value="Cliente:"/>
+                            <p:inputText readonly="true" value="#{sumiCliBean.selectedSuministro.cliente.nombre}"/>
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/>                                                 
+                            <h:outputText value="Monto Total"/>
+                            <p:inputText readonly="true" value="#{sumiCliBean.selectedSuministro.monto}" onkeypress="if (event.keyCode == 13) {onchange(); return false; }">                                
+                            <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                            </p:inputText>
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value=""/> 
+                            <h:outputText value="Descripcion"/>
+                            <p:inputText value="#{sumiCliBean.selectedSuministro.descrip}"/>   
+                            <h:outputText value=""/>
+                            <h:outputText value="Fecha"/>
+                            <p:calendar id="fecha2" value="#{sumiCliBean.selectedSuministro.fecha}" pattern="dd-MM-yyyy" mask="true"/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>                          
+                            <h:inputHidden value="#{sumiCliBean.selectedSuministro.idSumiCli}"/>                            
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="report" ajax="false" icon="icon-pdf" value="PDF" actionListener="#{sumiBean.exportarPDF2(actionEvent)}"></p:commandButton>
+                                <p:commandButton id="btnCreateAceptar" disabled="false" update=":msgs tabla:formDataTable" action="#{sumiCliBean.btnUpdateComb(actionEvent)}" onclick="PF('proCombDialogUpdate').hide()" icon="icon-guardar" title="Guardar" value="Guardar"/>                                
+                                <p:commandButton id="bntSalir" ajax="false" immediate="true" onclick="PF('proCombDialogUpdate').hide()" icon="icon-cancel" title="Salir" value="Salir" />
+                            </f:facet>
+                        </h:panelGrid>
+                        </p:fieldset>
+                        </p:dialog>
+                    </h:form>                                                     
+                <h:form id="formDelete" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Proveedor" severity="alert" widgetVar="proCombDialogDelete" closeOnEscape="true"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{sumiCliBean.selectedSuministro.idSumiCli}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update="tabla:formDataTable :msgs" oncomplete="PF('proCombDialogDelete').hide()"
+                                         actionListener="#{sumiCliBean.btnDeleteComb(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('proCombDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>                                                                    
+            </ui:define>            
+        </ui:composition>
+
+    </body>
+</html>

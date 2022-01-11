@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.PrecioSuministro" table="precio_suministro" schema="public">
+        <id name="idPrecioSumi" type="int">
+            <column name="id_precio_sumi" />
+            <generator class="sequence">
+                <param name="sequence">precio_suministro_id_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="unidadProvee" class="model.UnidadProvee" fetch="select">
+            <column name="id_unidad_pro" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="nombre" length="60" />
+        </property>
+        <property name="precio" type="java.lang.Double">
+            <column name="precio" precision="17" scale="17" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="20" />
+        </property>
+        <set name="suministros" table="suministro" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="precio_id" />
+            </key>
+            <one-to-many class="model.Suministro" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,331 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 10px;">
+                <p:tab title="Proveedores">
+                <h:form>
+                    <p:commandButton id="btnProveedorCombustibleCreate" update=":formCreate" oncomplete="PF('proCombDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo"/>
+                </h:form>
+                <h:form id="formDataTable" > 
+                    <p:dataTable id="provComb" var="proveedor" value="#{proCombBean.proCombustibles}"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown} {Exporters}"
+                                 selectionMode="single" rowKey="#{proveedor.idProveedor}" selection="#{proCombBean.selectedProveedor}"
+                                 >
+                        <f:facet name="{Exporters}">
+                            <p:commandButton onclick="form.target='_blank'" ajax="false" id="report" value="PDF" icon="icon-pdf" actionListener="#{proCombBean.exportarPDF(actionEvent)}"></p:commandButton>                                                 
+                        </f:facet>  
+                        <f:facet name="header">
+                            Listado de Proveedores de Combustibles
+                        </f:facet>
+                        <p:column headerText="Nombre" style="width: 20%;" filterBy="#{proveedor.nombre}" filterMatchMode="contains" sortBy="#{proveedor.nombre}" >
+                            <h:outputText value="#{proveedor.nombre}" />
+                        </p:column>
+                        <p:column headerText="Emblema" style="width: 15%;" >
+                            <h:outputText value="#{proveedor.emblema}" />
+                        </p:column>
+                        <p:column headerText="Telefono" style="width: 10%" filterBy="#{proveedor.telefono}" filterMatchMode="contains" sortBy="#{proveedor.telefono}" >
+                            <h:outputText value="#{proveedor.telefono}" />
+                        </p:column>
+                        <p:column headerText="Direccion" style="width: 15%">
+                            <h:outputText value="#{proveedor.direccion}" />
+                        </p:column>
+                        <p:column headerText="Ruc" style="width: 15%" filterBy="#{proveedor.ruc}" filterMatchMode="contains" sortBy="#{proveedor.ruc}">
+                            <h:outputText value="#{proveedor.ruc}" />
+                        </p:column>
+                        <p:column headerText="Descripcion" style="width: 15%">
+                            <h:outputText value="#{proveedor.descripcion}" />
+                        </p:column>
+                        <p:column style="width:10%">
+                            <p:commandButton id="bntClienteView" action="/views/procomb/viewpro.xhtml" icon="icon-view" title="Ver Proveedor" >  
+                                <f:setPropertyActionListener value="#{proveedor}" target="#{proCombBean.selectedProveedor}" />  
+                            </p:commandButton> 
+                            <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('proCombDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{proveedor}" target="#{proCombBean.selectedProveedor}" />
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('proCombDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{proveedor}" target="#{proCombBean.selectedProveedor}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                </p:tab>
+                <p:tab title="Precios de Comb">
+                <h:form>
+                    <p:commandButton id="btnPrecioCreate" update=":formCreate1" oncomplete="PF('precioDialogCreate').show()" icon="icon-nuevo" title="Crear" value="Nuevo"/>
+                </h:form>
+                <h:form id="formDataTable1">
+                    <p:dataTable id="preComb" var="precioComb" value="#{precioComBean.precios}"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 selectionMode="single" rowKey="#{precioComb.idPrecioComb}" selection="#{precioComBean.selectedPrecioComb}"
+                                 >
+                        <f:facet name="header">
+                            Listado de Precios de Comb
+                        </f:facet>
+                        <p:column headerText="N°" style="width: 15%;" filterBy="#{precioComb.idPrecioComb}" >
+                            <h:outputText value="#{precioComb.idPrecioComb}" />
+                        </p:column>
+                        <p:column headerText="Tipo Combustible" style="width: 15%;" >
+                            <h:outputText value="#{precioComb.tipoCombustible.nombre}" />
+                        </p:column>
+                        <p:column headerText="Proveedor" style="width: 15%" filterBy="#{precioComb.proveedor.nombre}" filterMatchMode="contains" sortBy="#{proveedor.nombre}" >
+                            <h:outputText value="#{precioComb.proveedor.nombre}" />
+                        </p:column>
+                        <p:column headerText="Precio" style="width: 15%">
+                            <h:outputText value="#{precioComb.monto}">
+                                <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                            </h:outputText>
+                        </p:column>           
+                        <p:column headerText="Estado" style="width: 15%" >
+                            <h:outputText value="#{precioComb.estado}" />
+                        </p:column>
+                        <p:column style="width:8%">
+                            <p:commandButton id="btnUpdate" update=":formUpdate1" oncomplete="PF('precioDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{precioComb}" target="#{precioComBean.selectedPrecioComb}" />                                       
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete1" oncomplete="PF('precioDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{precioComb}" target="#{precioComBean.selectedPrecioComb}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                </p:tab>
+                <p:tab title="Tipos de Comb">
+                <h:form>
+                    <p:commandButton id="btnPrecioCreate" update=":formCreate2" oncomplete="PF('tipoCombDialogCreate').show()" icon="icon-nuevo" title="Crear" value="Nuevo"/>
+                </h:form>
+                <h:form id="formDataTable2">
+                    <p:dataTable id="preComb" var="tipoCombustible" value="#{tipoComBean.tipos}"
+                                 paginator="true" paginatorPosition="bottom"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 selectionMode="single" rowKey="#{tipoCombustible.idTipoCombustible}" selection="#{tipoComBean.seletedTipoCombustible}"
+                                 >
+                        <f:facet name="header">
+                            Tipos de Combustibles
+                        </f:facet>
+                        <p:column headerText="N°" style="width: 15%;" filterBy="#{tipoCombustible.idTipoCombustible}" >
+                            <h:outputText value="#{tipoCombustible.idTipoCombustible}" />
+                        </p:column>
+                        <p:column headerText="Tipo Combustible" style="width: 15%;" filterBy="#{tipoCombustible.nombre}" filterMatchMode="contains" sortBy="#{tipoCombustible.nombre}" >
+                            <h:outputText value="#{tipoCombustible.nombre}" />
+                        </p:column>      
+                        <p:column style="width:8%">
+                            <p:commandButton id="btnUpdate" update=":formUpdate2" oncomplete="PF('tipoCombDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                <f:setPropertyActionListener value="#{tipoCombustible}" target="#{tipoComBean.seletedTipoCombustible}" />
+                            </p:commandButton>
+                            <p:commandButton id="btnDelete" update=":formDelete2" oncomplete="PF('tipoCombDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                <f:setPropertyActionListener value="#{tipoCombustible}" target="#{tipoComBean.seletedTipoCombustible}" />
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                </h:form>
+                </p:tab>
+                </p:tabView>
+                
+                    <p:dialog width="27%" closeOnEscape="true" header="Agregar Proveedor de Comb" widgetVar="proCombDialogCreate" resizable="false" id="dlgProCombCreate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:form id="formCreate" style="font-size: 10px;">
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>    
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.nombre}" style="width: 120%;"/>
+                            <h:outputText value="Emblema:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.emblema}" style="width: 120%;"/>
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.telefono}" style="width: 120%;"/>
+                            <h:outputText value="Direccion:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.direccion}" style="width: 120%;"/>
+                            <h:outputText value="Ruc:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.ruc}" style="width: 120%;"/>
+                             <h:outputText value="Descripcion:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.descripcion}" style="width: 120%;"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable :formCreate :formCreate1 :formCreate2 :formUpdate :formUpdate1 :msgs" action="#{proCombBean.btnCreateProveedorCombustible(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('proCombDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+                
+                <p:dialog  header="Agregar Precio De Combustible" widgetVar="precioDialogCreate" resizable="false" id="dlgPrecioCreate" 
+                              showEffect="fade" hideEffect="explode" closeOnEscape="true" modal="true">
+                <h:form id="formCreate1" style="font-size: 10px;">
+                        <h:panelGrid id="display" columns="3" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Proveedor:"/>
+                            <p:inputText value="#{precioComBean.selectedProveedor.nombre}" readonly="true"/>
+                            <p:commandButton id="btnSelecPro" update=":formAgregarPro" oncomplete="PF('proDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">                                
+                            </p:commandButton>
+                            <h:outputText value="Tipo Combustible:"/>
+                            <p:selectOneMenu value="#{precioComBean.selectedPrecioComb.tipoCombustible.idTipoCombustible}" style="width: 100% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{precioComBean.selectOneItemsTipoComb}" />
+                            </p:selectOneMenu>
+                            <h:outputText value=""/>
+                            <h:outputText value="Precio:"/>
+                            <p:inputText value="#{precioComBean.selectedPrecioComb.monto}"/>
+                            <h:outputText value=""/>                            
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable1 :formCreate1 :formCreate :msgs" oncomplete="PF('precioDialogCreate').hide()" action="#{precioComBean.btnCreatePrecioComb(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('precioDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>                    
+                </h:form>
+            </p:dialog>  
+                <p:dialog header="Agregar Tipo De Combustible" widgetVar="tipoCombDialogCreate" resizable="false" id="dlgTipoCombCreate" 
+                              showEffect="fade" hideEffect="explode" modal="true" closeOnEscape="true">
+                <h:form id="formCreate2" style="font-size: 10px;">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{tipoComBean.seletedTipoCombustible.nombre}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable2 :formCreate :formCreate1 :msgs" oncomplete="PF('tipoCombDialogCreate').hide()" action="#{tipoComBean.btnCreateTipoComb(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('tipoCombDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>                    
+                </h:form>
+            </p:dialog> 
+                <h:form id="formUpdate" style="font-size: 10px;">
+                    <p:dialog width="27%" header="Modificar Chofer" widgetVar="proCombDialogUpdate" closeOnEscape="true" resizable="false" id="dlgProCombUpdate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto; margin-left: 15px;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.nombre}" style="width: 120%;"/>
+                            <h:outputText value="Emblema:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.emblema}" style="width: 120%;"/>
+                            <h:outputText value="Telefono:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.telefono}" style="width: 120%;"/>
+                            <h:outputText value="Direccion:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.direccion}" style="width: 120%;"/>
+                             <h:outputText value="Ruc:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.ruc}" style="width: 120%;"/>
+                             <h:outputText value="Descripcion:"/>
+                            <p:inputText value="#{proCombBean.selectedProveedor.descripcion}" style="width: 120%;"/>
+                            <h:inputHidden value="#{proCombBean.selectedProveedor.idProveedor}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable :formCreate :formCreate1 :msgs" oncomplete="PF('proCombDialogUpdate').hide()" actionListener="#{proCombBean.btnUpdateProveedorCombustible(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('proCombDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <p:dialog header="Modificar Precio" widgetVar="precioDialogUpdate" resizable="false" closeOnEscape="true" id="dlgProCombUpdate" 
+                              showEffect="fade" hideEffect="explode" modal="true">               
+                <h:form id="formUpdate1" style="font-size: 10px;">         
+                    <!--p:ajax listener="#{precioComBean.onRowSelectProvv(event)}" event="focus" update=":formUpdate1"/-->
+                        <h:panelGrid id="display" columns="3" cellpadding="4" style="margin: 0 auto;">                             
+                            <h:outputText value="Proveedor:"/>
+                            <p:inputText value="#{precioComBean.selectedPrecioComb.proveedor.nombre}" readonly="true">                                                            
+                            </p:inputText>
+                            <p:commandButton id="btnSelecPro" oncomplete="PF('proDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">                                
+                            </p:commandButton>
+                            <h:outputText value="Tipo Combustible:"/>
+                            <p:selectOneMenu value="#{precioComBean.selectedPrecioComb.tipoCombustible.idTipoCombustible}" style="width: 100% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItems value="#{precioComBean.selectOneItemsTipoComb}" />
+                            </p:selectOneMenu>
+                            <h:outputText value=""/>
+                            <h:outputText value="Precio:"/>
+                            <p:inputText value="#{precioComBean.selectedPrecioComb.monto}">                                
+                            </p:inputText>
+                            <h:outputText value=""/>      
+                            <h:outputText value="Estado"/>
+                            <p:selectOneMenu value="#{precioComBean.selectedPrecioComb.estado}" style="width: 100% !important;">
+                                <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                <f:selectItem itemLabel="Alta" itemValue="Alta" />
+                                <f:selectItem itemLabel="Baja" itemValue="Baja" />
+                            </p:selectOneMenu>                                                  
+                            <h:inputHidden value="#{precioComBean.selectedPrecioComb.idPrecioComb}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable1 :formCreate :formCreate1 :msgs" oncomplete="PF('precioDialogUpdate').hide()" actionListener="#{precioComBean.btnUpdatePrecioComb(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('precioDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>                    
+                </h:form>
+             </p:dialog>       
+                <h:form id="formUpdate2" style="font-size: 10px;">
+                    <p:dialog header="Modificar Tipo Combustible" widgetVar="tipoCombDialogUpdate" resizable="false" closeOnEscape="true" id="dlgProCombUpdate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Nombre:"/>
+                            <p:inputText value="#{tipoComBean.seletedTipoCombustible.nombre}"/>
+                            <h:inputHidden value="#{tipoComBean.seletedTipoCombustible.idTipoCombustible}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":tabla:formDataTable2 :formCreate1 :formCreate :msgs" oncomplete="PF('tipoCombDialogUpdate').hide()" actionListener="#{tipoComBean.btnUpdateTipoComb(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('tipoCombDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formDelete" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Proveedor" severity="alert" widgetVar="proCombDialogDelete" closeOnEscape="true"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{proCombBean.selectedProveedor.idProveedor}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":tabla:formDataTable :msgs" oncomplete="PF('proCombDialogDelete').hide()"
+                                         actionListener="#{proCombBean.btnDeleteProveedorCombustible(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('proCombDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+                <h:form id="formDelete1" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?"  closeOnEscape="true"
+                                     header="Eliminar Precio" severity="alert" widgetVar="precioDialogDelete"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{precioComBean.selectedPrecioComb.idPrecioComb}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":tabla:formDataTable1 :msgs" oncomplete="PF('precioDialogDelete').hide()"
+                                         actionListener="#{precioComBean.btnDeletePrecioComb(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('precioDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+                <h:form id="formDelete2" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" closeOnEscape="true"
+                                     header="Eliminar Tipo Comb" severity="alert" widgetVar="tipoCombDialogDelete"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{tipoComBean.seletedTipoCombustible.idTipoCombustible}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":tabla:formDataTable2 :msgs" oncomplete="PF('tipoCombDialogDelete').hide()"
+                                         actionListener="#{tipoComBean.btnDeleteTipoComb(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('tipoCombDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+                <h:form id="formAgregarPro" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Proveedor" widgetVar="proDialogAgregar"  id="camion" closeOnEscape="true"
+                              showEffect="fade" width="50%">
+                        <p:dataTable var="proveedor" value="#{proCombBean.proCombustibles}" selection="#{precioComBean.selectedProveedor}" rowKey="#{proveedor.idProveedor}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Nombre" style="width: 10%" filterBy="#{proveedor.nombre}">
+                                <h:outputText value="#{proveedor.nombre}" />
+                            </p:column>
+                            <p:column headerText="Emblema" style="width: 10%">
+                                <h:outputText value="#{proveedor.emblema}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{proveedor.direccion}" />
+                            </p:column>
+                            <p:column headerText="Ruc" style="width: 10%">
+                                <h:outputText value="#{proveedor.ruc}" />
+                            </p:column>
+                            <p:ajax listener="#{precioComBean.onRowSelectPro(event)}" event="rowSelect" update=":formCreate1"  oncomplete="PF('proDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+            </ui:define>            
+        </ui:composition>
+
+    </body>
+</html>

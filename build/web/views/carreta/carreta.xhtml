@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <h:form>
+                    <p:commandButton id="btnCarretaCreate" update=":formCreate" oncomplete="PF('carretaDialogCreate').show()" icon="ui-icon-circle-plus" title="Crear" value="Nuevo" actionListener="#{carretaBean.btnIniciar(actionEvent)}"/>
+                </h:form>
+                <p:panel id="paneli" header="Listado de Carretas">                                                            
+                    <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 11px;">
+                        <p:tab title="Carretas">
+                            <h:form id="formDataTable" style="font-size: 10px;">
+                                <p:dataTable id="carretas" var="carreta" value="#{carretaBean.carretas}" style="letras"
+                                             paginator="true" paginatorPosition="bottom"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             selectionMode="single" rowKey="#{carreta.chapaCarreta}" selection="#{carretaBean.selectedCarreta}"
+                                             >
+                                    <p:column headerText="Chapa Carreta" filterStyle="width: 90%;" style="width: 10%;" filterBy="#{carreta.chapaCarreta}" filterMatchMode="contains">
+                                        <h:outputText value="#{carreta.chapaCarreta}" />
+                                    </p:column>
+                                    <p:column headerText="Marca" style="width: 15%;" >
+                                        <h:outputText value="#{carreta.marca}" />
+                                    </p:column>
+                                    <p:column headerText="Color" style="width: 10%" >
+                                        <h:outputText value="#{carreta.color}" />
+                                    </p:column>
+                                    <p:column headerText="Fecha Vencimiento" style="width: 15%">
+                                        <h:outputText value="#{carreta.fechaDinatran}" />
+                                    </p:column>
+                                    <p:column headerText="Departamento" style="width: 15%">
+                                        <h:outputText value="#{carreta.departamento}" />
+                                    </p:column>
+                                    <p:column headerText="Año" style="width: 8%">
+                                        <h:outputText value="#{carreta.anho}" />
+                                    </p:column>
+                                    <p:column headerText="Vto. Dinatran" style="width: 10%">
+                                        <h:outputText value="#{carreta.fechaDinatran}" />
+                                    </p:column>
+                                    <p:column headerText="Tipo Carreta" style="width: 15%">
+                                        <h:outputText value="#{carreta.tipoCarreta.descripcion}"/>
+                                    </p:column>
+                                    <p:column style="width:15%">
+                                        <p:commandButton id="btnUpdate" update=":formUpdate" oncomplete="PF('carretaDialogUpdate').show()" icon="icon-edit" title="Modificar">
+                                            <f:setPropertyActionListener value="#{carreta}" target="#{carretaBean.selectedCarreta}" />
+                                        </p:commandButton>
+                                        <p:commandButton id="btnDelete" update=":formDelete" oncomplete="PF('carretaDialogDelete').show()" icon="icon-delete" title="Eliminar">
+                                            <f:setPropertyActionListener value="#{carreta}" target="#{carretaBean.selectedCarreta}" />
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:form>
+                        </p:tab>
+                    </p:tabView>
+                </p:panel>
+                <h:form id="formCreate" style="font-size: 10px;">
+                    <p:dialog header="Agregar Carreta" widgetVar="carretaDialogCreate" closeOnEscape="true" resizable="false" id="dlgCarretaCreate" 
+                              showEffect="fade" hideEffect="explode" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="Tipo Carreta"/>
+                            <p:inputText readonly="true" value="#{carretaBean.selectedTipo.descripcion}">
+                                <p:ajax event="click" update=":formAgregarTipo" oncomplete="PF('tipoDialogAgregar').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="ChapaCarreta:"/>
+                            <p:inputText value="#{carretaBean.selectedCarreta.chapaCarreta}"/>
+                            <h:outputText value="Marca:"/>
+                            <p:inputText value="#{carretaBean.selectedCarreta.marca}"/>
+                            <h:outputText value="Color:"/>
+                            <p:inputText value="#{carretaBean.selectedCarreta.color}"/>
+                            <h:outputText value="Año:"/>
+                            <p:inputText value="#{carretaBean.selectedCarreta.anho}"/>
+                            <h:outputText value="Vto. Dinatran"/>
+                            <p:calendar id="dina" value="#{carretaBean.selectedCarreta.fechaDinatran}" pattern="dd-MM-yyyy" mask="true" />
+                            <h:outputText value="Departamento:"/>
+                            <p:inputText value="#{carretaBean.selectedCarreta.departamento}"/>                           
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":paneli :msgs" oncomplete="PF('carretaDialogCreate').hide()" action="#{carretaBean.btnCreateCarreta(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('carretaDialogCreate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formUpdate" style="font-size: 10px;">
+                    <p:dialog header="Modificar Carreta" widgetVar="carretaDialogUpdate" resizable="false" id="dlgCarretaUpdate" 
+                              showEffect="fade" hideEffect="explode" closeOnEscape="true" modal="true">
+                        <h:panelGrid id="display" columns="2" cellpadding="4" style="margin: 0 auto;">
+                            <h:outputText value="ChapaCarreta:"/>
+                            <p:inputText value="#{carretaBean.selectedCarreta.chapaCarreta}"/>
+                            <h:outputText value="Marca:"/>
+                            <p:inputText value="#{carretaBean.selectedCarreta.marca}"/>
+                            <h:outputText value="Color:"/>
+                            <p:inputText value="#{carretaBean.selectedCarreta.color}"/>
+                            <h:outputText value="Año:"/>
+                            <p:inputText value="#{carretaBean.selectedCarreta.anho}"/>
+                            <h:outputText value="Vto. Dinatran"/>
+                            <p:calendar id="dina1" value="#{carretaBean.selectedCarreta.fechaDinatran}" pattern="dd-MM-yyyy" mask="true" />
+                            <h:outputText value="Departamento:"/>
+                            <p:inputText value="#{carretaBean.selectedCarreta.departamento}"/>
+                            <h:outputText value="Tipo Carreta"/>
+                            <p:inputText readonly="true" value="#{carretaBean.selectedCarreta.tipoCarreta.descripcion}">
+                                <p:ajax event="click" update=":formAgregarTipo" oncomplete="PF('tipoDialogAgregar2').show()"/> 
+                            </p:inputText>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="btnCreateAceptar" update=":paneli :msgs" oncomplete="PF('carretaDialogUpdate').hide()" actionListener="#{carretaBean.btnUpdateCarreta(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="btnCreateCancelar" oncomplete="PF('carretaDialogUpdate').hide()" icon="icon-cancelar" title="Cancelar" value="Cancelar"/>
+                            </f:facet>
+                        </h:panelGrid>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formDelete" style="font-size: 10px;">
+                    <p:confirmDialog id="confirmDialog" message="Estas Seguro de eliminar el registro?" 
+                                     header="Eliminar Chofer" severity="alert" widgetVar="carretaDialogDelete"
+                                     showEffect="fade" hideEffect="explode">
+                        <h:inputHidden value="#{carretaBean.selectedCarreta.chapaCarreta}"/>
+                        <p:commandButton id="confirm" value="Aceptar" update=":paneli :msgs" oncomplete="PF('carretaDialogDelete').hide()"
+                                         actionListener="#{carretaBean.btnDeleteCarreta(actionEvent)}" icon="icon-aceptar"/>
+                        <p:commandButton id="decline" value="Cancelar" onclick="PF('carretaDialogDelete').hide()" type="button" icon="icon-cancelar"/>
+                    </p:confirmDialog>
+                </h:form>
+                <h:form id="formAgregarTipo" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Carreta" widgetVar="tipoDialogAgregar"  id="tipoCamion" 
+                              showEffect="fade" width="50%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="tipoCarreta" value="#{carretaBean.tipos}" selection="#{carretaBean.selectedTipo}" rowKey="#{tipoCarreta.idTipoCarreta}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Tipo Camion" style="width: 10%" filterBy="#{tipoCarreta.descripcion}" filterMatchMode="contains">
+                                <h:outputText value="#{tipoCarreta.descripcion}" />
+                            </p:column>
+                            <p:column headerText="Peso" style="width: 10%">
+                                <h:outputText value="#{tipoCarreta.peso}" />
+                            </p:column>                           
+                            <p:ajax listener="#{carretaBean.onRowSelectTipo(event)}" update="@this :formCreate" event="rowSelect" oncomplete="PF('carretaDialogCreate').show(); PF('tipoDialogAgregar').hide()"/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+                <h:form id="formAgregarTipo2" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Carreta" widgetVar="tipoDialogAgregar2"  id="tipoCamion" 
+                              showEffect="fade" width="50%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true">
+                        <p:dataTable var="tipoCarreta" value="#{carretaBean.tipos}" selection="#{carretaBean.selectedTipo}" rowKey="#{tipoCarreta.idTipoCarreta}" selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Tipo Camion" style="width: 10%" filterBy="#{tipoCarreta.descripcion}" filterMatchMode="contains">
+                                <h:outputText value="#{tipoCarreta.descripcion}" />
+                            </p:column>
+                            <p:column headerText="Peso" style="width: 10%">
+                                <h:outputText value="#{tipoCarreta.peso}" />
+                            </p:column>                           
+                            <p:ajax listener="#{carretaBean.onRowSelectTipo(event)}" update="@this :formUpdate" event="rowSelect" oncomplete="PF('carretaDialogUpdate').show(); PF('tipoDialogAgregar2').hide()"/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </body>
+</html>

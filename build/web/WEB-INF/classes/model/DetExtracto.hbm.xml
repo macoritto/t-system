@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.DetExtracto" table="det_extracto" schema="public">
+        <id name="idDet" type="int">
+            <column name="id_det" />
+            <generator class="sequence">
+                <param name="sequence">credito_id_credito_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="extracto" class="model.Extracto" fetch="select">
+            <column name="extracto_id_liquidacion" not-null="true" />
+        </many-to-one>
+        <many-to-one name="item" class="model.Item" fetch="select">
+            <column name="item_id_item" not-null="true" />
+        </many-to-one>
+        <property name="pasivo" type="double">
+            <column name="pasivo" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="activo" type="double">
+            <column name="activo" precision="17" scale="17" not-null="true" />
+        </property>
+        <property name="descrip" type="string">
+            <column name="descrip" length="100" not-null="true" />
+        </property>
+        <set name="extractoSumiclis" table="extracto_sumicli" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_det_extracto" />
+            </key>
+            <one-to-many class="model.ExtractoSumicli" />
+        </set>
+        <set name="detSumis" table="det_sumi" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="det_extracto_id" />
+            </key>
+            <one-to-many class="model.DetSumi" />
+        </set>
+        <set name="extractoSumis" table="extracto_sumi" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="id_det_extracto" />
+            </key>
+            <one-to-many class="model.ExtractoSumi" />
+        </set>
+    </class>
+</hibernate-mapping>

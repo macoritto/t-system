@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.UnidadDestino" table="unidad_destino" schema="public">
+        <id name="idUnidadDestino" type="int">
+            <column name="id_unidad_destino" />
+            <generator class="sequence">
+                <param name="sequence">unidad_destino_id_unidad_destino_seq</param>
+            </generator>
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="50" not-null="true" />
+        </property>
+        <property name="direccion" type="string">
+            <column name="direccion" length="50" not-null="true" />
+        </property>
+        <property name="correo" type="string">
+            <column name="correo" length="50" />
+        </property>
+        <property name="descripcion" type="string">
+            <column name="descripcion" length="50" />
+        </property>
+        <set name="precioFletes" table="precio_flete" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="unidad_destino_id_unidad_destino" not-null="true" />
+            </key>
+            <one-to-many class="model.PrecioFlete" />
+        </set>
+        <set name="ordenDeCargas" table="orden_de_carga" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="unidad_destino_id_unidad_destino" not-null="true" />
+            </key>
+            <one-to-many class="model.OrdenDeCarga" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="contra" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" scriptletClass="numletra.NumerosLetras" uuid="69bd7db5-5027-4a38-a384-46ab8ea3ef70">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="96"/>
+	<import value="numletra.*"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="db903f46-c001-4394-ac12-06406efe7462"/>
+	<parameter name="vCodpago" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="bruto" class="java.lang.Double">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[select c.*,v.*,k.*,o.*,u.*,c.id_contrasenha as id, c.fecha as fecha, v.dif as dif, un.*,p.precio as prepro, u.nombre as origen,p.nombre as producto, un.nombre as destino,v.precio_pago as precio, v.peso_origen as porigen, v.peso_destino as pdestino, c.viatico as viatico, c.combustible as combustible, c.saldo as saldo,v.monto_pagar as bruto, v.remision_destino as remision, v.montofaltante as faltante, v.montoseguro as seguro, k.chapa_camion as chapaCamion,concat(ch.nombre,' ',ch.apellido) as chofer from contrasenha c inner join viaje v on c.viaje_id_viaje = v.id_viaje
+                inner join orden_de_carga o on v.orden_de_carga_id_orden_de_carga = o.id_orden_de_carga               
+                inner join camion k on o.camion_chapa_camion = k.chapa_camion
+                inner join producto p on o.producto_id_producto = p.id_producto
+                inner join unidad_origen u on o.unidad_origen_id_unidad_origen = u.id_unidad_origen
+                inner join unidad_destino un on o.unidad_destino_id_unidad_destino = un.id_unidad_destino
+                inner join chofer ch on k.chofer_id_chofer = ch.id_chofer                  
+                where c.id_contrasenha = $P{vCodpago}]]>
+	</queryString>
+	<field name="chapaCamion" class="java.lang.String"/>
+	<field name="chofer" class="java.lang.String"/>
+	<field name="fecha" class="java.util.Date"/>
+	<field name="origen" class="java.lang.String"/>
+	<field name="destino" class="java.lang.String"/>
+	<field name="viatico" class="java.lang.Double"/>
+	<field name="combustible" class="java.lang.Double"/>
+	<field name="precio" class="java.lang.Double"/>
+	<field name="porigen" class="java.lang.Integer"/>
+	<field name="pdestino" class="java.lang.Integer"/>
+	<field name="saldo" class="java.lang.Double"/>
+	<field name="bruto" class="java.lang.Double"/>
+	<field name="producto" class="java.lang.String"/>
+	<field name="prepro" class="java.lang.Double"/>
+	<field name="dif" class="java.lang.Double"/>
+	<field name="faltante" class="java.lang.Double"/>
+	<field name="seguro" class="java.lang.Double"/>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="remision" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="106" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="554" height="102" backcolor="#FFFFFF" uuid="f7792b90-cab0-4e65-821e-856bab13fb80"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="429" y="41" width="90" height="31" uuid="8e3a3247-40c4-477b-a421-221b176cc522"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="427" y="18" width="93" height="19" uuid="a8e15025-90f4-4d6a-8cda-147190b7a387"/>
+				<textElement>
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CONTRASEÑA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="433" y="75" width="89" height="20" uuid="693ebf7e-f59a-496f-9dfb-d4cabc9f51df"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="8" width="269" height="32" uuid="46036ce8-f2dc-4cc0-88dd-aced572835bf"/>
+				<textElement>
+					<font size="22"/>
+				</textElement>
+				<text><![CDATA[Transportadora RC SRL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="81" width="226" height="20" uuid="dfe03ac2-5e19-4896-b960-ff71bd4b0479"/>
+				<text><![CDATA[Telefono: 0521-204555 / Cel. 0984-660054]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="48" width="265" height="20" uuid="aa14ea70-0660-4751-86be-6baf414b655e"/>
+				<text><![CDATA[Servicio de Flete Nacional - Transporte de granos.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="64" width="265" height="20" uuid="a5ce7c37-04f8-4cb5-867a-6a6a3ffbf1b0"/>
+				<text><![CDATA[Direccion: Mariscal Estigarribia e/ Doctor Montanaro.]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="433" y="44" width="78" height="28" uuid="ed8f62c1-2e68-411f-b0ea-278b59da3743"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="240" y="81" width="76" height="19" uuid="fe725dee-facb-479c-8e7c-74eb11f1d1e6"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Nro. Remision:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="319" y="82" width="124" height="20" uuid="e17b774f-77bf-4c5f-ace4-ffe2b5736885"/>
+				<textFieldExpression><![CDATA[$F{remision}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="369" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="0" width="555" height="257" uuid="5d66330b-b856-4872-980b-fa7b5d4182a0"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="242" y="229" width="74" height="20" uuid="9a27632b-2ad2-4e5f-976a-04bee66d0f6f"/>
+				<text><![CDATA[Firma y Sello]]></text>
+			</staticText>
+			<line>
+				<reportElement x="216" y="224" width="123" height="1" uuid="32125751-ae68-4765-bb39-0630f3c53e50"/>
+			</line>
+			<textField>
+				<reportElement x="69" y="4" width="100" height="20" uuid="cd6a0a8e-ae6c-4bcf-b90f-7cfb4ef902b4"/>
+				<textFieldExpression><![CDATA[$F{chapaCamion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="28" y="4" width="38" height="20" uuid="182d65d0-a667-4f29-aa0e-e93d9629b22c"/>
+				<text><![CDATA[Chapa:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="218" y="4" width="38" height="20" uuid="f2d68e42-d4d1-43dc-be37-45af4510d9a8"/>
+				<text><![CDATA[Chofer:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="256" y="4" width="275" height="20" uuid="0668cb59-4fce-49cc-b2ab-ccdffeb29168"/>
+				<textFieldExpression><![CDATA[$F{chofer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="73" y="31" width="131" height="20" uuid="5ed38147-bbcc-47a8-8806-f14e6bec0f56"/>
+				<textFieldExpression><![CDATA[$F{origen}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="28" y="31" width="38" height="20" uuid="98980f72-e60f-423d-908a-b5b564d66fcb"/>
+				<text><![CDATA[Origen:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="256" y="31" width="230" height="20" uuid="083c862f-5c3c-43f9-b2c8-bdc10e77d55b"/>
+				<textFieldExpression><![CDATA[$F{destino}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="218" y="31" width="38" height="20" uuid="01ec4e9a-93ce-4cfc-90ac-fcd20f4970ab"/>
+				<text><![CDATA[Destino:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="82" y="59" width="100" height="20" uuid="30fd8328-0795-4a18-8e80-e24b8a0b3b6d"/>
+				<textFieldExpression><![CDATA[$F{producto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="28" y="59" width="54" height="20" uuid="ab356861-bb32-4604-8c20-4ff7775aaa49"/>
+				<text><![CDATA[Producto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="218" y="59" width="87" height="20" uuid="2522b9db-0ed5-48aa-9f0e-6b4aa9f0fae0"/>
+				<text><![CDATA[Precio Producto:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="315" y="59" width="171" height="20" uuid="43d21a01-e5c8-414c-9599-01f5d6c885ac"/>
+				<textFieldExpression><![CDATA[$F{prepro}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="82" y="91" width="100" height="20" uuid="f20b7dec-71c9-41cd-b9d8-ff9f364b9843"/>
+				<textFieldExpression><![CDATA[$F{porigen}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="28" y="91" width="54" height="20" uuid="fa462589-f412-4bea-9bcd-ed04a4986c37"/>
+				<text><![CDATA[P. Origen:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="276" y="91" width="100" height="20" uuid="aa44a7d2-5254-4ef7-aa70-fbf41263edb3"/>
+				<textFieldExpression><![CDATA[$F{pdestino}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="218" y="91" width="58" height="20" uuid="d7926565-3372-4ce7-b2b9-9a39d26a0ccb"/>
+				<text><![CDATA[P. Destino:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="389" y="91" width="54" height="20" uuid="53a1e41d-1043-4236-8e05-6f147d31beaa"/>
+				<text><![CDATA[Dif. Peso:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="443" y="91" width="68" height="20" uuid="fe8dd86c-5c59-4c70-8ae3-e5265c672719"/>
+				<textFieldExpression><![CDATA[$F{dif}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="28" y="122" width="66" height="20" uuid="bc4bde9c-8db3-43b9-bbdf-fc4fbfa8dc45"/>
+				<text><![CDATA[Precio Flete:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="94" y="122" width="100" height="20" uuid="74a9f010-1146-484c-b4b5-976edf077f5b"/>
+				<textFieldExpression><![CDATA[$F{precio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="218" y="122" width="75" height="20" uuid="3303b9b6-0d1b-4386-bad0-270ba9974aff"/>
+				<text><![CDATA[Monto Bruto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="28" y="153" width="77" height="20" uuid="9c0cc505-519f-40cf-b887-8a959a98a0f9"/>
+				<text><![CDATA[Monto Faltante:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="105" y="153" width="100" height="20" uuid="41827885-f189-4596-b1aa-3f914382fb65"/>
+				<textFieldExpression><![CDATA[$F{faltante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="218" y="153" width="77" height="20" uuid="9aad8e2c-96e1-415a-ad02-2cba43cd2dbe"/>
+				<text><![CDATA[Monto Seguro:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="295" y="153" width="100" height="20" uuid="5d8f97aa-0120-4954-a6c9-c42c176bd523"/>
+				<textFieldExpression><![CDATA[$F{seguro}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="28" y="183" width="45" height="20" uuid="ff2701fb-1dc4-4b8a-85bb-a5e56d0f9607"/>
+				<text><![CDATA[Viatico:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="73" y="183" width="86" height="20" uuid="adbd693e-4e33-484f-bba3-69b679cfdb98"/>
+				<textFieldExpression><![CDATA[$F{viatico}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="191" y="183" width="65" height="20" uuid="d4e0fc3f-e989-4c62-b37e-7c7a4f2865e9"/>
+				<text><![CDATA[Combustible:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="256" y="183" width="100" height="20" uuid="ce2bb146-7cce-4477-a14e-5dc968293af0"/>
+				<textFieldExpression><![CDATA[$F{combustible}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="376" y="183" width="45" height="20" uuid="137e4596-56d9-4719-9214-7ce8f75fcf88"/>
+				<text><![CDATA[Saldo:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="423" y="183" width="119" height="20" uuid="59f28ccd-11bc-4e73-9380-84f54e1c7cf0"/>
+				<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="293" y="122" width="130" height="20" uuid="666af043-fb00-49bd-8334-3326cf1b9e39"/>
+				<textFieldExpression><![CDATA[$P{bruto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="32" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="vale" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="69bd7db5-5027-4a38-a384-46ab8ea3ef70">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="112"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="db903f46-c001-4394-ac12-06406efe7462"/>
+	<queryString language="SQL">
+		<![CDATA[select * from combustible]]>
+	</queryString>
+	<field name="idCombustible" class="java.lang.Integer"/>
+	<field name="valeCombustible.proveedor.nombre" class="java.lang.String"/>
+	<field name="valeCombustible.tipoCombustible.nombre" class="java.lang.String"/>
+	<field name="fecha" class="java.util.Date"/>
+	<field name="litros" class="java.lang.Double"/>
+	<field name="montoTotal" class="java.lang.Double"/>
+	<field name="extras" class="java.lang.Double"/>
+	<field name="valeCombustible.camion.chapaCamion" class="java.lang.String"/>
+	<field name="valeCombustible.camion.chofer.nombre" class="java.lang.String"/>
+	<field name="valeCombustible.camion.chofer.apellido" class="java.lang.String"/>
+	<field name="montoComb" class="java.lang.Double"/>
+	<field name="viatico_1" class="java.lang.Double"/>
+	<field name="NBoleta" class="java.lang.String"/>
+	<variable name="chofer" class="java.lang.String">
+		<variableExpression><![CDATA[($F{valeCombustible.camion.chofer.nombre}!=null?$F{valeCombustible.camion.chofer.nombre}:"")+($F{valeCombustible.camion.chofer.apellido}!=null?","+$F{valeCombustible.camion.chofer.apellido}:"")]]></variableExpression>
+	</variable>
+	<variable name="total" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{montoTotal}]]></variableExpression>
+	</variable>
+	<variable name="totale" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{extras}]]></variableExpression>
+	</variable>
+	<variable name="litros" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{litros}]]></variableExpression>
+	</variable>
+	<variable name="totalv" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{viatico_1}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="555" height="66" backcolor="#CCCCCC" uuid="5cd9181b-16d7-4ae3-8cdc-5df2d86f01fb"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="106" y="11" width="363" height="31" forecolor="#336600" uuid="48be20a9-ba8d-491f-8c73-a82f578bd3bc"/>
+				<textElement>
+					<font fontName="Exotc350 Bd BT" size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LISTA DE COMBUSTIBLES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="218" y="42" width="146" height="20" uuid="5da1f7dd-dbd5-426b-836b-ea871bfd0a27"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Transportadora RC SRL ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="68" splitType="Stretch">
+			<staticText>
+				<reportElement x="24" y="3" width="265" height="20" uuid="1dc9f19c-f9e6-48a9-b435-bb95a973a6f7"/>
+				<text><![CDATA[Servicio de Flete Nacional - Transporte de granos.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="25" width="265" height="20" uuid="d0ca376a-0912-4008-905c-f7c4361a24c4"/>
+				<text><![CDATA[Direccion: Mariscal Estigarribia e/ Doctor Montanaro.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="45" width="226" height="20" uuid="51d7968d-a5b4-445e-8620-8eb896695f6c"/>
+				<text><![CDATA[Telefono: 0521-204555 / Cel. 0984-660054]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="403" y="45" width="152" height="20" forecolor="#000000" backcolor="#000000" uuid="9413e069-7d56-4ae1-90a2-851ebc722e0e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="10" width="555" height="22" backcolor="#CCCCCC" uuid="88dde283-8574-402c-b5b2-b6fa06aa5f2a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="308" y="12" width="32" height="20" uuid="68ebf13e-3234-4ee0-8f94-19f61c09509a"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Viatico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="368" y="12" width="35" height="20" uuid="ce70efbd-5284-4a7d-aae1-617b7a6b87fa"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Extras]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="419" y="12" width="34" height="20" uuid="bfd326d6-7d80-43b8-ace9-ab29f7db8125"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Camion]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="12" width="25" height="20" uuid="37d3381c-f086-4178-8109-eb022efd3fdb"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N°]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="42" y="12" width="42" height="20" uuid="37ce2352-50df-4781-9539-7d445e8433e4"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Proveedor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="105" y="12" width="42" height="20" uuid="c2e5cf17-4270-487d-ab5d-322fef448987"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="140" y="12" width="33" height="20" uuid="d9171cb2-98cc-430a-8421-99c25843ae44"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="223" y="12" width="27" height="20" uuid="f90a6bd9-9a27-4fad-b48f-48564a8452f8"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Litros]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="255" y="12" width="58" height="20" uuid="41d4987a-b1b7-48f2-b176-0dd4b7c775e9"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monto Comb]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="477" y="12" width="34" height="20" uuid="c98c688c-b943-4262-a877-7fe0e957e914"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Chofer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="178" y="12" width="45" height="20" uuid="1b469716-31d1-49ed-8ed3-e009e54de88c"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nro. Boleta]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="141" y="1" width="32" height="20" uuid="c13520e0-783f-4f56-93a8-812c01bbebb9"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="477" y="1" width="78" height="20" uuid="20abb48d-6422-451e-b86e-b5e7358936c2"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{chofer}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="223" y="1" width="36" height="20" uuid="42d4e841-b682-4593-be88-6d775d008de8"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{litros}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="368" y="0" width="51" height="20" uuid="33696da8-85f7-410c-91d1-9ec6fdf83d41"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{extras}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="257" y="0" width="51" height="20" uuid="bace3d1b-3266-417d-a4fe-814904a6d6f8"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{montoComb}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="5" y="1" width="37" height="20" uuid="891590bc-863e-4211-8a4b-4d42c21a57cc"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idCombustible}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="42" y="1" width="63" height="20" uuid="42c83b3c-bb02-492a-a574-bee5b2e5463e"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valeCombustible.proveedor.nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="106" y="0" width="34" height="20" uuid="2143f5c7-bfe1-4845-9597-f20f8385ebe5"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valeCombustible.tipoCombustible.nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="419" y="0" width="50" height="20" uuid="9a5031dd-b4ea-4999-9777-5159a4d55f39"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valeCombustible.camion.chapaCamion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="178" y="1" width="45" height="20" uuid="a68434bc-9645-4403-b9d0-62b2782cc373"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NBoleta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="308" y="0" width="56" height="20" uuid="86e5da01-5d51-4b7a-97a0-68f67c946ab3"/>
+				<textElement>
+					<font size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{viatico_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="46" splitType="Stretch">
+			<rectangle radius="10">
+				<reportElement x="0" y="5" width="555" height="40" backcolor="#CCCCCC" uuid="9efa31ee-6967-4832-aa4d-57008bbd10c2"/>
+			</rectangle>
+			<textField>
+				<reportElement x="259" y="6" width="30" height="20" uuid="793608c7-3407-4720-9900-d956577be21a"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="233" y="6" width="24" height="20" uuid="25746ce0-660e-4ea7-97d9-ccc669868b61"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pag.]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="18" y="4" width="152" height="20" forecolor="#000000" backcolor="#000000" uuid="73de0d10-d593-4b0b-a8c1-b972a4677b46"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Dialog" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="320" y="8" width="22" height="18" uuid="b57c4923-5114-48b2-ad21-f01c01d79dde"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="344" y="10" width="43" height="18" uuid="c37ae8f1-59e9-49ab-bcf6-2a63cf96357e"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="320" y="26" width="57" height="18" uuid="ab1f5958-0a16-4094-a000-e68b3667d740"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Viatico:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="419" y="8" width="58" height="18" uuid="c9b43be7-92c2-4fc6-ab3c-1a17f0acceee"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Extras:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement x="465" y="8" width="68" height="16" uuid="3339828e-02f9-4420-bec2-bd88ff359b7f"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totale}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="419" y="24" width="34" height="18" uuid="f4ec37a4-1a3a-40d3-bb20-14e8e987114e"/>
+				<textElement>
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Litros:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="466" y="25" width="44" height="20" uuid="ac2485a3-0419-4694-a279-2e2479f4370b"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{litros}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="368" y="28" width="51" height="14" uuid="362de455-a298-4f24-8ad7-bbed1a67a4c2"/>
+				<textElement>
+					<font size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalv}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

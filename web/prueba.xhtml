@@ -1,0 +1,832 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      >
+
+    <h:head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link rel="shortcut icon" href="resources/diamond-layout/images/favicon.ico" type="image/x-icon" />
+        <link rel="icon" href="resources/diamond-layout/images/favicon.ico" type="image/x-icon" />
+        <link type="text/css" rel="stylesheet" href="#{appBean.baseUrl}/faces/resources/theme.css" />
+        <link type="text/css" rel="stylesheet" href="#{appBean.baseUrl}/faces/resources/primeicons/primeicons.css" />
+        <link type="text/css" rel="stylesheet" href="##{appBean.baseUrl}/faces/resources/components.css" />
+        <link type="text/css" href="#{appBean.baseUrl}resources/csss/default.css" rel="stylesheet"/>
+        <link href="#{appBean.baseUrl}resources/csss/cssLayout.css" type="text/css" rel="stylesheet"/>
+        <script name="jquery/jquery.js" library="primefaces"></script>
+        <!--<script type="text/javascript" src="#{appBean.baseUrl}/faces/resources/jquery/jquery2.js"></script>-->        
+        <script type="text/javascript" src="#{appBean.baseUrl}/faces/resources/core.js"></script>
+        <script type="text/javascript" src="##{appBean.baseUrl}/faces/resources/components.js"></script>
+        <script type="text/javascript" src="##{appBean.baseUrl}/faces/resources/jquery/jquery-plugins.js"></script>
+        <link type="text/css" rel="stylesheet" href="#{appBean.baseUrl}/faces/resources/css/primeicons.css" />
+        <link type="text/css" rel="stylesheet" href="#{appBean.baseUrl}/faces/resources/css/primeflex.min.css" />
+        <link type="text/css" rel="stylesheet" href="#{appBean.baseUrl}/faces/resources/css/layout-light.css" />
+        <link type="text/css" rel="stylesheet" href="#{appBean.baseUrl}/faces/resources/css/demo-light.css" />
+        <title>INICIO</title>
+        <script type="text/javascript" src="#{appBean.baseUrl}/faces/resources/js/layout.js"></script>
+        <script type="text/javascript" src="#{appBean.baseUrl}/faces/resources/js/prism.js"></script>        
+    </h:head>
+
+    <h:body>
+
+        <div class="layout-wrapper layout-static layout-sidebar-darkgray" data-theme="darkgray">
+
+            <div class="layout-sidebar"><a href="#{appBean.baseUrl}/faces/views/extracto/extracto.xhtml" class="logo"><img id="app-logo"
+                                                                                   src="#{appBean.baseUrl}/faces/resources/images/logo-white.svg" alt="" class="logo-image" />
+                    <span class="app-name">T. RC SRL</span></a>
+
+                <div class="layout-menu-container">
+                    <div id="menu">
+            </div>
+                    <form id="sidebar-form" name="sidebar-form" method="post"
+                          action="https://www.primefaces.org/diamond/empty.xhtml" enctype="application/x-www-form-urlencoded">
+                        <input type="hidden" name="sidebar-form" value="sidebar-form" />
+                        <ul id="sidebar-form:j_idt15" class="layout-menu">
+                            <li id="sidebar-form:om_homepage" role="menuitem" class="layout-root-menuitem">
+                                <div class="layout-menuitem-root-text">Favoritos</div><a href="#"><i
+                                        class="pi pi-home layout-menuitem-icon"></i><span
+                                        class="layout-menuitem-text">Favoritos</span><i
+                                        class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+                                <ul role="menu">
+                                    <li id="sidebar-form:om_dashboard" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/cualquier/cualquier.xhtml"><i
+                                                class="pi pi-home layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Inicio</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-separator"></li>
+                            <!--<li id="sidebar-form:om_components" role="menuitem" class="layout-root-menuitem">
+                                <div class="layout-menuitem-root-text">Procesos</div><a href="#"><i
+                                        class="pi pi-star layout-menuitem-icon"></i><span class="layout-menuitem-text">UI
+                                        Kit</span><i class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+                                <ul role="menu">
+                                    <li id="sidebar-form:om_formlayout" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/extracto/extracto.xhtml"><i
+                                                class="pi pi-id-card layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Extracto</span></a></li>
+                                    <li id="sidebar-form:om_input" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/flota/flota.xhtml"><i
+                                                class="pi pi-check-square layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Flota</span></a></li>
+                                    <li id="sidebar-form:om_floatlabel" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/agregar/aflota.xhtml"><i
+                                                class="pi pi-bookmark layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Float Label</span></a></li>
+                                    <li id="sidebar-form:om_invalidstate" role="menuitem"><a href="invalidstate.html"><i
+                                                class="pi pi-exclamation-circle layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Invalid State</span></a></li>
+                                    <li id="sidebar-form:om_button" role="menuitem"><a class="rotated-icon"
+                                                                                       href="button.html"><i class="pi pi-mobile layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Button</span></a></li>
+                                    <li id="sidebar-form:om_table" role="menuitem"><a href="table.html"><i
+                                                class="pi pi-table layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Table</span></a></li>
+                                    <li id="sidebar-form:om_list" role="menuitem"><a href="list.html"><i
+                                                class="pi pi-list layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">List</span></a></li>
+                                    <li id="sidebar-form:om_tree" role="menuitem"><a href="tree.html"><i
+                                                class="pi pi-share-alt layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Tree</span></a></li>
+                                    <li id="sidebar-form:om_panel" role="menuitem"><a href="panel.html"><i
+                                                class="pi pi-tablet layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Panel</span></a></li>
+                                    <li id="sidebar-form:om_overlay" role="menuitem"><a href="overlay.html"><i
+                                                class="pi pi-clone layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Overlay</span></a></li>
+                                    <li id="sidebar-form:om_menu" role="menuitem"><a href="menu.html"><i
+                                                class="pi pi-bars layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Menu</span></a></li>
+                                    <li id="sidebar-form:om_message" role="menuitem"><a href="messages.html"><i
+                                                class="pi pi-comment layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Message</span></a></li>
+                                    <li id="sidebar-form:om_file" role="menuitem"><a href="file.html"><i
+                                                class="pi pi-file layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">File</span></a></li>
+                                    <li id="sidebar-form:om_chart" role="menuitem"><a href="charts.html"><i
+                                                class="pi pi-chart-bar layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Chart</span></a></li>
+                                    <li id="sidebar-form:om_misc" role="menuitem"><a href="misc.html"><i
+                                                class="pi pi-circle-off layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Misc</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-separator"></li>
+                            <li id="sidebar-form:om_utils" role="menuitem" class="layout-root-menuitem">
+                                <div class="layout-menuitem-root-text">Utilities</div><a href="#"><i
+                                        class="pi pi-compass layout-menuitem-icon"></i><span
+                                        class="layout-menuitem-text">Utilities</span><i
+                                        class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+                                <ul role="menu">
+                                    <li id="sidebar-form:om_display" role="menuitem"><a href="display.html"><i
+                                                class="pi pi-desktop layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Display</span></a></li>
+                                    <li id="sidebar-form:om_elevation" role="menuitem"><a href="elevation.html"><i
+                                                class="pi pi-external-link layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Elevation</span></a></li>
+                                    <li id="sidebar-form:om_flexbox" role="menuitem"><a href="flexbox.html"><i
+                                                class="pi pi-directions layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">FlexBox</span></a></li>
+                                    <li id="sidebar-form:om_icons" role="menuitem"><a href="icons.html"><i
+                                                class="pi pi-search layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Icons</span></a></li>
+                                    <li id="sidebar-form:om_text" role="menuitem"><a href="text.html"><i
+                                                class="pi pi-pencil layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Text</span></a></li>
+                                    <li id="sidebar-form:om_widgets" role="menuitem"><a href="widgets.html"><i
+                                                class="pi pi-star-o layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Widgets</span></a></li>
+                                    <li id="sidebar-form:om_grid" role="menuitem"><a href="grid.html"><i
+                                                class="pi pi-th-large layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Grid System</span></a></li>
+                                    <li id="sidebar-form:om_spacing" role="menuitem"><a href="spacing.html"><i
+                                                class="pi pi-arrow-right layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Spacing</span></a></li>
+                                    <li id="sidebar-form:om_typography" role="menuitem"><a href="typography.html"><i
+                                                class="pi pi-align-center layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Typography</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-separator"></li>
+                            <li id="sidebar-form:om_default" role="menuitem" class="layout-root-menuitem">
+                                <div class="layout-menuitem-root-text">Pages</div><a href="#"><i
+                                        class="pi pi-briefcase layout-menuitem-icon"></i><span
+                                        class="layout-menuitem-text">Pages</span><i
+                                        class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+                                <ul role="menu">
+                                    <li id="sidebar-form:om_crud" role="menuitem"><a href="crud.html"><i
+                                                class="pi pi-pencil layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Crud</span></a></li>
+                                    <li id="sidebar-form:om_calendar" role="menuitem"><a href="calendar.html"><i
+                                                class="pi pi-calendar-plus layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Calendar</span></a></li>
+                                    <li id="sidebar-form:om_chronoline" role="menuitem"><a href="chronoline.html"><i
+                                                class="pi pi-calendar layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Chronoline</span></a></li>
+                                    <li id="sidebar-form:om_landing" role="menuitem"><a href="landing.html"><i
+                                                class="pi pi-user-plus layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Landing</span></a></li>
+                                    <li id="sidebar-form:om_login" role="menuitem"><a href="login.html"><i
+                                                class="pi pi-sign-in layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Login</span></a></li>
+                                    <li id="sidebar-form:om_invoice" role="menuitem"><a href="invoice.html"><i
+                                                class="pi pi-dollar layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Invoice</span></a></li>
+                                    <li id="sidebar-form:om_help" role="menuitem"><a href="help.html"><i
+                                                class="pi pi-question-circle layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Help</span></a></li>
+                                    <li id="sidebar-form:om_error" role="menuitem"><a href="error.html"><i
+                                                class="pi pi-times-circle layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Error</span></a></li>
+                                    <li id="sidebar-form:om_notfound" role="menuitem"><a href="notfound.html"><i
+                                                class="pi pi-exclamation-circle layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Not Found</span></a></li>
+                                    <li id="sidebar-form:om_access" role="menuitem"><a href="access.html"><i
+                                                class="pi pi-lock layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Access Denied</span></a></li>
+                                    <li id="sidebar-form:om_empty" role="menuitem"><a href="empty.html"><i
+                                                class="pi pi-circle-off layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Empty</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-separator"></li>-->
+                            <li id="sidebar-form:om_hierarchy" role="menuitem" class="layout-root-menuitem">
+                                <div class="layout-menuitem-root-text">Procesos</div><a href="#"><i
+                                        class="pi pi-align-left layout-menuitem-icon"></i><span
+                                        class="layout-menuitem-text">Procesos</span><i
+                                        class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+                                <ul role="menu">
+                                    <li id="sidebar-form:om_sm1" role="menuitem"><a href="#"><i
+                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Flota</span><i
+                                                class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+                                        <ul role="menu">
+                                                    <li id="sidebar-form:om_lnk111" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/agregar/aflota.xhtml"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Agregar</span></a></li>
+                                                    <li id="sidebar-form:om_lnk112" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/flota/flota.xhtml"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Flota</span></a></li>
+                                                    <li id="sidebar-form:om_lnk113" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/carreta/carreta.xhtml"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Carretas</span></a></li>
+                                                    <li id="sidebar-form:om_lnk113" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/choferes/choferes.xhtml"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Choferes</span></a></li>
+                                                    <li id="sidebar-form:om_lnk113" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/propietario/propietario.xhtml"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Propietarios</span></a></li>
+                                            <!--<li id="sidebar-form:om_sm12" role="menuitem"><a href="#"><i
+                                                        class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                        class="layout-menuitem-text">Submenu 1.2</span><i
+                                                        class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+                                                <ul role="menu">
+                                                    <li id="sidebar-form:om_lnk121" role="menuitem"><a href="#"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Link 1.2.1</span></a></li>
+                                                </ul>
+                                            </li>-->
+                                        </ul>
+                                    </li>
+                                    <li id="sidebar-form:om_sm2" role="menuitem"><a href="#"><i
+                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Orden de Carga</span><i
+                                                class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+
+                                                <ul role="menu">
+                                                    <li id="sidebar-form:om_lnk211" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/agregar/aorden.xhtml"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Agregar</span></a></li>
+                                                    <li id="sidebar-form:om_lnk212" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/OrdenDeCarga/ordenDeCarga.xhtml"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Ver Ordenes</span></a></li>
+                                                </ul>                                            
+                                    </li>
+                                    <li id="sidebar-form:om_sm2" role="menuitem"><a href="#"><i
+                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Suministros</span><i
+                                                class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+                                        <ul role="menu">
+                                            <li id="sidebar-form:om_sm21" role="menuitem"><a href="#"><i
+                                                        class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                        class="layout-menuitem-text">Proveedores</span><i
+                                                        class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+                                                <ul role="menu">
+                                                    <li id="sidebar-form:om_lnk211" role="menuitem"><a href="#{appBean.baseUrl}/faces/views/viaticos/viaticos.xhtml"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Proveedores</span></a></li>
+                                                    <li id="sidebar-form:om_lnk212" role="menuitem"><a href="#"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Unidades de Suministros</span></a></li>
+                                                                <li id="sidebar-form:om_lnk212" role="menuitem"><a href="#"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Precios de Combustible</span></a></li>
+                                                    <li id="sidebar-form:om_lnk212" role="menuitem"><a href="#"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Pendientes de pago</span></a></li>
+                                                </ul>
+                                            </li>
+                                                    <li id="sidebar-form:om_lnk221" role="menuitem"><a href="#"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Agregar</span></a></li>
+                                                    <li id="sidebar-form:om_lnk221" role="menuitem"><a href="#"><i
+                                                                class="pi pi-align-left layout-menuitem-icon"></i><span
+                                                                class="layout-menuitem-text">Ver Suministros</span></a></li>
+                                                
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="menu-separator"></li>
+                            <li id="sidebar-form:om_getstarted" role="menuitem" class="layout-root-menuitem">
+                                <div class="layout-menuitem-root-text">Start</div><a href="#"><i
+                                        class="pi pi-download layout-menuitem-icon"></i><span
+                                        class="layout-menuitem-text">Start</span><i
+                                        class="pi pi-chevron-down layout-submenu-toggler"></i></a>
+                                <ul role="menu">
+                                    <li id="sidebar-form:om_buy" role="menuitem"><a
+                                            href="https://www.primefaces.org/store"><i
+                                                class="pi pi-shopping-cart layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Buy Now</span></a></li>
+                                    <li id="sidebar-form:om_doc" role="menuitem"><a href="documentation.html"><i
+                                                class="pi pi-info-circle layout-menuitem-icon"></i><span
+                                                class="layout-menuitem-text">Documentation</span></a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-separator"></li>
+                        </ul>
+                        <script id="sidebar-form:j_idt15_s"
+                        type="text/javascript">$(function () { PrimeFaces.cw("Diamond", "diamondMenuWidget", { id: "sidebar-form:j_idt15", statefulScroll: true }); });</script>
+                        <script id="sidebar-form:j_idt15_s"
+                        type="text/javascript">PrimeFaces.cw("Diamond", "diamondMenuWidget", { id: "sidebar-form:j_idt15", statefulScroll: true, pathname: "/diamond/empty.xhtml" });</script>
+                        <input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:0"
+                               value="3662983587620451095:6150846060375647032" autocomplete="off" />
+                    </form>
+                </div>
+            </div>
+
+            <div class="layout-sidebar-right">
+                <h5>Activity</h5>
+                <form id="j_idt24" name="j_idt24" method="post" action="https://www.primefaces.org/diamond/empty.xhtml"
+                      enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="j_idt24" value="j_idt24" />
+
+                    <div class="widget-timeline">
+                        <div class="timeline-event">
+                            <span class="timeline-event-icon" style="background-color:#64B5F6">
+                                <i class="pi pi-dollar"></i>
+                            </span>
+                            <div class="timeline-event-title">New Sale</div>
+                            <div class="timeline-event-detail">Richard Jones has purchased a blue t-shirt for
+                                <strong>$79</strong>.
+                            </div>
+                        </div>
+                        <div class="timeline-event">
+                            <span class="timeline-event-icon" style="background-color:#7986CB">
+                                <i class="timeline-icon pi pi-download"></i>
+                            </span>
+                            <div class="timeline-event-title">Withdrawal Initiated</div>
+                            <div class="timeline-event-detail">Your request for withdrawal of
+                                <strong>$2500</strong> has been initiated.
+                            </div>
+                        </div>
+                        <div class="timeline-event">
+                            <span class="timeline-event-icon" style="background-color:#4DB6AC">
+                                <i class="timeline-icon pi pi-question"></i>
+                            </span>
+                            <div class="timeline-event-title">Question Received</div>
+                            <div class="timeline-event-detail">Jane Davis has posted a
+                                <strong>new question</strong> about your product.
+                            </div>
+                        </div>
+                        <div class="timeline-event">
+                            <span class="timeline-event-icon" style="background-color:#4DD0E1">
+                                <i class="timeline-icon pi pi-comment"></i>
+                            </span>
+                            <div class="timeline-event-title">Comment Received</div>
+                            <div class="timeline-event-detail">Claire Smith has upvoted your store along with a
+                                <strong>comment</strong>.
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <h5>Quick Withdraw</h5>
+                    <div class="withdraw ui-fluid">
+                        <div><input id="j_idt24:j_idt26" name="j_idt24:j_idt26" type="text"
+                                    class="ui-inputfield ui-inputtext ui-widget ui-state-default ui-corner-all "
+                                    placeholder="Amount" />
+                            <script id="j_idt24:j_idt26_s"
+                            type="text/javascript">$(function () { PrimeFaces.cw("InputText", "widget_j_idt24_j_idt26", { id: "j_idt24:j_idt26" }); });</script>
+                        </div>
+                        <div>
+                            <div id="j_idt24:j_idt28" class="ui-selectonemenu ui-widget ui-state-default ui-corner-all "
+                                 aria-owns="j_idt24:j_idt28_panel" role="combobox" aria-haspopup="listbox"
+                                 aria-expanded="false">
+                                <div class="ui-helper-hidden-accessible"><input id="j_idt24:j_idt28_focus"
+                                                                                name="j_idt24:j_idt28_focus" type="text" autocomplete="off" /></div>
+                                <div class="ui-helper-hidden-accessible"><select id="j_idt24:j_idt28_input"
+                                                                                 name="j_idt24:j_idt28_input" tabindex="-1" autocomplete="off" aria-hidden="true">
+                                        <option value="*****24" data-escape="true">*****24</option>
+                                        <option value="*****75" data-escape="true">*****75</option>
+                                    </select></div><label id="j_idt24:j_idt28_label"
+                                                      class="ui-selectonemenu-label ui-inputfield ui-corner-all">&nbsp;</label>
+                                <div class="ui-selectonemenu-trigger ui-state-default ui-corner-right"><span
+                                        class="ui-icon ui-icon-triangle-1-s ui-c"></span></div>
+                                <div id="j_idt24:j_idt28_panel"
+                                     class="ui-selectonemenu-panel ui-widget ui-widget-content ui-corner-all ui-helper-hidden ui-shadow ui-input-overlay">
+                                    <div class="ui-selectonemenu-items-wrapper" style="max-height:200px"></div>
+                                </div>
+                            </div>
+                            <script id="j_idt24:j_idt28_s"
+                            type="text/javascript">$(function () { PrimeFaces.cw("SelectOneMenu", "widget_j_idt24_j_idt28", { id: "j_idt24:j_idt28", appendTo: "j_idt24:j_idt28", renderPanelContentOnClient: true }); });</script>
+                        </div>
+                        <div><button id="j_idt24:j_idt32" name="j_idt24:j_idt32"
+                                     class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
+                                     type="button"><span class="ui-button-icon-left ui-icon ui-c pi pi-check"></span><span
+                                    class="ui-button-text ui-c">Confirm</span></button>
+                            <script id="j_idt24:j_idt32_s"
+                            type="text/javascript">$(function () { PrimeFaces.cw("CommandButton", "widget_j_idt24_j_idt32", { id: "j_idt24:j_idt32" }); });</script>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <h5>Shipment Tracking</h5>
+                    <p>Track your ongoing shipments to customers.</p><img id="j_idt24:j_idt34"
+                                                                          src="#{request.contextPath}/faces/resources/images/sidebar-right/staticmap.png" alt=""
+                                                                          class="logo-image" style="width:100%" /><input type="hidden" name="javax.faces.ViewState"
+                                                                          id="j_id1:javax.faces.ViewState:1" value="3662983587620451095:6150846060375647032"
+                                                                          autocomplete="off" />
+                </form>
+            </div>
+
+            <a tabindex="0" id="layout-config-button" class="layout-config-button">
+                <i class="pi pi-cog"></i>
+            </a>
+
+            <div class="layout-config">
+                <h5>Menu Type</h5>
+                <form id="config-form" name="config-form" method="post"
+                      action="https://www.primefaces.org/diamond/empty.xhtml" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="config-form" value="config-form" />
+                    <table id="config-form:j_idt37" role="presentation" class="ui-selectoneradio ui-widget">
+                        <tr>
+                            <td>
+                                <div class="ui-radiobutton ui-widget">
+                                    <div class="ui-helper-hidden-accessible"><input id="config-form:j_idt37:0"
+                                                                                    name="config-form:j_idt37" type="radio" value="static"
+                                                                                    onchange="PrimeFaces.ab({s: &quot; config - form:j_idt37 &quot; , e: &quot; valueChange &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt37 &quot; , u: &quot; config - form:menu - themes - panel &quot; });"
+                                                                                    checked="checked" /></div>
+                                    <div
+                                        class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default ui-state-active">
+                                        <span class="ui-radiobutton-icon ui-icon ui-icon-bullet ui-c"></span>
+                                    </div>
+                                </div><label for="config-form:j_idt37:0">Static</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="ui-radiobutton ui-widget">
+                                    <div class="ui-helper-hidden-accessible"><input id="config-form:j_idt37:1"
+                                                                                    name="config-form:j_idt37" type="radio" value="overlay"
+                                                                                    onchange="PrimeFaces.ab({s: &quot; config - form:j_idt37 &quot; , e: &quot; valueChange &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt37 &quot; , u: &quot; config - form:menu - themes - panel &quot; });" />
+                                    </div>
+                                    <div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default"><span
+                                            class="ui-radiobutton-icon ui-icon ui-icon-blank ui-c"></span></div>
+                                </div><label for="config-form:j_idt37:1">Overlay</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="ui-radiobutton ui-widget">
+                                    <div class="ui-helper-hidden-accessible"><input id="config-form:j_idt37:2"
+                                                                                    name="config-form:j_idt37" type="radio" value="slim"
+                                                                                    onchange="PrimeFaces.ab({s: &quot; config - form:j_idt37 &quot; , e: &quot; valueChange &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt37 &quot; , u: &quot; config - form:menu - themes - panel &quot; });" />
+                                    </div>
+                                    <div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default"><span
+                                            class="ui-radiobutton-icon ui-icon ui-icon-blank ui-c"></span></div>
+                                </div><label for="config-form:j_idt37:2">Slim</label>
+                            </td>
+                        </tr>
+                    </table>
+                    <script id="config-form:j_idt37_s"
+                    type="text/javascript">$(function () { PrimeFaces.cw("SelectOneRadio", "widget_config_form_j_idt37", { id: "config-form:j_idt37", unselectable: false }); });</script>
+
+                    <hr />
+
+                    <h5>Color Scheme</h5>
+                    <table id="config-form:j_idt42" role="presentation" class="ui-selectoneradio ui-widget">
+                        <tr>
+                            <td>
+                                <div class="ui-radiobutton ui-widget">
+                                    <div class="ui-helper-hidden-accessible"><input id="config-form:j_idt42:0"
+                                                                                    name="config-form:j_idt42" type="radio" value="light"
+                                                                                    onchange="PrimeFaces.ab({s: &quot; config - form:j_idt42 &quot; , e: &quot; valueChange &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt42 &quot; , u: &quot; config - form:menu - themes - panel &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }});"
+                                                                                    checked="checked" /></div>
+                                    <div
+                                        class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default ui-state-active">
+                                        <span class="ui-radiobutton-icon ui-icon ui-icon-bullet ui-c"></span>
+                                    </div>
+                                </div><label for="config-form:j_idt42:0">Light</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="ui-radiobutton ui-widget">
+                                    <div class="ui-helper-hidden-accessible"><input id="config-form:j_idt42:1"
+                                                                                    name="config-form:j_idt42" type="radio" value="dim"
+                                                                                    onchange="PrimeFaces.ab({s: &quot; config - form:j_idt42 &quot; , e: &quot; valueChange &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt42 &quot; , u: &quot; config - form:menu - themes - panel &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }});" />
+                                    </div>
+                                    <div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default"><span
+                                            class="ui-radiobutton-icon ui-icon ui-icon-blank ui-c"></span></div>
+                                </div><label for="config-form:j_idt42:1">Dim</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="ui-radiobutton ui-widget">
+                                    <div class="ui-helper-hidden-accessible"><input id="config-form:j_idt42:2"
+                                                                                    name="config-form:j_idt42" type="radio" value="dark"
+                                                                                    onchange="PrimeFaces.ab({s: &quot; config - form:j_idt42 &quot; , e: &quot; valueChange &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt42 &quot; , u: &quot; config - form:menu - themes - panel &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }});" />
+                                    </div>
+                                    <div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default"><span
+                                            class="ui-radiobutton-icon ui-icon ui-icon-blank ui-c"></span></div>
+                                </div><label for="config-form:j_idt42:2">Dark</label>
+                            </td>
+                        </tr>
+                    </table>
+                    <script id="config-form:j_idt42_s"
+                    type="text/javascript">$(function () { PrimeFaces.cw("SelectOneRadio", "widget_config_form_j_idt42", { id: "config-form:j_idt42", unselectable: false }); });</script>
+
+                    <hr />
+
+                    <h5>Input Style</h5>
+                    <table id="config-form:j_idt47" role="presentation" class="ui-selectoneradio ui-widget">
+                        <tr>
+                            <td>
+                                <div class="ui-radiobutton ui-widget">
+                                    <div class="ui-helper-hidden-accessible"><input id="config-form:j_idt47:0"
+                                                                                    name="config-form:j_idt47" type="radio" value="outlined"
+                                                                                    onchange="PrimeFaces.bcn(this, event, [function(event){PrimeFaces.DiamondConfigurator.updateInputStyle(event.target.value)}, function(event){PrimeFaces.ab({s: &quot; config - form:j_idt47 &quot; , e: &quot; valueChange &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt47 &quot; }); }])"
+                                                                                    checked="checked" /></div>
+                                    <div
+                                        class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default ui-state-active">
+                                        <span class="ui-radiobutton-icon ui-icon ui-icon-bullet ui-c"></span>
+                                    </div>
+                                </div><label for="config-form:j_idt47:0">Outlined</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="ui-radiobutton ui-widget">
+                                    <div class="ui-helper-hidden-accessible"><input id="config-form:j_idt47:1"
+                                                                                    name="config-form:j_idt47" type="radio" value="filled"
+                                                                                    onchange="PrimeFaces.bcn(this, event, [function(event){PrimeFaces.DiamondConfigurator.updateInputStyle(event.target.value)}, function(event){PrimeFaces.ab({s: &quot; config - form:j_idt47 &quot; , e: &quot; valueChange &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt47 &quot; }); }])" />
+                                    </div>
+                                    <div class="ui-radiobutton-box ui-widget ui-corner-all ui-state-default"><span
+                                            class="ui-radiobutton-icon ui-icon ui-icon-blank ui-c"></span></div>
+                                </div><label for="config-form:j_idt47:1">Filled</label>
+                            </td>
+                        </tr>
+                    </table>
+                    <script id="config-form:j_idt47_s"
+                    type="text/javascript">$(function () { PrimeFaces.cw("SelectOneRadio", "widget_config_form_j_idt47", { id: "config-form:j_idt47", unselectable: false }); });</script>
+
+                    <hr />
+
+                    <h5>Menu Themes</h5>
+                    <div id="config-form:menu-themes-panel" class="ui-outputpanel ui-widget">
+                        <div id="config-form:j_idt51" class="ui-outputpanel ui-widget layout-themes">
+                            <div><a id="config-form:j_idt52:0:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="white"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:0:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:0:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('white', 'dark', ''); }}); return false;"
+                                    style="background-color: #ffffff" title="white"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:1:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="darkgray"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:1:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:1:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('darkgray', 'white', ''); }}); return false;"
+                                    style="background-color: #343a40" title="darkgray"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:2:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="blue"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:2:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:2:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('blue', 'white', 'blue'); }}); return false;"
+                                    style="background-color: #1976d2" title="blue"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:3:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="bluegray"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:3:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:3:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('bluegray', 'white', 'lightgreen'); }}); return false;"
+                                    style="background-color: #455a64" title="bluegray"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:4:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="brown"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:4:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:4:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('brown', 'white', 'cyan'); }}); return false;"
+                                    style="background-color: #5d4037" title="brown"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:5:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="cyan"
+                                    onclick="PrimeFaces.ab({s: quot; config - form:j_idt52:5:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:5:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('cyan', 'white', 'cyan'); }}); return false;"
+                                    style="background-color: #0097a7" title="cyan"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:6:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="green"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:6:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:6:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('green', 'white', 'green'); }}); return false;"
+                                    style="background-color: #388e3C" title="green"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:7:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="indigo"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:7:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:7:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('indigo', 'white', 'indigo'); }}); return false;"
+                                    style="background-color: #303f9f" title="indigo"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:8:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="deeppurple"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:8:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:8:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('deeppurple', 'white', 'deeppurple'); }}); return false;"
+                                    style="background-color: #512da8" title="deeppurple"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:9:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="orange"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:9:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:9:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('orange', 'dark', 'orange'); }}); return false;"
+                                    style="background-color: #F57c00" title="orange"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:10:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="pink"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:10:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:10:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('pink', 'white', 'pink'); }}); return false;"
+                                    style="background-color: #c2185b" title="pink"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:11:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="purple"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:11:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:11:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('purple', 'white', 'purple'); }}); return false;"
+                                    style="background-color: #7b1fa2" title="purple"></a>
+                            </div>
+                            <div><a id="config-form:j_idt52:12:j_idt54" href="#" class="ui-commandlink ui-widget"
+                                    aria-label="teal"
+                                    onclick="PrimeFaces.ab({s: &quot; config - form:j_idt52:12:j_idt54 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt52:12:j_idt54 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeMenuTheme('teal', 'white', 'teal'); }}); return false;"
+                                    style="background-color: #00796b" title="teal"></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <h5>Component Themes</h5>
+                    <div class="layout-themes">
+                        <div><a id="config-form:j_idt59:0:j_idt61" href="#" class="ui-commandlink ui-widget"
+                                aria-label="blue"
+                                onclick="PrimeFaces.ab({s: &quot; config - form:j_idt59:0:j_idt61 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt59:0:j_idt61 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeComponentTheme('blue'); }}); return false;"
+                                style="background-color: #42A5F5" title="blue"></a>
+                        </div>
+                        <div><a id="config-form:j_idt59:1:j_idt61" href="#" class="ui-commandlink ui-widget"
+                                aria-label="green"
+                                onclick="PrimeFaces.ab({s: &quot; config - form:j_idt59:1:j_idt61 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt59:1:j_idt61 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeComponentTheme('green'); }}); return false;"
+                                style="background-color: #66BB6A" title="green"></a>
+                        </div>
+                        <div><a id="config-form:j_idt59:2:j_idt61" href="#" class="ui-commandlink ui-widget"
+                                aria-label="lightgreen"
+                                onclick="PrimeFaces.ab({s: &quot; config - form:j_idt59:2:j_idt61 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt59:2:j_idt61 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeComponentTheme('lightgreen'); }}); return false;"
+                                style="background-color: #9CCC65" title="lightgreen"></a>
+                        </div>
+                        <div><a id="config-form:j_idt59:3:j_idt61" href="#" class="ui-commandlink ui-widget"
+                                aria-label="purple"
+                                onclick="PrimeFaces.ab({s: &quot; config - form:j_idt59:3:j_idt61 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt59:3:j_idt61 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeComponentTheme('purple'); }}); return false;"
+                                style="background-color: #AB47BC" title="purple"></a>
+                        </div>
+                        <div><a id="config-form:j_idt59:4:j_idt61" href="#" class="ui-commandlink ui-widget"
+                                aria-label="deeppurple"
+                                onclick="PrimeFaces.ab({s: &quot; config - form:j_idt59:4:j_idt61 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt59:4:j_idt61 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeComponentTheme('deeppurple'); }}); return false;"
+                                style="background-color: #7E57C2" title="deeppurple"></a>
+                        </div>
+                        <div><a id="config-form:j_idt59:5:j_idt61" href="#" class="ui-commandlink ui-widget"
+                                aria-label="indigo"
+                                onclick="PrimeFaces.ab({s: &quot; config - form:j_idt59:5:j_idt61 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt59:5:j_idt61 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeComponentTheme('indigo'); }}); return false;"
+                                style="background-color: #5C6BC0" title="indigo"></a>
+                        </div>
+                        <div><a id="config-form:j_idt59:6:j_idt61" href="#" class="ui-commandlink ui-widget"
+                                aria-label="orange"
+                                onclick="PrimeFaces.ab({s: &quot; config - form:j_idt59:6:j_idt61 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt59:6:j_idt61 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeComponentTheme('orange'); }}); return false;"
+                                style="background-color: #FFA726" title="orange"></a>
+                        </div>
+                        <div><a id="config-form:j_idt59:7:j_idt61" href="#" class="ui-commandlink ui-widget"
+                                aria-label="cyan"
+                                onclick="PrimeFaces.ab({s: &quot; config - form:j_idt59:7:j_idt61 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt59:7:j_idt61 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeComponentTheme('cyan'); }}); return false;"
+                                style="background-color: #26C6DA" title="cyan"></a>
+                        </div>
+                        <div><a id="config-form:j_idt59:8:j_idt61" href="#" class="ui-commandlink ui-widget"
+                                aria-label="pink"
+                                onclick="PrimeFaces.ab({s: &quot; config - form:j_idt59:8:j_idt61 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt59:8:j_idt61 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeComponentTheme('pink'); }}); return false;"
+                                style="background-color: #EC407A" title="pink"></a>
+                        </div>
+                        <div><a id="config-form:j_idt59:9:j_idt61" href="#" class="ui-commandlink ui-widget"
+                                aria-label="teal"
+                                onclick="PrimeFaces.ab({s: &quot; config - form:j_idt59:9:j_idt61 &quot; , f: &quot; config - form &quot; , p: &quot; config - form:j_idt59:9:j_idt61 &quot; , onst:function(cfg){PrimeFaces.DiamondConfigurator.beforeResourceChange(); }, onco:function(xhr, status, args, data){PrimeFaces.DiamondConfigurator.changeComponentTheme('teal'); }}); return false;"
+                                style="background-color: #26A69A" title="teal"></a>
+                        </div>
+                    </div><input type="hidden" name="javax.faces.ViewState" id="j_id1:javax.faces.ViewState:2"
+                                 value="3662983587620451095:6150846060375647032" autocomplete="off" />
+                </form>
+            </div>
+
+            <div class="layout-content-wrapper">
+
+                <div class="layout-topbar">
+                    <div class="topbar-left">
+                        <a tabindex="0" class="menu-button">
+                            <i class="pi pi-chevron-left"></i>
+                        </a>
+                        <span class="topbar-separator"></span>
+                        <span class="viewname">EMPTY PAGE</span><img id="logo-mobile"
+                                                                     src="#{request.contextPath}/faces/resources/images/logo-dark.svg" alt="" class="mobile-logo" />
+                    </div>
+
+                    <div class="topbar-right">
+                        <ul class="topbar-menu">
+                            <li class="search-item">
+                                <a tabindex="0">
+                                    <i class="pi pi-search"></i>
+                                </a>
+                            </li>
+                            <li class="notifications-item">
+                                <a tabindex="0">
+                                    <i class="pi pi-bell"></i>
+                                    <span class="topbar-badge">5</span>
+                                </a>
+                                <ul class="notifications-menu">
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-shopping-cart"></i>
+                                            <div class="notification-item">
+                                                <div class="notification-summary">New Order</div>
+                                                <div class="notification-detail">You have <strong>3</strong> new orders.
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-check-square"></i>
+                                            <div class="notification-item">
+                                                <div class="notification-summary">Withdrawn Completed</div>
+                                                <div class="notification-detail">Funds are on their way.</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-chart-line"></i>
+                                            <div class="notification-item">
+                                                <div class="notification-summary">Monthly Reports</div>
+                                                <div class="notification-detail">New reports are ready.</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-comments"></i>
+                                            <div class="notification-item">
+                                                <div class="notification-summary">Comments</div>
+                                                <div class="notification-detail"><strong>2</strong> new comments.</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-exclamation-circle"></i>
+                                            <div class="notification-item">
+                                                <div class="notification-summary">Chargeback Request</div>
+                                                <div class="notification-detail"><strong>1</strong> to review.</div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="profile-item">
+                                <a tabindex="0"><img id="j_idt68"
+                                                     src="#{request.contextPath}/faces/resources/images/avatar/profile.jpg" alt=""
+                                                     class="profile-image" />
+                                    <span class="profile-name">Amelia Stone</span>
+                                </a>
+                                <ul class="profile-menu">
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-user"></i>
+                                            <span>Profile</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-cog"></i>
+                                            <span>Settings</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-calendar"></i>
+                                            <span>Calendar</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-inbox"></i>
+                                            <span>Inbox</span>
+                                        </a>
+                                    </li>
+                                    <li class="menuitem-separator"></li>
+                                    <li>
+                                        <a tabindex="0">
+                                            <i class="pi pi-power-off"></i>
+                                            <span>Logout</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="right-sidebar-item">
+                                <a tabindex="0">
+                                    <i class="pi pi-align-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="layout-content">
+                    <div class="p-grid">
+                        <div class="p-col">
+                            <ui:insert name="content"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layout-footer">
+                    <div class="footer-logo-container"><img id="footer-logo"
+                                                            src="#{request.contextPath}/faces/resources/images/logo-dark.svg" alt="" />
+                        <span class="app-name">DIAMOND</span>
+                    </div><span class="copyright">© Your Organization - 2021</span>
+                </div>
+            </div>
+            <div id="j_idt78" style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+                <div id="j_idt78_start" style="display:none">
+                    <i class="pi pi-spin pi-spinner layout-ajax-loader-icon" aria-hidden="true"></i>
+                </div>
+                <div id="j_idt78_complete" style="display:none"></div>
+            </div>
+            <script id="j_idt78_s"
+            type="text/javascript">$(function () { PrimeFaces.cw("AjaxStatus", "widget_j_idt78", { id: "j_idt78", delay: 0 }); });</script>
+
+            <div class="layout-search">
+                <div class="search-container fade-in-up">
+                    <i class="pi pi-search"></i>
+                    <input type="text" class="ui-inputfield" placeholder="Search" />
+                </div>
+            </div>
+            <div class="layout-mask modal-in"></div>
+        </div>
+        <script type="text/javascript">
+            function handleLoginRequest(xhr, status, args) {
+                if (args.loggetOut) {
+                    location.href = args.ruta;
+                }
+            }
+        </script>
+    </h:body>
+
+</html>

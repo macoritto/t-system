@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Usuario" table="usuario" schema="public">
+        <id name="id" type="int">
+            <column name="id" />
+            <generator class="sequence">
+                <param name="sequence">usuario_id_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="rol" class="model.Rol" fetch="select">
+            <column name="rol_id" not-null="true" />
+        </many-to-one>
+        <property name="usuario" type="string">
+            <column name="usuario" length="20" not-null="true" />
+        </property>
+        <property name="clave" type="string">
+            <column name="clave" length="32" not-null="true" />
+        </property>
+        <property name="email" type="string">
+            <column name="email" length="60" not-null="true" />
+        </property>
+        <property name="estado" type="int">
+            <column name="estado" not-null="true" />
+        </property>
+        <property name="usuariocreacion" type="string">
+            <column name="usuariocreacion" length="25" not-null="true" />
+        </property>
+        <property name="fechacreacion" type="date">
+            <column name="fechacreacion" length="13" not-null="true" />
+        </property>
+        <property name="usuariomodificacion" type="string">
+            <column name="usuariomodificacion" length="25" not-null="true" />
+        </property>
+        <property name="fechamodificacion" type="date">
+            <column name="fechamodificacion" length="13" not-null="true" />
+        </property>
+        <set name="valeVarioses" table="vale_varios" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.ValeVarios" />
+        </set>
+        <set name="varioses" table="varios" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.Varios" />
+        </set>
+        <set name="viajes" table="viaje" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.Viaje" />
+        </set>
+        <set name="pagoFletes" table="pago_flete" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.PagoFlete" />
+        </set>
+        <set name="precioFletes" table="precio_flete" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.PrecioFlete" />
+        </set>
+        <set name="adelantoChofers" table="adelanto_chofer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.AdelantoChofer" />
+        </set>
+        <set name="combustibles" table="combustible" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.Combustible" />
+        </set>
+        <set name="valeCombustibles" table="vale_combustible" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.ValeCombustible" />
+        </set>
+        <set name="pagoCombustibles" table="pago_combustible" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.PagoCombustible" />
+        </set>
+        <set name="viaticos" table="viatico" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.Viatico" />
+        </set>
+        <set name="creditos" table="credito" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.Credito" />
+        </set>
+        <set name="extractocs" table="extractoc" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.Extractoc" />
+        </set>
+        <set name="ordenDeCargas" table="orden_de_carga" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.OrdenDeCarga" />
+        </set>
+        <set name="pagoVarioses" table="pago_varios" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.PagoVarios" />
+        </set>
+        <set name="contrasenhas" table="contrasenha" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.Contrasenha" />
+        </set>
+        <set name="extractos" table="extracto" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="usuario_id" not-null="true" />
+            </key>
+            <one-to-many class="model.Extracto" />
+        </set>
+    </class>
+</hibernate-mapping>

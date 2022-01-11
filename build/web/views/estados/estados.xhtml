@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../template.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>                 
+                <p:panel id="paneli" header="Estados"> 
+                    <p:tabView id="tabla" dynamic="true" cache="true" style="font-size: 10px;">
+                        <p:tab title="Todos">
+                            <h:form id="datos1">  
+                                <p:dataTable id="datacar" var="extracto" value="#{estadoBean.estados}" rowKey="#{extracto.idLiquidacion}" selection="#{estadoBean.selectedEstado}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     selectionMode="single" paginator="true" paginatorPosition="top">                                                                                                    
+                                    <p:column headerText="Propietario" style="width:20%;" filterBy="#{extracto.propietario.nombre} #{extracto.propietario.apellido}"   
+                                           filterMatchMode="contains">  
+                                        <h:outputText value="#{extracto.propietario.nombre},#{extracto.propietario.apellido}" />  
+                                    </p:column>
+                                    <p:column headerText="Fecha" style="width:10%;">  
+                                        <h:outputText value="#{extracto.fecha}" />  
+                                    </p:column>                                  
+                                    <p:column headerText="Total" style="width:8%; text-align: right;">  
+                                        <h:outputText value="#{extracto.monto}"  >
+                                            <f:convertNumber type="number"/>
+                                        </h:outputText>  
+                                    </p:column>  
+                                    <p:column headerText="Estado" style="width:10%;">  
+                                        <h:outputText value="#{extracto.estado}" />  
+                                    </p:column>                                                          
+                                </p:dataTable>  
+                            </h:form> 
+                            <h:form id="suma1">
+                                <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                    <div class="ui-datatable-tablewrapper">
+                                        <table role="grid2">
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                                    <td class="ui-state-default"><h:outputText value="#{estadoBean.total}" >
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>  </td>
+                                                    <td class="ui-state-default"></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p:separator/>                            
+                            </h:form>  
+                        </p:tab>
+                        <p:tab title="Negativos">
+                            <h:form id="datos2">  
+                                <p:dataTable id="datacar" var="extracto" value="#{estadoBean.negativos}" rowKey="#{extracto.idLiquidacion}" selection="#{estadoBean.selectedEstado}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     selectionMode="single" paginator="true" paginatorPosition="top">                                                                                                   
+                                    <p:column headerText="Propietario" style="width:20%;" filterBy="#{extracto.propietario.nombre},#{extracto.propietario.apellido}"   
+                                           filterMatchMode="contains">  
+                                        <h:outputText value="#{extracto.propietario.nombre},#{extracto.propietario.apellido}" />  
+                                    </p:column>
+                                    <p:column headerText="Fecha" style="width:10%;">  
+                                        <h:outputText value="#{extracto.fecha}" />  
+                                    </p:column>                                  
+                                    <p:column headerText="Total" style="width:8%; text-align: right;">  
+                                        <h:outputText value="#{extracto.monto}"  >
+                                            <f:convertNumber type="number"/>
+                                        </h:outputText>  
+                                    </p:column>  
+                                    <p:column headerText="Estado" style="width:10%;">  
+                                        <h:outputText value="#{extracto.estado}" />  
+                                    </p:column>                                                          
+                                </p:dataTable>  
+                            </h:form> 
+                            <h:form id="suma2">
+                                <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                    <div class="ui-datatable-tablewrapper">
+                                        <table role="grid2">
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                                    <td class="ui-state-default"><h:outputText value="#{estadoBean.totaln}" >
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>  </td>
+                                                    <td class="ui-state-default"></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p:separator/>                            
+                            </h:form>  
+                        </p:tab>
+                        <p:tab title="Positivos">
+                            <h:form id="datos3">  
+                                <p:dataTable id="datacar" var="extracto" value="#{estadoBean.positivos}" rowKey="#{extracto.idLiquidacion}" selection="#{estadoBean.selectedEstado}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     selectionMode="single" paginator="true" paginatorPosition="top">                                                                                                   
+                                    <p:column headerText="Propietario" style="width:20%;" filterBy="#{extracto.propietario.nombre},#{extracto.propietario.apellido}"   
+                                           filterMatchMode="contains">  
+                                        <h:outputText value="#{extracto.propietario.nombre},#{extracto.propietario.apellido}" />  
+                                    </p:column>
+                                    <p:column headerText="Fecha" style="width:10%;">  
+                                        <h:outputText value="#{extracto.fecha}" />  
+                                    </p:column>                                  
+                                    <p:column headerText="Total" style="width:8%; text-align: right;">  
+                                        <h:outputText value="#{extracto.monto}"  >
+                                            <f:convertNumber type="number"/>
+                                        </h:outputText>  
+                                    </p:column>  
+                                    <p:column headerText="Estado" style="width:10%;">  
+                                        <h:outputText value="#{extracto.estado}" />  
+                                    </p:column>                                                          
+                                </p:dataTable>  
+                            </h:form> 
+                            <h:form id="suma3">
+                                <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                                    <div class="ui-datatable-tablewrapper">
+                                        <table role="grid2">
+                                            <tfoot>
+                                                <tr>
+                                                    <td class="ui-state-default" width="690px" style="text-align:right">Totales:</td>
+                                                    <td class="ui-state-default"><h:outputText value="#{estadoBean.totalp}" >
+                                                            <f:convertNumber type="number"/>
+                                                        </h:outputText>  </td>
+                                                    <td class="ui-state-default"></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                                <p:separator/>                            
+                            </h:form>  
+                        </p:tab>
+                    </p:tabView>
+                    </p:panel>                   
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

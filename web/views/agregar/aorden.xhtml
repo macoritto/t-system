@@ -1,0 +1,262 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <head>
+        <script type="text/javascript">
+        function validar(e) {
+            tecla = (document.all) ? e.keyCode : e.which;
+            if (tecla==13) cargarDescrip(event);
+            
+        }
+        </script>
+    </head>
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>    
+                <p:panel id="paneli" header="Agregar Orden">
+                <h:form id="formCreate" style="font-size: 11px;">                
+                        <p:messages id="msgs1" showDetail="true" autoUpdate="true"/>
+                        <h:panelGrid id="display" columns="5" cellpadding="2" style="margin: 0 auto; width: 50%;">
+                            <p:ajax listener="#{ordenBean.cargarDescrip(event)}" update="formCreate" event="keypress"/>       
+                            <h:outputText value="Cliente:"/>
+                            <p:inputText readonly="true" required="true" requiredMessage="hola" value="#{ordenBean.selectedCliente.nombre}">
+                                <p:ajax listener="#{ordenBean.onRowSelectCliente(event)}" event="click" update=":formAgregarCliente" oncomplete="PF('clienteDialogAgregar').show()"/> 
+                            </p:inputText>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Origen"/>
+                            <p:inputText readonly="true" value="#{ordenBean.selectedOrigen.nombre}">
+                                <p:ajax listener="#{ordenBean.onRowSelectOrigen(event)}" event="click" update=":formAgregarOrigen" oncomplete="PF('origenDialogAgregar').show()"/> 
+                            </p:inputText>
+                            <h:outputText value="Destino"/>
+                            <p:inputText readonly="true" value="#{ordenBean.selectedDestino.nombre}">
+                                <p:ajax listener="#{ordenBean.onRowSelectDestino(event)}" event="click" update=":formAgregarDestino" oncomplete="PF('destinoDialogAgregar').show()"/> 
+                            </p:inputText>
+                            <h:outputText value=""/>
+                            <h:outputText value="Producto"/>
+                            <p:inputText readonly="true" value="#{ordenBean.selectedProducto.nombre}">
+                                <p:ajax listener="#{ordenBean.onRowSelectProducto(event)}" event="click" update=":formAgregarProducto" oncomplete="PF('productoDialogAgregar').show()"/> 
+                            </p:inputText>
+
+                            <h:outputText value="Fecha"/>
+                            <p:calendar id="fecha" value="#{ordenBean.selectedOrdenDeCarga.fechaEmision}" pattern="dd-MM-yyyy" mask="true" />
+                            <h:outputText value=""/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Datos del Camion"/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText style="width: 15%;" value="Camion:"/>
+                            <p:inputText readonly="true" value="#{ordenBean.selectedCamion.chapaCamion}" class="form-control" onkeypress="if (event.keyCode == 13) {jQuery('#name').trigger('change'); return false; }">                                                              
+                            </p:inputText>
+                            <p:commandButton id="btnSelectCa" update=":formAgregarCamion" action="#{ordenBean.cargarcamion(actionEvent)}" oncomplete="PF('camionDialogAgregar').show()" value="Seleccionar" icon="icon-select" title="Seleccionar">
+                            </p:commandButton> 
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Marca:"/>
+                            <p:inputText  value="#{ordenBean.selectedCamion.marca}" readonly="true"/>
+                            <h:outputText value="Color:"/>
+                            <p:inputText value="#{ordenBean.selectedCamion.color}" readonly="true"/>
+                                                        
+                            <h:outputText value=""/>
+                            <h:outputText value="Tipo Camion"/>
+                            <p:inputText value="#{ordenBean.selectedCamion.tipoCamion.descripcion}" readonly="true"/>
+                            <h:outputText value="Vto. Dinatran"/>
+                            <p:calendar id="fecha1" value="#{ordenBean.selectedCamion.fechaVencimiento}" pattern="dd-MM-yyyy" mask="true" readonly="true" disabled="true" />
+                            <h:outputText value=""/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Datos de la Carreta"/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText style="width: 15%;" value="Carreta:"/>
+                            <p:inputText readonly="true" value="#{ordenBean.selectedCamion.carreta.chapaCarreta}"/>
+                            <h:outputText value="Marca:"/>
+                            <p:inputText  value="#{ordenBean.selectedCamion.carreta.chapaCarreta}" readonly="true"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Color:"/>
+                            <p:inputText value="#{ordenBean.selectedCamion.carreta.color}" readonly="true"/>
+                            <h:outputText value="Año:"/>
+                            <p:inputText value="#{ordenBean.selectedCamion.carreta.anho}" readonly="true"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Departamento:"/>
+                            <p:inputText value="#{ordenBean.selectedCamion.carreta.departamento}" readonly="true"/>    
+                            <h:outputText value="Tipo Camion"/>
+                            <p:inputText value="#{ordenBean.selectedCamion.carreta.tipoCarreta.descripcion}" readonly="true"/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Vto. Dinatran"/>
+                            <p:calendar id="fecha2" value="#{ordenBean.selectedCamion.carreta.fechaDinatran}" pattern="dd-MM-yyyy" mask="true" disabled="true"/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <p:separator/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Datos del Chofer"/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value=""/>
+                            <h:outputText value="Nombre"/>
+                            <p:inputText value="#{ordenBean.selectedCamion.chofer.nombre} #{ordenBean.selectedCamion.chofer.apellido}" readonly="true"/>
+                            <h:outputText value="N° ci"/>
+                            <p:inputText value="#{ordenBean.selectedCamion.chofer.NCi}" readonly="true"/>
+                            <p:separator/>
+                            <h:inputHidden id="cam" value="#{ordenBean.selectedCamion.chapaCamion}"/>
+                            <h:inputHidden id="cli" value="#{ordenBean.selectedCliente.idCliente}"/>
+                            <h:inputHidden id="ori" value="#{ordenBean.selectedOrigen.idUnidadOrigen}"/>
+                            <h:inputHidden id="des" value="#{ordenBean.selectedDestino.idUnidadDestino}"/>
+                            <f:facet name="footer">
+                                <p:separator/>
+                                <p:commandButton id="report" ajax="false" icon="icon-pdf" value="PDF" actionListener="#{ordenBean.exportarPDF2(actionEvent)}"></p:commandButton>                                                  
+                                <p:commandButton id="btnCreateAceptar" update="formCreate:msgs1 :formCreate" action="#{ordenBean.btnCreateOrdenDeCarga(actionEvent)}" icon="icon-guardar" title="Guardar" value="Guardar"/>
+                                <p:commandButton id="bntSalir" ajax="false" immediate="true" action="/views/inicio.xhtml" icon="icon-cancel" title="Salir" value="Salir" />
+                            </f:facet>
+                        </h:panelGrid>
+                    </h:form>
+                    </p:panel> 
+                <h:form id="formAgregarCliente" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Cliente" widgetVar="clienteDialogAgregar"  id="clienteAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                            <p:dataTable var="cliente" value="#{clienteBean.clientes}" selection="#{ordenBean.selectedCliente}" rowKey="#{cliente.idCliente}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="6" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{cliente.idCliente}" />
+                            </p:column>
+                                <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 20%" filterBy="#{cliente.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 20%">
+                                <h:outputText value="#{cliente.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{cliente.telefono}" />
+                            </p:column>                             
+                                <p:ajax listener="#{ordenBean.onRowSelectCliente(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('clienteDialogAgregar').hide() "/>  
+                        </p:dataTable>                        
+                </p:dialog>
+                </h:form>    
+                <h:form id="formAgregarOrigen" style="font-size: 10px;">
+                <p:dialog header="Seleccionar Origen" widgetVar="origenDialogAgregar"  id="OrigenAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                            <p:dataTable var="unidadOrigen" value="#{origenBean.origenes}" selection="#{ordenBean.selectedOrigen}" rowKey="#{unidadOrigen.idUnidadOrigen}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="7" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{unidadOrigen.idUnidadOrigen}" />
+                            </p:column>
+                                <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 30%" filterBy="#{unidadOrigen.nombre}" filterMatchMode="contains">
+                                    <h:outputText value="#{unidadOrigen.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 20%">
+                                <h:outputText value="#{unidadOrigen.direccion}" />
+                            </p:column>
+                            <p:column headerText="Correo" style="width: 10%">
+                                <h:outputText value="#{unidadOrigen.correo}" />
+                            </p:column>
+                            <p:column headerText="Descripcion" style="width: 10%">
+                                <h:outputText value="#{unidadOrigen.descripcion}" />
+                            </p:column>    
+                                <p:ajax listener="#{ordenBean.onRowSelectOrigen(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('origenDialogAgregar').hide() "/>  
+                        </p:dataTable>                       
+                </p:dialog>
+                 </h:form>    
+                <h:form id="formAgregarProducto" style="font-size: 10px;">
+                <p:dialog header="Seleccionar Producto" widgetVar="productoDialogAgregar"  id="OrigenAgre" 
+                              showEffect="fade" width="50%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >                        
+                    <p:dataTable var="producto" value="#{ordenBean.productos}" selection="#{ordenBean.selectedProducto}" rowKey="#{producto.idProducto}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="7" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{producto.idProducto}" />
+                            </p:column>
+                                <p:column headerText="Nombre" filterStyle="width: 80%;" style="width: 20%" filterBy="#{producto.nombre}" filterMatchMode="contains">
+                                    <h:outputText value="#{producto.nombre}" />
+                            </p:column>
+                            <p:column headerText="Cliente" style="width: 20%">
+                                <h:outputText value="#{producto.cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Precio" style="width: 10%">
+                                <h:outputText value="#{producto.precio}" />
+                            </p:column>
+                                <p:ajax listener="#{ordenBean.onRowSelectProducto(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('productoDialogAgregar').hide()"/>  
+                        </p:dataTable>                       
+                </p:dialog>
+                 </h:form> 
+                <h:form id="formAgregarDestino" style="font-size: 10px;">
+                <p:dialog header="Seleccionar Destino" widgetVar="destinoDialogAgregar"  id="destinoAgre" 
+                              showEffect="fade" width="90%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >
+                        
+                            <p:dataTable var="unidadDestino" value="#{destinoBean.destinos}" selection="#{ordenBean.selectedDestino}" rowKey="#{unidadDestino.idUnidadDestino}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="7" >
+                            <p:column headerText="Id" style="width: 10%">
+                                <h:outputText value="#{unidadDestino.idUnidadDestino}" />
+                            </p:column>
+                                <p:column headerText="Nombre" style="width: 30%" filterBy="#{unidadDestino.nombre}" filterMatchMode="contains" filterStyle="width: 80%;">
+                                    <h:outputText value="#{unidadDestino.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{unidadDestino.direccion}" />
+                            </p:column>
+                            <p:column headerText="Correo" style="width: 10%">
+                                <h:outputText value="#{unidadDestino.correo}" />
+                            </p:column>
+                            <p:column headerText="Descriocion" style="width: 10%">
+                                <h:outputText value="#{unidadDestino.descripcion}" />
+                            </p:column>    
+                                <p:ajax listener="#{ordenBean.onRowSelectDestino(event)}" event="rowSelect" update=":formCreate"  oncomplete="PF('destinoDialogAgregar').hide() "/>  
+                        </p:dataTable>
+                        
+                </p:dialog>
+                </h:form>
+                <h:form id="formAgregarCamion">
+                    <p:dialog header="Seleccionar Camion" widgetVar="camionDialogAgregar"  id="camion" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >
+                        <p:dataTable var="camion" value="#{ordenBean.camiones}" selection="#{ordenBean.selectedCamion}" rowKey="#{camion.chapaCamion}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="10" >
+                            <p:column headerText="Chapa Camion" filterStyle="width: 80%;" style="width: 10%" filterBy="#{camion.chapaCamion}" filterMatchMode="contains">
+                                <h:outputText value="#{camion.chapaCamion}" />
+                            </p:column>
+                            <p:column headerText="Marca" style="width: 10%">
+                                <h:outputText value="#{camion.marca}" />
+                            </p:column>
+                            <p:column headerText="Color" style="width: 10%">
+                                <h:outputText value="#{camion.color}" />
+                            </p:column>
+                            <p:column headerText="Año" style="width: 10%">
+                                <h:outputText value="#{camion.anho}" />
+                            </p:column>
+                            <p:column headerText="Chofer" style="width: 30%" filterBy="#{camion.chofer.nombre} #{camion.chofer.apellido}" filterMatchMode="contains">
+                                <h:outputText value="#{camion.chofer.nombre} #{camion.chofer.apellido}" />
+                            </p:column>
+                            <p:column headerText="Tipo Camion" style="width: 10%">
+                                <h:outputText value="#{camion.tipoCamion.descripcion}" />
+                            </p:column>
+                            <p:ajax listener="#{ordenBean.onRowSelectCamion(event)}" event="rowSelect" update=":formCreate formCreate:msgs1"  oncomplete="PF('camionDialogAgregar').hide() "/>
+                        </p:dataTable>
+                    </p:dialog>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+        
+    </body>
+</html>

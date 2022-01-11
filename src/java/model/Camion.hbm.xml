@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.Camion" table="camion" schema="public">
+        <id name="chapaCamion" type="string">
+            <column name="chapa_camion" length="6" />
+            <generator class="assigned"></generator>
+        </id>
+        <many-to-one name="carreta" class="model.Carreta" fetch="select">
+            <column name="carreta_chapa_carreta" length="6" not-null="true" />
+        </many-to-one>
+        <many-to-one name="chofer" class="model.Chofer" fetch="select">
+            <column name="chofer_id_chofer" not-null="true" />
+        </many-to-one>
+        <many-to-one name="propietario" class="model.Propietario" fetch="select">
+            <column name="propietario_id_propietario" not-null="true" />
+        </many-to-one>
+        <many-to-one name="tipoCamion" class="model.TipoCamion" fetch="select">
+            <column name="tipo_camion_id_tipo_camion" not-null="true" />
+        </many-to-one>
+        <property name="marca" type="string">
+            <column name="marca" length="30" not-null="true" />
+        </property>
+        <property name="anho" type="int">
+            <column name="anho" not-null="true" />
+        </property>
+        <property name="color" type="string">
+            <column name="color" length="30" not-null="true" />
+        </property>
+        <property name="modelo" type="string">
+            <column name="modelo" length="30" not-null="true" />
+        </property>
+        <property name="departamento" type="string">
+            <column name="departamento" length="30" />
+        </property>
+        <property name="fechaVencimiento" type="date">
+            <column name="fecha_vencimiento" length="13" not-null="true" />
+        </property>
+        <property name="peso" type="int">
+            <column name="peso" not-null="true" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="30" />
+        </property>
+        <set name="recibos" table="recibo" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="camion_chapa_camion" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.Recibo" />
+        </set>
+        <set name="items" table="item" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="camion_chapa_camion" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.Item" />
+        </set>
+        <set name="viaticos" table="viatico" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="camion_chapa_camion" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.Viatico" />
+        </set>
+        <set name="exCamions" table="ex_camion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="camion_chapa_camion" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.ExCamion" />
+        </set>
+        <set name="adelantoChofers" table="adelanto_chofer" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="camion_chapa_camion" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.AdelantoChofer" />
+        </set>
+        <set name="valeVarioses" table="vale_varios" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="camion_chapa_camion" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.ValeVarios" />
+        </set>
+        <set name="valeCombustibles" table="vale_combustible" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="camion_chapa_camion" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.ValeCombustible" />
+        </set>
+        <set name="ordenDeCargas" table="orden_de_carga" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="camion_chapa_camion" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.OrdenDeCarga" />
+        </set>
+        <set name="creditos" table="credito" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="camion_chapa_camion" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.Credito" />
+        </set>
+        <set name="itemcs" table="itemc" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="camion_chapa_camion" length="6" not-null="true" />
+            </key>
+            <one-to-many class="model.Itemc" />
+        </set>
+    </class>
+</hibernate-mapping>

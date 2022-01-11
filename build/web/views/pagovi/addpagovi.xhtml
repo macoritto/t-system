@@ -1,0 +1,327 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../prueba.xhtml">
+            <ui:define name="content">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel id="paneli" header="Pago a Proveedores">
+                    <h:form id="formPago" style="font-size: 10px;"> 
+                        <p:messages id="msgs1" showDetail="true"/>     
+                        <h:inputHidden id="proveedor" value="#{pagoviBean.selectedCliente.idCliente}"/>                       
+                        <h:panelGrid id="display"  columns="9" cellpadding="2" columnClasses="alinder, alinizq" >
+                            <h:outputText value="*Fecha:" />
+                            <p:calendar id="fecha" size="20" pattern="dd/MM/yyyy"   value="#{pagoviBean.selectedPago.fecha}" showButtonPanel="true" navigator="true" required="true" requiredMessage="Seleccione la Fecha"/>
+                            
+                            <p:commandButton id="DataTableCli" update=":formAgregarCliente"   oncomplete="PF('clienteDialogAgregar').show()" icon="icon-select1" title="Buscar Proveedor" process="proveedor,proveedor2" />
+                            <p:inputText id="proveedor2" size="40" value="#{pagoviBean.selectedCliente.nombre}" readonly="true" required="true" requiredMessage="Seleccione el Cliente" />
+
+                            <h:outputText value="Nro Liq.:"/>
+                            <p:inputText size="20" id="nroliq" value="#{pagoviBean.selectedPago.nroLiq}">
+                                <p:ajax listener="#{pagoviBean.cargarNro(event)}" event="keyup"/>  
+                            </p:inputText>   
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="" />
+                            <h:outputText value="Con IVA:" />
+                            <p:selectOneMenu value="#{pagoviBean.iva}" style="width: 100%;">                                                                
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                <f:selectItem itemLabel="SI" itemValue="SI" />
+                                <f:selectItem itemLabel="NO" itemValue="NO" />
+                                <p:ajax listener="#{pagoviBean.ivaselect(event)}" event="itemSelect" update=":formPago"/>
+                            </p:selectOneMenu>  
+                            <h:outputText value="Retención:" />
+                            <p:selectOneMenu disabled="#{pagoviBean.reteboo}" value="#{pagoviBean.retencion}" style="width: 100%;">                                                                
+                                <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                <f:selectItem itemLabel="70%" itemValue="0.7" />
+                                <f:selectItem itemLabel="50%" itemValue="0.5" />
+                                <f:selectItem itemLabel="0%" itemValue="0.0" />
+                                <p:ajax listener="#{pagoviBean.retencionselect(event)}" event="itemSelect" update=":formPago"/>
+                            </p:selectOneMenu>  
+                            <h:outputText value="Descripcion.:"/>
+                            <p:inputText size="50" id="descrip" value="#{pagoviBean.selectedPago.descripcion}">
+                                <p:ajax listener="#{pagoviBean.cargarDescrip(event)}" event="keyup"/>  
+                            </p:inputText>                              
+                            <p:commandButton disabled="#{pagoviBean.cargarboo}" update=":detalle :datos :suma" icon="icon-pro" value="Cargar" action="#{pagoviBean.cargarArray(event)}"/>
+                        </h:panelGrid>
+                    </h:form>
+                    <h:form id="detalle" style="font-size: 10px;">
+                        <p:dataTable id="valev" var="sumicli" value="#{pagoviBean.sumiclis}" selection="#{pagoviBean.selectedsumi}" rowKey="#{sumicli.id}" style="margin-bottom:0"  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     emptyMessage="No se encontró ningún resultado">
+                            <f:facet name="header">
+                                Seleccionar Viaje Pendientes de Cobro
+                            </f:facet>                            
+                            <p:column headerText="Id" width="5%"> 
+                                <h:outputText value="#{sumicli.id}" />
+                            </p:column>
+                            <p:column headerText="Camion" width="5%">
+                                <h:outputText value="#{sumicli.chapa}" />
+                            </p:column>                                               
+                            <p:column headerText="Fecha" width="6%">
+                                <h:outputText value="#{sumicli.fecha}" />
+                            </p:column>
+                            <p:column headerText="Origen" width="18%">
+                                <h:outputText value="#{sumicli.origen}" />
+                            </p:column>
+                            <p:column headerText="Destino" width="18%">
+                                <h:outputText value="#{sumicli.destino}" />
+                            </p:column>
+                            <p:column headerText="R. Destino" width="7%">
+                                <h:outputText value="#{sumicli.remision}" />
+                            </p:column>
+                            <p:column headerText="P. Origen" width="4%">
+                                <h:outputText value="#{sumicli.porigen}" />
+                            </p:column>
+                            <p:column headerText="P. Destino" width="4%">
+                                <h:outputText value="#{sumicli.pdestino}" />
+                            </p:column>   
+                            <p:column headerText="Precio" width="3%">
+                                <h:outputText value="#{sumicli.precio}">
+                                    <f:convertNumber maxFractionDigits="2" type="number"/>
+                                </h:outputText>                            
+                            </p:column> 
+                            <p:column headerText="Bruto" width="6%">
+                                <h:outputText value="#{sumicli.bruto}">
+                                    <f:convertNumber maxFractionDigits="2" type="number"/>
+                                </h:outputText>                            
+                            </p:column> 
+                            <p:column headerText="Descuento" width="6%">
+                                <h:outputText value="#{sumicli.descuento}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>                            
+                            </p:column>
+                            <p:column headerText="Total" width="6%">
+                                <h:outputText value="#{sumicli.total}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>                            
+                            </p:column>
+                            <p:column headerText="Agregar"  style="width:5%">
+                                <p:commandButton icon="ui-icon-circle-plus"  action="#{pagoviBean.bntAdd(sumicli)}" update=":datos :suma :detalle :formView">
+                                    <f:setPropertyActionListener value="#{sumicli}" target="#{pagoviBean.selectedsumi}" />
+                                </p:commandButton>     
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                    <h:form id="datos" style="font-size: 10px;">  
+                        <p:dataTable id="datacar" var="sumicli" value="#{pagoviBean.sumiclis2}" editable="true" selectionMode="single" rowKey="#{sumicli.id}"
+                                     selection="#{pagoviBean.selectedsumi}" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     emptyMessage="No se cargo ningún registro">                             
+                            <f:facet name="header">
+                                Viajes a Cobrar
+                            </f:facet>
+
+                            <p:column headerText="Id" width="3%">
+                                <h:outputText value="#{sumicli.id}" />
+                            </p:column>
+                            <p:column headerText="Fecha" width="6%">
+                                <h:outputText value="#{sumicli.fecha}" />
+                            </p:column>
+                            <p:column headerText="Camion" width="4%">
+                                <h:outputText value="#{sumicli.chapa}" />
+                            </p:column>                                               
+                            <p:column headerText="Origen" width="10%">
+                                <h:outputText value="#{sumicli.origen}" />
+                            </p:column>
+                            <p:column headerText="Destino" width="10%">
+                                <h:outputText value="#{sumicli.destino}" />
+                            </p:column>
+                            <p:column headerText="R. Destino" width="8%">
+                                <h:outputText value="#{sumicli.remision}" />
+                            </p:column>
+                            <p:column headerText="P. Origen" width="4%">
+                                <h:outputText value="#{sumicli.porigen}" />
+                            </p:column>
+                            <p:column headerText="P. Destino" width="4%">
+                                <h:outputText value="#{sumicli.pdestino}" />
+                            </p:column>   
+                            <p:column headerText="Bruto" width="7%">
+                                <h:outputText value="#{sumicli.bruto}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>                            
+                            </p:column>
+                            <p:column headerText="Descuento" width="7%">
+                                <h:outputText value="#{sumicli.descuento}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>                            
+                            </p:column>
+                            <p:column headerText="Monto Cobrar" width="7%">
+                                <h:outputText value="#{sumicli.total}">
+                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                </h:outputText>                            
+                            </p:column>     
+                            <p:column headerText="Eliminar"  style="width:4%">  
+                                <p:commandButton icon="icon-eliminar"  action="#{pagoviBean.bntDescargar(sumicli)}" update=":datos,:suma,:detalle, :formView" />
+                            </p:column>  
+                        </p:dataTable>  
+                    </h:form> 
+                    <h:form id="formView" style="font-size: 10px;">    
+                        <p:fieldset legend="Detalles" style="margin-left:100px; margin-right:380px; margin-bottom: 30px; margin-top: 30px;">                                    
+                            <div style="width: 70%">
+                                <h:panelGrid id="display"  columns="11" cellpadding="1" columnClasses="alinder, alinizq" style="font-size: 10px; float: left;">                                                                                                                                                                                    
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" />
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" />
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="" /> 
+                                    <h:outputText value="No. Fletes:" />                                    
+                                    <p:inputText value="#{pagoviBean.contaflete}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                                    </p:inputText>                                    
+                                    <h:outputText value="Peso Origen:" />                                    
+                                    <p:inputText  value="#{pagoviBean.pesoO}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                                    </p:inputText>                                    
+                                    <h:outputText value="Peso Destino:" />                                    
+                                    <p:inputText  value="#{pagoviBean.pesoD}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                                    </p:inputText>    
+                                    <h:outputText value="" />   
+                                    <h:outputText value="Diferencia:" />                                    
+                                    <p:inputText  value="#{pagoviBean.dif}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                                    </p:inputText>  
+                                    <h:outputText value="Ganancias:" />                                    
+                                    <p:inputText  value="#{pagoviBean.ganancia}">
+                                        <f:convertNumber maxFractionDigits="0" groupingUsed="true"/>
+                                    </p:inputText>  
+                                </h:panelGrid>                                       
+                            </div>            
+                        </p:fieldset>        
+                    </h:form>
+                    <h:form id="suma" style="font-size: 10px;">
+                        <div id="datos3:datacar3" class="ui-datatable ui-widget">  
+                            <div class="ui-datatable-tablewrapper">
+                                <table role="grid2">
+                                    <tfoot>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Total con IVA:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{pagoviBean.bruto}" ><f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/></h:outputText> </td>
+                                            <td class="ui-state-default"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Total a Cobrar:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{pagoviBean.saldocobrar}" ><f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/></h:outputText> </td>
+                                            <td class="ui-state-default"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Descuento:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{pagoviBean.descuento}" ><f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/></h:outputText> </td>
+                                            <td class="ui-state-default"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Adelantos:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{pagoviBean.adelanto}" ><f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/></h:outputText> </td>
+                                            <td class="ui-state-default"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Suministros:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{pagoviBean.suministro}" ><f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/></h:outputText> </td>
+                                            <td class="ui-state-default"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="ui-state-default" width="690px" style="text-align:right">Total a Cobrar:</td>
+                                            <td class="ui-state-default"><h:outputText value="#{pagoviBean.selectedPago.montoTotal}" >
+                                                    <f:convertNumber maxFractionDigits="0" groupingUsed="true" currencySymbol="Gs"  type="currency"/>
+                                                </h:outputText>  </td>
+                                            <td class="ui-state-default"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <p:separator />  
+                        <div>
+                            <p:commandButton id="report" ajax="false" icon="icon-pdf" value="PDF" actionListener="#{pagoviBean.exportarPDF2(actionEvent)}"></p:commandButton>                                                                                                  
+                            <p:commandButton update="formPago:msgs1"  id="bntGuardar" icon="icon-save" action="#{pagoviBean.btnCreatePago()}" title="Confirmar Pago" value="Confirmar Pago"/> 
+                            <p:commandButton id="bntSalir" ajax="false" immediate="true" action="/views/clientes/pagovi.xhtml" icon="icon-cancel" title="Salir" value="Salir" />
+                        </div>
+                    </h:form>
+                </p:panel>   
+                <h:form id="formAgregarCliente" style="font-size: 10px;">
+                    <p:dialog header="Seleccionar Cliente" widgetVar="clienteDialogAgregar"  id="clienteAgre" 
+                              showEffect="fade" width="70%" modal="true" closeOnEscape="true"  maximizable="true" dynamic="true" position="top" resizable="true" >
+
+                        <p:dataTable var="cliente" value="#{clienteBean.clientes}" selection="#{pagoviBean.selectedCliente}" rowKey="#{cliente.idCliente}"  selectionMode="single" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                                     rowsPerPageTemplate="10,20,30" emptyMessage="No se encontró ningún resultado" paginator="true" rows="6" >
+                            <p:column headerText="Id" style="width: 5%">
+                                <h:outputText value="#{cliente.idCliente}" />
+                            </p:column>
+                            <p:column headerText="Nombre" style="width: 20%" filterBy="#{cliente.nombre}" filterMatchMode="contains">
+                                <h:outputText value="#{cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Direccion" style="width: 10%">
+                                <h:outputText value="#{cliente.direccion}" />
+                            </p:column>
+                            <p:column headerText="Telefono" style="width: 10%">
+                                <h:outputText value="#{cliente.telefono}" />
+                            </p:column>
+                            <p:column headerText="Ruc" style="width: 10%">
+                                <h:outputText value="#{cliente.ruc}" />
+                            </p:column>    
+                            <p:ajax listener="#{pagoviBean.onRowSelectCliente(event)}" event="rowSelect" update=":formPago"  oncomplete="PF('clienteDialogAgregar').hide() "/>  
+                        </p:dataTable>
+
+                    </p:dialog>   
+                </h:form>
+            </ui:define>           
+        </ui:composition>
+        <script type="text/javascript">
+            function handleClose(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioCreate').hide();
+                }
+            }
+
+            function handleClose2(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogUsuarioUpdate').hide();
+                }
+            }
+
+            function handleClose3(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogNivelCreateN').hide();
+                }
+            }
+
+            function handleClose4(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableUsu').hide();
+                }
+            }
+
+            function handleClose5(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTableCli').hide();
+                }
+            }
+
+            function handleClose6(xhr, status, args) {
+                if (!args.validationFailed) {
+
+                    PF('dialogDataTablePro').hide();
+                }
+            }
+
+
+        </script>
+    </body>
+</html>

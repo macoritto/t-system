@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 22/10/2021 08:36:10 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="model.PagoSuministro" table="pago_suministro" schema="public">
+        <id name="idPagosumi" type="int">
+            <column name="id_pagosumi" />
+            <generator class="sequence">
+                <param name="sequence">pagosumi_seq</param>
+            </generator>
+        </id>
+        <many-to-one name="proveeCliente" class="model.ProveeCliente" fetch="select">
+            <column name="proveedor_id" />
+        </many-to-one>
+        <many-to-one name="usuario" class="model.Usuario" fetch="select">
+            <column name="usuario_id" />
+        </many-to-one>
+        <property name="descrip" type="string">
+            <column name="descrip" length="100" />
+        </property>
+        <property name="factura" type="string">
+            <column name="factura" length="50" />
+        </property>
+        <property name="montoSumi" type="java.lang.Double">
+            <column name="monto_sumi" precision="17" scale="17" />
+        </property>
+        <property name="montoAdelanto" type="java.lang.Double">
+            <column name="monto_adelanto" precision="17" scale="17" />
+        </property>
+        <property name="saldo" type="java.lang.Double">
+            <column name="saldo" precision="17" scale="17" />
+        </property>
+        <property name="montoPagar" type="java.lang.Double">
+            <column name="monto_pagar" precision="17" scale="17" />
+        </property>
+        <property name="fecha" type="date">
+            <column name="fecha" length="13" />
+        </property>
+        <property name="estado" type="string">
+            <column name="estado" length="10" />
+        </property>
+        <set name="pagoSumiDets" table="pago_sumi_det" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pago_sumi_id" />
+            </key>
+            <one-to-many class="model.PagoSumiDet" />
+        </set>
+        <set name="pagoAdeDets" table="pago_ade_det" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="pago_sumi_id" />
+            </key>
+            <one-to-many class="model.PagoAdeDet" />
+        </set>
+    </class>
+</hibernate-mapping>
