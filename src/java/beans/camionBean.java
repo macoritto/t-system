@@ -160,7 +160,7 @@ public class camionBean {
       stream.flush();
       stream.close();
       FacesContext.getCurrentInstance().responseComplete();
-      System.out.println("hola mundo");
+      System.out.println("hola mundodito");
     }
     public List<SelectItem> getSelectOneItemsTipoCamion() {
       this.selectOneItemsTipoCamion = new ArrayList<SelectItem>();
