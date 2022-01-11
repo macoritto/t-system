@@ -62,7 +62,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 @ManagedBean(name="camionBean")
 @SessionScoped
 public class camionBean {
-
+    
     private List<Camion> camiones;
     private List<TipoCamion> tipos;
     private Camion selectedCamion;
@@ -122,6 +122,7 @@ public class camionBean {
 
     public Integer getTotalflete() {
         return totalflete;
+
     }
 
     public Double getTotalbruto() {
@@ -159,6 +160,7 @@ public class camionBean {
       stream.flush();
       stream.close();
       FacesContext.getCurrentInstance().responseComplete();
+      System.out.println("hola mundo");
     }
     public List<SelectItem> getSelectOneItemsTipoCamion() {
       this.selectOneItemsTipoCamion = new ArrayList<SelectItem>();
